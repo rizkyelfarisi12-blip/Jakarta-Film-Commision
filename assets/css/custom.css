@@ -352,12 +352,15 @@
     .film-title{
       font-size:13px;
       letter-spacing:.08em;
+      padding-left: 5px;
       margin-bottom:6px;
       text-transform:uppercase;
     }
 
     .film-meta{
       color:#777;
+      padding-left: 5px;
+      margin-bottom: 10px;
       font-size:12px;
     }
 
@@ -1884,7 +1887,8 @@ PROGRAM SHOWCASE SECTION
   position:relative;
   z-index:5;
 
-  padding:140px 0;
+  padding-top: 10px;
+  padding-bottom: 50px;
 
   background:#050505;
 }
@@ -2142,7 +2146,7 @@ HERO PROGRAM BUTTON
 @media(max-width:768px){
 
   .program-showcase-section{
-    padding:100px 0;
+    padding:80px 0;
   }
 
   .program-showcase-heading h2{
