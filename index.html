@@ -209,117 +209,40 @@
           <h2 class="section-title">
             SUPPORTED FILMS
           </h2>
+
           <p class="section-subtitle">
             Showcasing cinematic productions supported through our Jakarta film initiatives.
           </p>
         </div>
+
         <a href="#" class="archive-link">
           VIEW ARCHIVE →
         </a>
       </div>
 
-      <div class="film-grid">
-
-        <div class="film-card">
-          <img src="https://images.unsplash.com/photo-1514565131-fce0801e5785?q=80&w=987&auto=format&fit=crop">
-          <div class="film-info">
-            <div class="film-title">Jakarta Noir</div>
-            <div class="film-meta">Directed by Aria Wijaya · 2025</div>
-          </div>
-        </div>
-
-        <div class="film-card">
-          <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=987&auto=format&fit=crop">
-          <div class="film-info">
-            <div class="film-title">The Capital Run</div>
-            <div class="film-meta">Directed by Putra · 2024</div>
-          </div>
-        </div>
-
-        <div class="film-card">
-          <img src="https://images.unsplash.com/photo-1511818966892-d7d671e672a2?q=80&w=987&auto=format&fit=crop">
-          <div class="film-info">
-            <div class="film-title">Old Town Ghosts</div>
-            <div class="film-meta">Directed by Nadia Yusuf · 2025</div>
-          </div>
-        </div>
-
-      </div>
+      <!-- FILM GRID -->
+      <div class="film-grid" id="filmGrid"></div>
 
     </div>
   </section>
 
   <!-- PRESS RELEASE -->
   <section class="section">
-    <div class="container">
+  <div class="container">
 
-      <div class="section-header">
-        <div>
-          <h2 class="section-title">
-            PRESS RELEASE
-          </h2>
-        </div>
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">
+          PRESS RELEASE
+        </h2>
       </div>
-
-      <div class="press-grid">
-
-        <article class="press-card">
-          <div>
-            <div class="press-category">
-              Official Release
-            </div>
-            <h3>
-              Jakarta Film Commission launches annual creative lab</h3>
-            <p>
-              A new initiative supporting emerging filmmakers and production teams.</p>
-          </div>
-          <div class="press-bottom">
-            <span>March 2026</span>
-            <span>↗</span>
-          </div>
-        </article>
-
-        <article class="press-card">
-          <div>
-            <div class="press-category">
-              Program Update
-            </div>
-            <h3>
-              Expanded incentive support for international productions
-            </h3>
-            <p>
-              Incentive programs now include logistics and permit assistance.
-            </p>
-          </div>
-          <div class="press-bottom">
-            <span>April 2026</span>
-            <span>↗</span>
-          </div>
-        </article>
-
-        <article class="press-card">
-          <div>
-            <div class="press-category">
-              Event News
-            </div>
-            <h3>
-              Jakarta hosts new film showcase for Southeast Asia
-            </h3>
-            <p>
-              Industry leaders gather to celebrate regional cinematic excellence.
-            </p>
-          </div>
-          <div class="press-bottom">
-            <span>May 2026</span>
-            <span>↗</span>
-          </div>
-        </article>
-
-      </div>
-
     </div>
+    
+    <!-- PRESS GRID -->
+    <div class="press-grid" id="pressGrid"></div>
 
-  </section>
+  </div>
+</section>
 
   <!-- FOOTER -->
   <div id="footer"></div>
@@ -331,4 +254,93 @@
   <script src="assets/js/components.js"></script>
   <script src="assets/js/custom.js"></script>
   
+ <script>
+/* =========================
+   FILMS
+========================= */
+fetch("assets/data/films.json")
+  .then(response => response.json())
+  .then(data => {
+
+    const filmGrid =
+    document.getElementById("filmGrid");
+
+    // MAX 3 CARD
+    data.slice(0,3).forEach(film => {
+
+      filmGrid.innerHTML += `
+        <div class="film-card">
+          <img src="${film.image}" alt="${film.title}">
+
+          <div class="film-info">
+            <div class="film-title">
+              ${film.title}
+            </div>
+
+            <div class="film-meta">
+              Directed by ${film.director} · ${film.year}
+            </div>
+          </div>
+        </div>
+      `;
+
+    });
+
+  });
+
+
+/* =========================
+   PRESS RELEASE
+========================= */
+fetch("assets/data/press.json")
+  .then(response => response.json())
+  .then(data => {
+
+    const pressGrid =
+    document.getElementById("pressGrid");
+
+    // FUNCTION LIMIT 10 WORDS
+    function limitWords(text, limit){
+
+      return text
+        .split(" ")
+        .slice(0, limit)
+        .join(" ") + "...";
+
+    }
+
+    // MAX 3 CARD
+    data.slice(0,3).forEach(item => {
+
+      pressGrid.innerHTML += `
+        <article class="press-card">
+
+          <div>
+
+            <div class="press-category">
+              ${item.category}
+            </div>
+
+            <h3>
+              ${item.title}
+            </h3>
+
+            <p>
+              ${limitWords(item.description, 10)}
+            </p>
+
+          </div>
+
+          <div class="press-bottom">
+            <span>${item.date}</span>
+            <span>↗</span>
+          </div>
+
+        </article>
+      `;
+
+    });
+
+  });
+</script>
 </html>
