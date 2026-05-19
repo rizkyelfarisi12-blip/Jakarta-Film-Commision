@@ -16,6 +16,10 @@
       font-display: swap;
     }
 
+    html{
+      scroll-behavior:smooth;
+    }
+
     *{
       margin:0;
       padding:0;
@@ -1110,6 +1114,7 @@
   .program-section,
   .incentive-section,
   .section,
+
   footer{
     position:relative;
 
@@ -1517,6 +1522,11 @@ INCENTIVE HERO
   padding-bottom:120px;
 }
 
+.incentive-hero .container{
+  position:relative;
+  z-index:10;
+}
+
 /* BG */
 
 .incentive-bg{
@@ -1553,8 +1563,7 @@ INCENTIVE HERO
 
 .incentive-content{
   position:relative;
-
-  z-index:5;
+  z-index:10;
 
   text-align:center;
 
@@ -1615,7 +1624,7 @@ INCENTIVE SECTION
   gap:24px;
 }
 
-/* CARD */
+
 /* =========================
 PROGRAM SECTION
 ========================= */
@@ -1867,6 +1876,292 @@ RESPONSIVE
 
 }
 
+/* =========================
+PROGRAM SHOWCASE SECTION
+========================= */
+
+.program-showcase-section{
+  position:relative;
+  z-index:5;
+
+  padding:140px 0;
+
+  background:#050505;
+}
+
+.program-showcase-heading{
+  text-align:center;
+
+  margin-bottom:70px;
+}
+
+.program-showcase-heading span{
+  display:inline-block;
+
+  color:#ff5a1f;
+
+  font-size:12px;
+
+  letter-spacing:.16em;
+
+  text-transform:uppercase;
+
+  margin-bottom:18px;
+}
+
+.program-showcase-heading h2{
+  font-size:64px;
+
+  line-height:.95;
+
+  letter-spacing:-.05em;
+
+  margin-bottom:24px;
+}
+
+.program-showcase-heading p{
+  max-width:700px;
+
+  margin:auto;
+
+  color:#8f8f8f;
+
+  line-height:1.9;
+}
+
+/* WRAPPER */
+
+.program-showcase-wrapper{
+  display:flex;
+  flex-direction:column;
+
+  gap:34px;
+}
+
+/* CARD */
+
+.showcase-card{
+  position:relative;
+
+  min-height:320px;
+
+  overflow:hidden;
+
+  border:1px solid rgba(255,255,255,.08);
+
+  transition:
+  transform .5s ease,
+  border-color .4s ease;
+}
+
+.showcase-card:hover{
+  transform:translateY(-6px);
+
+  border-color:rgba(255,90,31,.35);
+}
+
+/* BG */
+
+.showcase-bg{
+  position:absolute;
+  inset:0;
+}
+
+.showcase-bg img{
+  width:100%;
+  height:100%;
+
+  object-fit:cover;
+
+  transition:transform 1.2s ease;
+}
+
+.showcase-card:hover .showcase-bg img{
+  transform:scale(1.06);
+}
+
+/* OVERLAY */
+
+.showcase-overlay{
+  position:absolute;
+  inset:0;
+
+  background:
+  linear-gradient(
+    to right,
+    rgba(0,0,0,.88),
+    rgba(0,0,0,.45)
+  );
+}
+
+/* CONTENT */
+
+.showcase-content{
+  position:relative;
+  z-index:3;
+
+  min-height:320px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  gap:40px;
+
+  padding:60px;
+}
+
+.showcase-left{
+  max-width:560px;
+}
+
+.showcase-label{
+  display:inline-block;
+
+  color:#ff5a1f;
+
+  font-size:11px;
+
+  letter-spacing:.16em;
+
+  text-transform:uppercase;
+
+  margin-bottom:18px;
+}
+
+.showcase-left h3{
+  font-size:58px;
+
+  line-height:.95;
+
+  letter-spacing:-.05em;
+
+  margin-bottom:22px;
+}
+
+.showcase-left p{
+  color:#b0b0b0;
+
+  line-height:1.9;
+
+  max-width:520px;
+}
+
+/* BUTTON */
+
+.showcase-button{
+  display:inline-flex;
+
+  align-items:center;
+  justify-content:center;
+
+  height:64px;
+
+  padding:0 34px;
+
+  background:#ff5a1f;
+
+  color:#fff;
+
+  font-size:11px;
+
+  letter-spacing:.16em;
+
+  text-transform:uppercase;
+
+  transition:.3s ease;
+}
+
+.showcase-card:hover .showcase-button{
+  background:#ff7440;
+}
+
+/* =========================
+HERO PROGRAM BUTTON
+========================= */
+.hero-program-button-wrap{
+  position:relative;
+  z-index:20;
+
+  display:flex;
+  justify-content:center;
+
+  margin-top:50px;
+}
+
+.hero-program-button{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  height:58px;
+  padding:0 34px;
+
+  background:#ff5a1f;
+  color:#fff;
+
+  font-size:12px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+
+  border-radius:999px;
+
+  transition:
+  transform .3s ease,
+  background .3s ease,
+  box-shadow .3s ease;
+
+  box-shadow:
+  0 10px 30px rgba(255,90,31,.25);
+}
+
+.hero-program-button:hover{
+  background:#ff7440;
+
+  transform:translateY(-3px);
+
+  box-shadow:
+  0 18px 40px rgba(255,90,31,.35);
+}
+
+/* RESPONSIVE */
+
+@media(max-width:992px){
+
+  .showcase-content{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .showcase-left h3{
+    font-size:44px;
+  }
+
+}
+
+@media(max-width:768px){
+
+  .program-showcase-section{
+    padding:100px 0;
+  }
+
+  .program-showcase-heading h2{
+    font-size:42px;
+  }
+
+  .showcase-content{
+    padding:36px 28px;
+  }
+
+  .showcase-left h3{
+    font-size:36px;
+  }
+
+  .showcase-card{
+    min-height:auto;
+  }
+
+}
 
 /* =========================
 CONTACT
