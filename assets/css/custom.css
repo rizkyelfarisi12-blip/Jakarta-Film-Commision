@@ -290,7 +290,6 @@
       font-size:26px;
     }
 
-    /*============== SUPPORTED FILMS ================*/
     .section{
       padding:120px 0;
     }
@@ -321,47 +320,6 @@
       font-size:13px;
       letter-spacing:.08em;
       text-transform:uppercase;
-    }
-
-    .film-grid{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:24px;
-    }
-
-    .film-card{
-      position:relative;
-      overflow:hidden;
-      background:#111;
-    }
-
-    .film-card img{
-      height:620px;
-      object-fit:cover;
-      transition:.5s ease;
-    }
-
-    .film-card:hover img{
-      transform:scale(1.05);
-    }
-
-    .film-info{
-      padding-top:18px;
-    }
-
-    .film-title{
-      font-size:13px;
-      letter-spacing:.08em;
-      padding-left: 5px;
-      margin-bottom:6px;
-      text-transform:uppercase;
-    }
-
-    .film-meta{
-      color:#777;
-      padding-left: 5px;
-      margin-bottom: 10px;
-      font-size:12px;
     }
 
     /*=================== PRESS RELEASE CARD ===================*/
@@ -471,24 +429,7 @@
       color:#fff;
     }
 
-    @media(max-width:1100px){
-      .hero-grid,
-      .footer-grid,
-      .film-grid,
-      .press-grid{
-        grid-template-columns:1fr;
-      }
-      .hero{
-        min-height:1000px;
-      }
-      .section-title{
-        font-size:42px;
-      }
-      .film-card img{
-        height:520px;
-      }
-    }
-
+    
     @media(max-width:768px){
       .nav-menu{
         gap:16px;
@@ -3518,6 +3459,339 @@ RESPONSIVE
 
   .press-release-content blockquote{
     font-size:17px;
+  }
+
+}
+
+/* =========================
+FILMS HERO
+========================= */
+
+.films-hero{
+  position:relative;
+
+  min-height:78vh;
+
+  display:flex;
+  align-items:flex-end;
+
+  overflow:hidden;
+
+  padding-top:180px;
+  padding-bottom:100px;
+}
+
+/* BG */
+
+.films-hero-bg{
+  position:absolute;
+  inset:0;
+
+  z-index:1;
+}
+
+.films-hero-bg img{
+  width:100%;
+  height:100%;
+
+  object-fit:cover;
+}
+
+/* OVERLAY */
+
+.films-hero-overlay{
+  position:absolute;
+  inset:0;
+
+  background:
+  linear-gradient(
+    to right,
+    rgba(0,0,0,.82),
+    rgba(0,0,0,.35)
+  ),
+
+  linear-gradient(
+    to top,
+    #050505 0%,
+    transparent 35%
+  );
+
+  z-index:2;
+}
+
+/* CONTENT */
+
+.films-hero .container{
+  position:relative;
+  z-index:5;
+}
+
+.films-hero-content{
+  max-width:760px;
+}
+
+.films-label{
+  display:inline-block;
+
+  color:#ff5a1f;
+
+  font-size:12px;
+
+  letter-spacing:.18em;
+
+  text-transform:uppercase;
+
+  margin-bottom:22px;
+}
+
+.films-hero-content h1{
+  font-size:clamp(68px,8vw,140px);
+
+  line-height:.88;
+
+  letter-spacing:-.07em;
+
+  margin-bottom:28px;
+
+  font-weight:800;
+
+  text-transform:uppercase;
+}
+
+.films-hero-content p{
+  max-width:620px;
+
+  color:#b5b5b5;
+
+  line-height:1.9;
+
+  font-size:15px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:768px){
+
+  .films-hero{
+    min-height:68vh;
+
+    padding-top:140px;
+    padding-bottom:80px;
+  }
+
+  .films-hero-content h1{
+    font-size:58px;
+  }
+
+}
+
+/* =========================
+SUPPORTED FILMS
+========================= */
+
+.film-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:28px;
+}
+
+.film-card{
+  background:#101010;
+  border:1px solid rgba(255,255,255,.05);
+  overflow:hidden;
+  position:relative;
+
+  transition:
+  transform .4s ease,
+  border-color .4s ease,
+  box-shadow .4s ease;
+}
+
+.film-card:hover{
+  transform:translateY(-8px);
+
+  border-color:rgba(255,90,31,.3);
+
+  box-shadow:
+  0 18px 40px rgba(0,0,0,.45);
+}
+
+/* IMAGE */
+.film-poster{
+  position:relative;
+  overflow:hidden;
+
+  aspect-ratio:2 / 3;
+}
+
+.film-poster img{
+  width:100%;
+  height:100%;
+
+  object-fit:cover;
+
+  transition:transform 1s ease;
+}
+
+.film-card:hover .film-poster img{
+  transform:scale(1.05);
+}
+
+/* OVERLAY */
+.film-poster::after{
+  content:"";
+
+  position:absolute;
+  inset:0;
+
+  background:
+  linear-gradient(
+    to top,
+    rgba(0,0,0,.88) 0%,
+    rgba(0,0,0,.25) 45%,
+    transparent 70%
+  );
+}
+
+/* INFO */
+.film-info{
+  position:absolute;
+
+  left:0;
+  bottom:0;
+
+  width:100%;
+
+  padding:24px;
+
+  z-index:5;
+}
+
+.film-title{
+  font-size:28px;
+  line-height:1;
+
+  letter-spacing:-.03em;
+
+  margin-bottom:10px;
+
+  color:#fff;
+}
+
+.film-meta{
+  color:#d0d0d0;
+
+  font-size:13px;
+
+  margin-bottom:14px;
+}
+
+.film-status{
+  color:#ff5a1f;
+
+  font-size:11px;
+
+  letter-spacing:.14em;
+
+  text-transform:uppercase;
+}
+
+/* BUTTON */
+.film-button-wrap{
+  display:flex;
+  justify-content:center;
+
+  margin-top:60px;
+}
+
+.film-button{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  height:54px;
+  padding:0 32px;
+
+  border:1px solid rgba(255,255,255,.08);
+
+  font-size:11px;
+  letter-spacing:.16em;
+
+  text-transform:uppercase;
+
+  transition:.3s ease;
+
+  cursor:pointer;
+}
+
+.film-button:hover{
+  background:#ff5a1f;
+  border-color:#ff5a1f;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:992px){
+
+  .film-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+}
+
+@media(max-width:768px){
+
+  .film-grid{
+    grid-template-columns:repeat(2,1fr);
+    gap:18px;
+  }
+
+  .film-title{
+    font-size:18px;
+  }
+
+}
+
+@media(max-width:520px){
+
+  .film-grid{
+    grid-template-columns:1fr;
+  }
+
+}
+
+#loadMoreBtn{
+  margin-top:20px;
+  cursor:pointer;
+}
+
+
+.film-card:hover{
+  transform:translateY(-8px);
+
+  border-color:rgba(255,90,31,.3);
+
+  box-shadow:
+  0 18px 40px rgba(0,0,0,.45);
+}
+
+@media(max-width:768px){
+
+  .film-grid{
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+  }
+
+  .film-title{
+    font-size:15px;
+  }
+
+}
+
+@media(max-width:520px){
+
+  .film-grid{
+    grid-template-columns:1fr;
   }
 
 }

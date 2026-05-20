@@ -215,7 +215,7 @@
           </p>
         </div>
 
-        <a href="#" class="archive-link">
+        <a href="films-list.html" class="archive-link">
           VIEW ARCHIVE →
         </a>
       </div>
@@ -258,32 +258,37 @@
 /* =========================
    FILMS
 ========================= */
+  const filmGrid = document.getElementById("filmGrid");
+
 fetch("assets/data/films.json")
-  .then(response => response.json())
+  .then(res => res.json())
   .then(data => {
 
-    const filmGrid =
-    document.getElementById("filmGrid");
+    const films = data.slice(0,3);
 
-    // MAX 3 CARD
-    data.slice(0,3).forEach(film => {
+    films.forEach(film => {
 
       filmGrid.innerHTML += `
         <div class="film-card">
-          <img src="${film.image}" alt="${film.title}">
+
+          <div class="film-poster">
+            <img src="${film.image}" alt="${film.title}">
+          </div>
 
           <div class="film-info">
-            <div class="film-title">
-              ${film.title}
-            </div>
+            <h3 class="film-title">${film.title}</h3>
 
             <div class="film-meta">
-              Directed by ${film.director} · ${film.year}
+              Directed by ${film.director} • ${film.year}
+            </div>
+
+            <div class="film-status">
+              Supported Production
             </div>
           </div>
+
         </div>
       `;
-
     });
 
   });

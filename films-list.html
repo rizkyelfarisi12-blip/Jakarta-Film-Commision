@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jakarta Film Commission</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+ <!-- internal resources -->
+ <link rel="stylesheet" href="assets/css/custom.css">
+
+
+</head>
+
+<body>
+  
+  <!-- NAVBAR -->
+  <div id="navbar"></div>
+
+  <section class="films-hero">
+
+    <div class="films-hero-bg">
+        <img src="../gallery/banner/films-banner.jpg" alt="Films">
+    </div>
+
+    <div class="films-hero-overlay"></div>
+
+    <div class="container">
+
+        <div class="films-hero-content">
+
+        <span class="films-label">
+            Supported Productions
+        </span>
+
+        <h1>
+            STORIES<br>
+            MADE IN<br>
+            JAKARTA
+        </h1>
+
+        <p>
+            Explore feature films, series, documentaries, and international productions supported through Jakarta’s growing film ecosystem.
+        </p>
+
+        </div>
+
+    </div>
+
+    </section>
+
+    <section class="section">
+    <div class="container">
+
+        <div class="section-header">
+
+        <div>
+            <span class="section-label">
+            Production Archive
+            </span>
+
+            <h2 class="section-title">
+            Film Catalogue
+            </h2>
+        </div>
+
+        </div>
+
+        <div class="film-grid" id="filmGrid"></div>
+
+        <div class="film-button-wrap">
+        <button id="loadMoreBtn" class="film-button">
+            Show More Productions
+        </button>
+        </div>
+
+    </div>
+    </section>
+
+  <!-- FOOTER -->
+  <div id="footer"></div>
+ 
+
+</body>
+
+<!-- JAVASCRIPT -->
+  <script src="assets/js/components.js"></script>
+  <script src="assets/js/custom.js"></script>
+
+  <script>
+    const filmGrid = document.getElementById("filmGrid");
+    const loadMoreBtn = document.getElementById("loadMoreBtn");
+
+    let allFilms = [];
+    let currentIndex = 0;
+
+    fetch("../assets/data/films.json")
+    .then(res => res.json())
+    .then(data => {
+
+        allFilms = data;
+
+        renderFilms();
+    });
+
+    function renderFilms(){
+
+    const nextFilms = allFilms.slice(currentIndex, currentIndex + 6);
+
+    nextFilms.forEach(film => {
+
+        filmGrid.innerHTML += `
+        <div class="film-card">
+
+            <div class="film-poster">
+            <img src="${film.image}" alt="${film.title}">
+            </div>
+
+            <div class="film-info">
+            <h3 class="film-title">${film.title}</h3>
+
+            <div class="film-meta">
+                Directed by ${film.director} • ${film.year}
+            </div>
+
+            <div class="film-status">
+                Supported Production
+            </div>
+            </div>
+
+        </div>
+        `;
+    });
+
+    currentIndex += 6;
+
+    if(currentIndex >= allFilms.length){
+        loadMoreBtn.style.display = "none";
+    }
+    }
+
+    loadMoreBtn.addEventListener("click", renderFilms);
+  </script>
+</html>
