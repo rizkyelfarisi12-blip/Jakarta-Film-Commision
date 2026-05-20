@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jakarta Film Commission</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+ <!-- internal resources -->
+ <link rel="stylesheet" href="assets/css/custom.css">
+
+
+</head>
+
+<body>
+  
+  <!-- NAVBAR -->
+  <div id="navbar"></div>
+
+  <!-- HERO -->
+    <section class="press-release-hero">
+
+    <div class="press-release-bg">
+        <img src="assets/images/press-release-bg.jpg" alt="">
+    </div>
+
+    <div class="press-release-overlay"></div>
+
+    <div class="container">
+
+        <div class="press-release-hero-content">
+
+        <span class="press-release-label">
+            Communications & Press
+        </span>
+
+        <h1>
+            Press Releases
+        </h1>
+
+        </div>
+
+    </div>
+
+    </section>
+
+    <!-- =========================
+PRESS RELEASE LIST
+========================= -->
+<section class="section">
+
+  <div class="container">
+
+    <!-- FILTER -->
+    <div class="press-filter-wrapper">
+
+      <div class="press-filters">
+
+        <button class="press-filter active" data-filter="all">
+          All Announcements
+        </button>
+
+        <button class="press-filter" data-filter="official">
+          Official Release
+        </button>
+
+        <button class="press-filter" data-filter="program">
+          Program Update
+        </button>
+
+        <button class="press-filter" data-filter="industry">
+          Industry News
+        </button>
+
+      </div>
+
+    <div class="press-sort-dropdown">
+
+    <button class="press-sort-trigger" id="sortTrigger">
+        Sort: Newest
+        <span>+</span>
+    </button>
+
+    <div class="press-sort-menu" id="sortMenu">
+
+        <button class="sort-option active" data-sort="newest">
+        Newest
+        </button>
+
+        <button class="sort-option" data-sort="oldest">
+        Oldest
+        </button>
+
+    </div>
+
+    </div>
+
+    </div>
+
+    <!-- LIST -->
+    <div class="press-list" id="pressContainer"></div>
+
+    <!-- LOAD MORE -->
+    <div class="film-button-wrap">
+      <button class="film-button" id="loadMoreBtn">
+        Load More Updates
+      </button>
+    </div>
+
+  </div>
+
+</section>
+
+  <!-- FOOTER -->
+  <div id="footer"></div>
+ 
+
+</body>
+
+<!-- JAVASCRIPT -->
+  <script src="assets/js/components.js"></script>
+  <script src="assets/js/custom.js"></script>
+
+  <script>
+
+let pressData = [];
+let visibleCount = 5;
+let currentFilter = "all";
+let currentSort = "newest";
+
+async function loadPressReleases(){
+
+  const response = await fetch("assets/data/press.json");
+  pressData = await response.json();
+
+  renderPress();
+}
+
+
+function renderPress(){
+
+  const container = document.getElementById("pressContainer");
+
+  container.innerHTML = "";
+
+  let filtered = [...pressData];
+
+  /* FILTER CATEGORY */
+  if(currentFilter !== "all"){
+
+    filtered = filtered.filter(item =>
+      item.category.toLowerCase().includes(currentFilter)
+    );
+
+  }
+
+  /* SORT DATE */
+  filtered.sort((a,b)=>{
+
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+
+    if(currentSort === "newest"){
+      return dateB - dateA;
+    }else{
+      return dateA - dateB;
+    }
+
+  });
+
+  /* SORT BUTTON */
+
+document.addEventListener("click", e => {
+
+  if(e.target.classList.contains("sort-btn")){
+
+    document
+      .querySelectorAll(".sort-btn")
+      .forEach(btn => btn.classList.remove("active"));
+
+    e.target.classList.add("active");
+
+    currentSort = e.target.dataset.sort;
+
+    renderPress();
+  }
+
+});
+  
+  /* RENDER */
+  filtered.slice(0, visibleCount).forEach(item => {
+
+    container.innerHTML += `
+    
+      <article class="press-item">
+
+        <div class="press-top">
+
+          <span class="press-category">
+            ${item.category}
+          </span>
+
+          <span class="press-date">
+            ${item.date}
+          </span>
+
+        </div>
+
+        <h2>${item.title}</h2>
+
+        <p>${item.description}</p>
+
+        <a href="press-release/${generateSlug(item.title)}.html" class="press-link">
+          Read Full Announcement →
+        </a>
+
+      </article>
+
+    `;
+
+  });
+
+  const loadBtn = document.getElementById("loadMoreBtn");
+
+  if(visibleCount >= filtered.length){
+    loadBtn.style.display = "none";
+  }else{
+    loadBtn.style.display = "inline-flex";
+  }
+}
+
+function generateSlug(title){
+
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-");
+
+}
+
+/* FILTER */
+
+document.addEventListener("click", e => {
+
+  if(e.target.classList.contains("press-filter")){
+
+    document
+      .querySelectorAll(".press-filter")
+      .forEach(btn => btn.classList.remove("active"));
+
+    e.target.classList.add("active");
+
+    currentFilter = e.target.dataset.filter;
+
+    visibleCount = 5;
+
+    renderPress();
+  }
+
+});
+
+const sortTrigger = document.getElementById("sortTrigger");
+const sortMenu = document.getElementById("sortMenu");
+
+/* TOGGLE MENU */
+
+sortTrigger.addEventListener("click", ()=>{
+
+  sortMenu.classList.toggle("active");
+
+});
+
+/* SORT OPTION */
+
+document.addEventListener("click", e => {
+
+  if(e.target.classList.contains("sort-option")){
+
+    document
+      .querySelectorAll(".sort-option")
+      .forEach(btn => btn.classList.remove("active"));
+
+    e.target.classList.add("active");
+
+    currentSort = e.target.dataset.sort;
+
+    sortTrigger.innerHTML = `
+      Sort: ${e.target.textContent}
+      <span>+</span>
+    `;
+
+    sortMenu.classList.remove("active");
+
+    visibleCount = 5;
+
+    renderPress();
+  }
+
+});
+
+/* CLOSE OUTSIDE */
+
+document.addEventListener("click", e => {
+
+  if(
+    !e.target.closest(".press-sort-dropdown")
+  ){
+    sortMenu.classList.remove("active");
+  }
+
+});
+
+
+/* LOAD MORE */
+
+document
+.getElementById("loadMoreBtn")
+.addEventListener("click", () => {
+
+  visibleCount += 5;
+
+  renderPress();
+
+});
+
+loadPressReleases();
+
+</script>
+ 
+</html>
