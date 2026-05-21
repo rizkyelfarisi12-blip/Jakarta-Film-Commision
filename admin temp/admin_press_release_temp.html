@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Press Release Admin</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    body{
+      font-family:'Inter',sans-serif;
+      background:#0f1115;
+      color:#fff;
+      padding:40px 20px;
+    }
+
+    .container{
+      max-width:1200px;
+      margin:auto;
+    }
+
+    .admin-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:40px;
+      gap:20px;
+      flex-wrap:wrap;
+    }
+
+    .admin-header h1{
+      font-size:40px;
+      font-weight:800;
+    }
+
+    .admin-layout{
+      display:grid;
+      grid-template-columns:380px 1fr;
+      gap:30px;
+    }
+
+    .admin-card{
+      background:#181b22;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:24px;
+      padding:24px;
+    }
+
+    .admin-card h2{
+      font-size:20px;
+      margin-bottom:20px;
+    }
+
+    .form-group{
+      margin-bottom:18px;
+    }
+
+    .form-group label{
+      display:block;
+      font-size:13px;
+      margin-bottom:8px;
+      color:#aaa;
+    }
+
+    .form-control{
+      width:100%;
+      background:#111318;
+      border:1px solid rgba(255,255,255,.08);
+      color:#fff;
+      padding:14px 16px;
+      border-radius:14px;
+      font-family:inherit;
+      outline:none;
+    }
+
+    textarea.form-control{
+      min-height:180px;
+      resize:vertical;
+      line-height:1.7;
+    }
+
+    .btn{
+      border:none;
+      background:#fff;
+      color:#111;
+      padding:14px 20px;
+      border-radius:14px;
+      font-weight:700;
+      cursor:pointer;
+      transition:.2s;
+    }
+
+    .btn:hover{
+      transform:translateY(-2px);
+    }
+
+    .btn-secondary{
+      background:#252932;
+      color:#fff;
+    }
+
+    .btn-danger{
+      background:#ff4d4f;
+      color:#fff;
+    }
+
+    .button-group{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .press-list{
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+
+    .press-item{
+      background:#111318;
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:20px;
+      padding:22px;
+    }
+
+    .press-top{
+      display:flex;
+      justify-content:space-between;
+      gap:20px;
+      margin-bottom:14px;
+      flex-wrap:wrap;
+    }
+
+    .press-category{
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      color:#bbb;
+    }
+
+    .press-date{
+      font-size:13px;
+      color:#777;
+    }
+
+    .press-item h3{
+      font-size:24px;
+      margin-bottom:10px;
+      line-height:1.3;
+    }
+
+    .press-item p{
+      color:#bbb;
+      line-height:1.7;
+      margin-bottom:18px;
+    }
+
+    .press-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .json-output{
+      margin-top:30px;
+      background:#111318;
+      border-radius:20px;
+      padding:24px;
+    }
+
+    .json-output textarea{
+      min-height:300px;
+      font-size:13px;
+    }
+
+    .helper{
+      color:#8f96a3;
+      font-size:13px;
+      line-height:1.7;
+      margin-top:12px;
+    }
+
+    @media(max-width:900px){
+      .admin-layout{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <div class="admin-header">
+      <h1>Press Release Admin</h1>
+
+      <button class="btn" onclick="downloadJSON()">
+        Download JSON
+      </button>
+    </div>
+
+    <div class="admin-layout">
+
+      <!-- FORM -->
+      <div class="admin-card">
+
+        <h2>Add / Edit Press Release</h2>
+
+        <div class="form-group">
+          <label>Category</label>
+
+          <select class="form-control" id="category">
+            <option value="Official Release">Official Release</option>
+            <option value="Program Update">Program Update</option>
+            <option value="Industry News">Industry News</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" class="form-control" id="date">
+        </div>
+
+        <div class="form-group">
+          <label>Title</label>
+          <input type="text" class="form-control" id="title">
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea class="form-control" id="description"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Content (1 paragraph per line)</label>
+          <textarea class="form-control" id="content"></textarea>
+        </div>
+
+        <div class="button-group">
+          <button class="btn" onclick="savePress()">
+            Save Data
+          </button>
+
+          <button class="btn btn-secondary" onclick="resetForm()">
+            Reset
+          </button>
+        </div>
+
+        <p class="helper">
+          Semua data akan otomatis mengikuti struktur press-release-data.js yang sudah Anda gunakan sebelumnya.
+        </p>
+
+      </div>
+
+      <!-- LIST -->
+      <div class="admin-card">
+
+        <h2>Current Press Releases</h2>
+
+        <div class="press-list" id="pressList"></div>
+
+      </div>
+
+    </div>
+
+
+    <!-- JSON OUTPUT -->
+    <div class="json-output">
+
+      <h2 style="margin-bottom:20px;">
+        Generated press-release-data.js
+      </h2>
+
+      <textarea class="form-control" id="jsonOutput"></textarea>
+
+      <p class="helper">
+        Copy isi ini lalu paste ke file:
+        <strong>assets/data/press-release-data.js</strong>
+      </p>
+
+    </div>
+
+  </div>
+
+
+<script>
+
+let editIndex = null;
+
+let pressData = [
+  {
+    category: "Official Release",
+    date: "2026-05-20",
+    title: "Jakarta Launches New Film Incentive Program",
+    description: "A new initiative to support local and international productions filming in Jakarta.",
+    content: [
+      "Jakarta Film Commission officially launched a new incentive program for film productions.",
+      "The initiative aims to attract international filmmakers and strengthen the local creative industry."
+    ]
+  }
+];
+
+
+function renderPress(){
+
+  const pressList = document.getElementById('pressList');
+
+  pressList.innerHTML = '';
+
+  pressData.forEach((item,index)=>{
+
+    pressList.innerHTML += `
+      <article class="press-item">
+
+        <div class="press-top">
+          <span class="press-category">
+            ${item.category}
+          </span>
+
+          <span class="press-date">
+            ${item.date}
+          </span>
+        </div>
+
+        <h3>${item.title}</h3>
+
+        <p>${item.description}</p>
+
+        <div class="press-actions">
+
+          <button class="btn btn-secondary" onclick="editPress(${index})">
+            Edit
+          </button>
+
+          <button class="btn btn-danger" onclick="deletePress(${index})">
+            Delete
+          </button>
+
+        </div>
+
+      </article>
+    `;
+
+  });
+
+  updateJSONOutput();
+
+}
+
+
+function savePress(){
+
+  const category = document.getElementById('category').value;
+  const date = document.getElementById('date').value;
+  const title = document.getElementById('title').value;
+  const description = document.getElementById('description').value;
+
+  const content = document
+    .getElementById('content')
+    .value
+    .split('\n')
+    .filter(item => item.trim() !== '');
+
+  const data = {
+    category,
+    date,
+    title,
+    description,
+    content
+  };
+
+
+  if(editIndex === null){
+
+    pressData.unshift(data);
+
+  }else{
+
+    pressData[editIndex] = data;
+
+    editIndex = null;
+
+  }
+
+  renderPress();
+
+  resetForm();
+
+}
+
+
+function editPress(index){
+
+  const item = pressData[index];
+
+  document.getElementById('category').value = item.category;
+  document.getElementById('date').value = item.date;
+  document.getElementById('title').value = item.title;
+  document.getElementById('description').value = item.description;
+
+  document.getElementById('content').value =
+    item.content.join('\n');
+
+  editIndex = index;
+
+  window.scrollTo({
+    top:0,
+    behavior:'smooth'
+  });
+
+}
+
+
+function deletePress(index){
+
+  if(confirm('Delete this press release?')){
+
+    pressData.splice(index,1);
+
+    renderPress();
+
+  }
+
+}
+
+
+function resetForm(){
+
+  document.getElementById('category').value = 'Official Release';
+  document.getElementById('date').value = '';
+  document.getElementById('title').value = '';
+  document.getElementById('description').value = '';
+  document.getElementById('content').value = '';
+
+  editIndex = null;
+
+}
+
+
+function updateJSONOutput(){
+
+  const jsContent =
+`const pressData = ${JSON.stringify(pressData,null,2)};`;
+
+  document.getElementById('jsonOutput').value = jsContent;
+
+}
+
+
+function downloadJSON(){
+
+  const jsContent =
+`const pressData = ${JSON.stringify(pressData,null,2)};`;
+
+  const blob = new Blob([jsContent], {
+    type:'application/javascript'
+  });
+
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement('a');
+
+  a.href = url;
+  a.download = 'press-release-data.js';
+
+  a.click();
+
+  URL.revokeObjectURL(url);
+
+}
+
+
+renderPress();
+
+</script>
+
+</body>
+</html>

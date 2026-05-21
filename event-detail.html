@@ -34,23 +34,16 @@
     <div class="container">
         <div class="event-detail-content">
 
-        <span class="event-detail-label">
-            Exclusive Industry Event
-        </span>
+        <span class="event-detail-label" id="eventCategory"></span>
 
-        <h1>
-            Jakarta Premiere <br>
-            Night 2024
-        </h1>
+            <h1 id="eventTitle"></h1>
 
-        <div class="event-meta-row">
-            <div class="event-meta-item">
-            📅 Oct 12, 2024
-            </div>
+            <div class="event-meta-row">
 
-            <div class="event-meta-item">
-            📍 Taman Ismail Marzuki, Jakarta
-            </div>
+            <div class="event-meta-item" id="eventDate"></div>
+
+            <div class="event-meta-item" id="eventLocation"></div>
+
         </div>
 
         <!-- <div class="event-hero-buttons">
@@ -83,23 +76,9 @@
             <!-- OVERVIEW -->
             <div class="event-block">
 
-            <h2>
-                Event Overview
-            </h2>
+                <h2>Event Overview</h2>
 
-            <p>
-                The Jakarta Premiere Night is the crown jewel of the city's cinematic calendar,
-                a prestigious evening dedicated to showcasing the absolute best of local and
-                international visionaries.
-            </p>
-
-            <p>
-                This year, we transform the iconic Taman Ismail Marzuki into a sanctuary of storytelling and technical brilliance.
-            </p>
-
-            <p>
-                Expect an immersive atmosphere where the pulse of Jakarta’s urban energy meets the refined artistry of world-class filmmaking.
-            </p>
+                <div id="eventContent"></div>
 
             </div>
 
@@ -111,73 +90,7 @@
                 Program Schedule
             </h2>
 
-            <div class="schedule-list">
-
-                <!-- ITEM -->
-                <div class="schedule-item">
-
-                <div class="schedule-time">
-                    19:00
-                </div>
-
-                <div class="schedule-content">
-                    <h3>The Red Carpet Arrival</h3>
-                    <p>
-                    Official reception and press photography session at the main entrance.
-                    </p>
-                </div>
-
-                </div>
-
-                <!-- ITEM -->
-                <div class="schedule-item">
-
-                <div class="schedule-time">
-                    20:00
-                </div>
-
-                <div class="schedule-content">
-                    <h3>Opening Address</h3>
-                    <p>
-                    Welcome speech by the Chairman of Jakarta Film Commission.
-                    </p>
-                </div>
-
-                </div>
-
-                <!-- ITEM -->
-                <div class="schedule-item">
-
-                <div class="schedule-time">
-                    20:30
-                </div>
-
-                <div class="schedule-content">
-                    <h3>Cinematic Showcase</h3>
-                    <p>
-                    Premiere screening of selected Indonesian short films.
-                    </p>
-                </div>
-
-                </div>
-
-                <!-- ITEM -->
-                <div class="schedule-item">
-
-                <div class="schedule-time">
-                    21:30
-                </div>
-
-                <div class="schedule-content">
-                    <h3>Grand Q&A Panel</h3>
-                    <p>
-                    Interactive discussion with directors, producers, and cast.
-                    </p>
-                </div>
-
-                </div>
-
-            </div>
+            <div class="schedule-list" id="scheduleList"></div>
 
             </div>
 
@@ -215,25 +128,19 @@
             <span class="sidebar-label">
                 Date & Time
             </span>
-            <h3>
-                Oct 12, 2024
-            </h3>
-            <p>
-                19:00 – 22:00 WIB
-            </p>
+            <h3 id="sidebarDate"></h3>
+            <p id="eventTime"></p>
             </div>
 
             <div class="sidebar-card">
             <span class="sidebar-label">
                 Location
             </span>
-            <h3>
-                Taman Ismail Marzuki
-            </h3>
-            <p>
-                Cikini, Jakarta Pusat
-            </p>
-            <a href="#" class="sidebar-link">
+
+            <h3 id="sidebarLocation"></h3>
+            <p id="sidebarAddress"></p>
+
+            <a href="#" class="sidebar-link" id="mapsLink" target="_blank">
                 View on Maps →
             </a>
             </div>
@@ -269,5 +176,145 @@
 <!-- JAVASCRIPT -->
   <script src="assets/js/components.js"></script>
   <script src="assets/js/custom.js"></script>
+  <script src="assets/data/events-data.js"></script>
  
+  <script>
+
+function generateSlug(title){
+
+  return title
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-");
+
+}
+
+const params =
+new URLSearchParams(window.location.search);
+
+const slug = params.get("slug");
+
+console.log("URL SLUG:", slug);
+
+console.log(eventData);
+
+let currentEvent = null;
+
+eventData.forEach(item => {
+
+  console.log(
+    generateSlug(item.title)
+  );
+
+  if(generateSlug(item.title) === slug){
+
+    currentEvent = item;
+
+  }
+
+});
+
+console.log(currentEvent);
+
+if(!currentEvent){
+
+  document.body.innerHTML = `
+    <h1 style="padding:40px">
+      Event Not Found
+    </h1>
+  `;
+
+}else{
+
+  document.getElementById("eventTitle")
+  .textContent =
+  currentEvent.title;
+
+  document.getElementById("eventCategory")
+  .textContent =
+  currentEvent.category;
+
+  document.getElementById("eventDate")
+  .innerHTML =
+  `📅 ${currentEvent.date}`;
+
+  document.getElementById("eventLocation")
+  .innerHTML =
+  `📍 ${currentEvent.location}`;
+  
+  document.getElementById("mapsLink")
+  .href =
+  currentEvent.maps;
+
+  document.getElementById("sidebarDate")
+  .textContent =
+  currentEvent.date;
+
+  document.getElementById("eventTime")
+  .textContent =
+  currentEvent.time;
+
+  document.getElementById("sidebarLocation")
+  .textContent =
+  currentEvent.location;
+
+  document.getElementById("sidebarAddress")
+  .textContent =
+  currentEvent.address;
+
+  document.querySelector(".event-detail-bg img")
+  .src =
+  currentEvent.image;
+
+    const content =
+    document.getElementById("eventContent");
+
+    currentEvent.content.forEach(paragraph => {
+
+    content.innerHTML += `
+        <p>${paragraph}</p>
+    `;
+
+    });
+
+    const scheduleList =
+    document.getElementById("scheduleList");
+
+    if(currentEvent.schedule){
+
+    currentEvent.schedule.forEach(item => {
+
+        scheduleList.innerHTML += `
+
+        <div class="schedule-item">
+
+            <div class="schedule-time">
+            ${item.time}
+            </div>
+
+            <div class="schedule-content">
+
+            <h3>
+                ${item.title}
+            </h3>
+
+            <p>
+                ${item.description}
+            </p>
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+    }
+
+}
+
+</script>
+
 </html>

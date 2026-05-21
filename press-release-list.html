@@ -116,7 +116,6 @@ PRESS RELEASE LIST
   <!-- FOOTER -->
   <div id="footer"></div>
  
-
 </body>
 
 <!-- JAVASCRIPT -->
@@ -236,6 +235,75 @@ document
 });
 
 loadPressReleases();
+
+/* FILTER BUTTON */
+
+document.addEventListener("click", e => {
+
+  if(e.target.classList.contains("press-filter")){
+
+    document
+      .querySelectorAll(".press-filter")
+      .forEach(btn => btn.classList.remove("active"));
+
+    e.target.classList.add("active");
+
+    currentFilter = e.target.dataset.filter;
+
+    visibleCount = 5;
+
+    renderPress();
+
+  }
+
+});
+
+
+/* SORT DROPDOWN */
+
+const sortTrigger =
+  document.getElementById("sortTrigger");
+
+const sortMenu =
+  document.getElementById("sortMenu");
+
+
+/* OPEN DROPDOWN */
+sortTrigger.addEventListener("click", () => {
+  sortMenu.classList.toggle("active");
+});
+
+
+/* SORT OPTION */
+document.addEventListener("click", e => {
+  if(e.target.classList.contains("sort-option")){
+    document
+      .querySelectorAll(".sort-option")
+      .forEach(btn => btn.classList.remove("active"));
+    e.target.classList.add("active");
+
+    currentSort = e.target.dataset.sort;
+
+    sortTrigger.innerHTML = `
+      Sort: ${e.target.textContent}
+      <span>+</span>
+    `;
+
+    sortMenu.classList.remove("active");
+    visibleCount = 5;
+    renderPress();
+  }
+});
+
+
+/* CLOSE DROPDOWN */
+document.addEventListener("click", e => {
+  if(!e.target.closest(".press-sort-dropdown")){
+
+    sortMenu.classList.remove("active");
+
+  }
+});
 
 </script>
  

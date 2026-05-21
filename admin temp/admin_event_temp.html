@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Events - Jakarta Film Commission</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    body{
+      font-family:'Inter',sans-serif;
+      background:#0f1115;
+      color:#fff;
+    }
+
+    .admin-layout{
+      display:grid;
+      grid-template-columns:320px 1fr;
+      min-height:100vh;
+    }
+
+    /* SIDEBAR */
+
+    .admin-sidebar{
+      border-right:1px solid rgba(255,255,255,.08);
+      background:#12151c;
+      overflow-y:auto;
+    }
+
+    .admin-sidebar-header{
+      padding:24px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+
+    .admin-sidebar-header h2{
+      font-size:20px;
+      font-weight:700;
+    }
+
+    .event-list{
+      padding:20px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .event-item{
+      background:#1a1f28;
+      border:1px solid rgba(255,255,255,.06);
+      padding:16px;
+      border-radius:14px;
+      cursor:pointer;
+      transition:.3s;
+    }
+
+    .event-item:hover{
+      border-color:#fff;
+    }
+
+    .event-item.active{
+      border-color:#fff;
+      background:#222835;
+    }
+
+    .event-item h3{
+      font-size:15px;
+      margin-bottom:6px;
+    }
+
+    .event-item span{
+      font-size:12px;
+      opacity:.6;
+    }
+
+    /* MAIN */
+
+    .admin-main{
+      padding:40px;
+      overflow-y:auto;
+    }
+
+    .admin-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:32px;
+    }
+
+    .admin-header h1{
+      font-size:32px;
+      font-weight:800;
+    }
+
+    .add-btn{
+      background:#fff;
+      color:#000;
+      border:none;
+      padding:14px 20px;
+      border-radius:12px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    /* FORM */
+
+    .admin-form{
+      display:grid;
+      gap:24px;
+      max-width:900px;
+    }
+
+    .form-group{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .form-group label{
+      font-size:14px;
+      opacity:.7;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select{
+      width:100%;
+      background:#1a1f28;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:12px;
+      padding:16px;
+      color:#fff;
+      font-family:inherit;
+      font-size:15px;
+    }
+
+    textarea{
+      min-height:120px;
+      resize:vertical;
+    }
+
+    .schedule-wrapper{
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+    }
+
+    .schedule-item{
+      border:1px solid rgba(255,255,255,.08);
+      background:#1a1f28;
+      border-radius:14px;
+      padding:18px;
+      display:grid;
+      gap:12px;
+    }
+
+    .schedule-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+
+    .delete-schedule{
+      background:#ff4d4d;
+      color:#fff;
+      border:none;
+      padding:8px 12px;
+      border-radius:8px;
+      cursor:pointer;
+      font-size:12px;
+    }
+
+    .add-schedule{
+      background:#2a3140;
+      color:#fff;
+      border:none;
+      padding:14px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:600;
+    }
+
+    .actions{
+      display:flex;
+      gap:16px;
+      margin-top:20px;
+    }
+
+    .save-btn{
+      background:#fff;
+      color:#000;
+      border:none;
+      padding:16px 24px;
+      border-radius:12px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .delete-btn{
+      background:#ff4d4d;
+      color:#fff;
+      border:none;
+      padding:16px 24px;
+      border-radius:12px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .download-box{
+      margin-top:40px;
+      background:#161b24;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:20px;
+      padding:24px;
+    }
+
+    .download-box h3{
+      margin-bottom:12px;
+    }
+
+    .download-btn{
+      margin-top:18px;
+      background:#fff;
+      color:#000;
+      border:none;
+      padding:14px 20px;
+      border-radius:12px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="admin-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar">
+
+    <div class="admin-sidebar-header">
+      <h2>Events CMS</h2>
+    </div>
+
+    <div class="event-list" id="eventList"></div>
+
+  </aside>
+
+  <!-- MAIN -->
+  <main class="admin-main">
+
+    <div class="admin-header">
+
+      <h1>Event Editor</h1>
+
+      <button class="add-btn" id="addEventBtn">
+        + New Event
+      </button>
+
+    </div>
+
+    <div class="admin-form">
+
+      <div class="form-group">
+        <label>Title</label>
+        <input type="text" id="title">
+      </div>
+
+      <div class="form-group">
+        <label>Category</label>
+
+        <select id="category">
+          <option>JFS</option>
+          <option>Nonton Di</option>
+          <option>Fam Night</option>
+          <option>Forum</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Date</label>
+        <input type="text" id="date">
+      </div>
+
+      <div class="form-group">
+        <label>Time</label>
+        <input type="text" id="time">
+      </div>
+
+      <div class="form-group">
+        <label>Location</label>
+        <input type="text" id="location">
+      </div>
+
+      <div class="form-group">
+        <label>Address</label>
+        <input type="text" id="address">
+      </div>
+
+      <div class="form-group">
+        <label>Google Maps Link</label>
+        <input type="text" id="maps">
+      </div>
+
+      <div class="form-group">
+        <label>Image Path</label>
+        <input type="text" id="image">
+      </div>
+
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="description"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Content Paragraphs</label>
+        <textarea id="content"></textarea>
+      </div>
+
+      <!-- SCHEDULE -->
+      <div class="form-group">
+
+        <label>Schedule</label>
+
+        <div class="schedule-wrapper" id="scheduleWrapper"></div>
+
+        <button class="add-schedule" id="addScheduleBtn">
+          + Add Schedule
+        </button>
+
+      </div>
+
+      <!-- ACTIONS -->
+      <div class="actions">
+
+        <button class="save-btn" id="saveBtn">
+          Save Event
+        </button>
+
+        <button class="delete-btn" id="deleteBtn">
+          Delete Event
+        </button>
+
+      </div>
+
+      <!-- DOWNLOAD -->
+      <div class="download-box">
+
+        <h3>Export events-data.js</h3>
+
+        <p>
+          Click button below to download updated data file.
+        </p>
+
+        <button class="download-btn" id="downloadBtn">
+          Download File
+        </button>
+
+      </div>
+
+    </div>
+
+  </main>
+
+</div>
+
+<script>
+
+let eventData = [];
+
+let currentIndex = 0;
+
+/* =========================
+LOAD LOCAL STORAGE
+========================= */
+const saved =
+localStorage.getItem("eventData");
+
+if(saved){
+
+  eventData = JSON.parse(saved);
+
+}else{
+
+  eventData = [
+
+    {
+      title:"Jakarta Premiere Night 2024",
+      category:"JFS",
+      date:"Oct 12, 2024",
+      time:"19:00 – 22:00 WIB",
+      location:"Taman Ismail Marzuki",
+      address:"Cikini, Jakarta Pusat",
+      maps:"https://maps.google.com",
+      image:"assets/images/event-1.jpg",
+      description:"Join the city's most prestigious screening event.",
+      content:[
+        "The Jakarta Premiere Night is the crown jewel of Jakarta cinema."
+      ],
+      schedule:[
+        {
+          time:"19:00",
+          title:"Opening",
+          description:"Opening ceremony."
+        }
+      ]
+    }
+
+  ];
+
+}
+
+/* =========================
+RENDER SIDEBAR
+========================= */
+function renderSidebar(){
+
+  const list =
+  document.getElementById("eventList");
+
+  list.innerHTML = "";
+
+  eventData.forEach((event,index)=>{
+
+    list.innerHTML += `
+
+      <div class="event-item ${index === currentIndex ? "active" : ""}"
+      onclick="selectEvent(${index})">
+
+        <h3>${event.title}</h3>
+
+        <span>${event.category}</span>
+
+      </div>
+
+    `;
+
+  });
+
+}
+
+/* =========================
+SELECT EVENT
+========================= */
+function selectEvent(index){
+
+  currentIndex = index;
+
+  renderSidebar();
+
+  renderForm();
+
+}
+
+/* =========================
+RENDER FORM
+========================= */
+function renderForm(){
+
+  const event =
+  eventData[currentIndex];
+
+  document.getElementById("title").value =
+  event.title || "";
+
+  document.getElementById("category").value =
+  event.category || "";
+
+  document.getElementById("date").value =
+  event.date || "";
+
+  document.getElementById("time").value =
+  event.time || "";
+
+  document.getElementById("location").value =
+  event.location || "";
+
+  document.getElementById("address").value =
+  event.address || "";
+
+  document.getElementById("maps").value =
+  event.maps || "";
+
+  document.getElementById("image").value =
+  event.image || "";
+
+  document.getElementById("description").value =
+  event.description || "";
+
+  document.getElementById("content").value =
+  event.content.join("\n\n");
+
+  renderSchedule();
+
+}
+
+/* =========================
+RENDER SCHEDULE
+========================= */
+function renderSchedule(){
+
+  const wrapper =
+  document.getElementById("scheduleWrapper");
+
+  wrapper.innerHTML = "";
+
+  const schedules =
+  eventData[currentIndex].schedule;
+
+  schedules.forEach((item,index)=>{
+
+    wrapper.innerHTML += `
+
+      <div class="schedule-item">
+
+        <div class="schedule-top">
+
+          <strong>Schedule ${index + 1}</strong>
+
+          <button class="delete-schedule"
+          onclick="deleteSchedule(${index})">
+
+            Delete
+
+          </button>
+
+        </div>
+
+        <input type="text"
+        placeholder="Time"
+        value="${item.time}"
+
+        onchange="
+        eventData[currentIndex].schedule[${index}].time = this.value
+        ">
+
+        <input type="text"
+        placeholder="Title"
+        value="${item.title}"
+
+        onchange="
+        eventData[currentIndex].schedule[${index}].title = this.value
+        ">
+
+        <textarea
+        placeholder="Description"
+
+        onchange="
+        eventData[currentIndex].schedule[${index}].description = this.value
+        ">${item.description}</textarea>
+
+      </div>
+
+    `;
+
+  });
+
+}
+
+/* =========================
+SAVE EVENT
+========================= */
+document
+.getElementById("saveBtn")
+.addEventListener("click", ()=>{
+
+  const event =
+  eventData[currentIndex];
+
+  event.title =
+  document.getElementById("title").value;
+
+  event.category =
+  document.getElementById("category").value;
+
+  event.date =
+  document.getElementById("date").value;
+
+  event.time =
+  document.getElementById("time").value;
+
+  event.location =
+  document.getElementById("location").value;
+
+  event.address =
+  document.getElementById("address").value;
+
+  event.maps =
+  document.getElementById("maps").value;
+
+  event.image =
+  document.getElementById("image").value;
+
+  event.description =
+  document.getElementById("description").value;
+
+  event.content =
+  document.getElementById("content")
+  .value
+  .split("\n\n");
+
+  localStorage.setItem(
+    "eventData",
+    JSON.stringify(eventData)
+  );
+
+  renderSidebar();
+
+  alert("Event Saved!");
+
+});
+
+/* =========================
+ADD EVENT
+========================= */
+document
+.getElementById("addEventBtn")
+.addEventListener("click", ()=>{
+
+  eventData.push({
+
+    title:"New Event",
+    category:"JFS",
+    date:"",
+    time:"",
+    location:"",
+    address:"",
+    maps:"",
+    image:"",
+    description:"",
+    content:[],
+    schedule:[]
+
+  });
+
+  currentIndex =
+  eventData.length - 1;
+
+  renderSidebar();
+
+  renderForm();
+
+});
+
+/* =========================
+DELETE EVENT
+========================= */
+document
+.getElementById("deleteBtn")
+.addEventListener("click", ()=>{
+
+  if(confirm("Delete this event?")){
+
+    eventData.splice(currentIndex,1);
+
+    currentIndex = 0;
+
+    renderSidebar();
+
+    renderForm();
+
+  }
+
+});
+
+/* =========================
+ADD SCHEDULE
+========================= */
+document
+.getElementById("addScheduleBtn")
+.addEventListener("click", ()=>{
+
+  eventData[currentIndex]
+  .schedule
+  .push({
+
+    time:"",
+    title:"",
+    description:""
+
+  });
+
+  renderSchedule();
+
+});
+
+/* =========================
+DELETE SCHEDULE
+========================= */
+function deleteSchedule(index){
+
+  eventData[currentIndex]
+  .schedule
+  .splice(index,1);
+
+  renderSchedule();
+
+}
+
+/* =========================
+DOWNLOAD JS FILE
+========================= */
+document
+.getElementById("downloadBtn")
+.addEventListener("click", ()=>{
+
+  const content =
+`const eventData = ${JSON.stringify(eventData,null,2)};`;
+
+  const blob =
+  new Blob([content],{
+    type:"application/javascript"
+  });
+
+  const link =
+  document.createElement("a");
+
+  link.href =
+  URL.createObjectURL(blob);
+
+  link.download =
+  "events-data.js";
+
+  link.click();
+
+});
+
+/* =========================
+INIT
+========================= */
+renderSidebar();
+
+renderForm();
+
+</script>
+
+</body>
+</html>
