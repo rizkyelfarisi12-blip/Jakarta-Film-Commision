@@ -141,6 +141,9 @@ function renderPress(){
   const container =
     document.getElementById("pressContainer");
 
+  const loadBtn =
+    document.getElementById("loadMoreBtn");
+
   container.innerHTML = "";
 
   let filtered = [...pressData];
@@ -199,6 +202,17 @@ function renderPress(){
 
   });
 
+  // HIDE LOAD MORE IF NOT NEEDED
+  if(filtered.length <= visibleCount){
+
+    loadBtn.style.display = "none";
+
+  }else{
+
+    loadBtn.style.display = "inline-flex";
+
+  }
+
 }
 
 function generateSlug(title){
@@ -210,6 +224,16 @@ function generateSlug(title){
     .replace(/\s+/g, "-");
 
 }
+
+document
+.getElementById("loadMoreBtn")
+.addEventListener("click", () => {
+
+  visibleCount += 5;
+
+  renderPress();
+
+});
 
 loadPressReleases();
 
