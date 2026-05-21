@@ -20,102 +20,64 @@
   <div id="navbar"></div>
 
   <!-- =========================
-PRESS RELEASE HERO
-========================= -->
+  PRESS RELEASE HERO
+  ========================= -->
 
-<section class="press-release-hero">
+  <section class="press-release-hero">
 
-  <!-- BG -->
-  <div class="press-release-bg">
-    <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=1800&auto=format&fit=crop" alt="">
-    <div class="press-release-overlay"></div>
-  </div>
-
-  <div class="container">
-
-    <div class="press-release-hero-content">
-
-      <span class="press-release-label">
-        Official Release
-      </span>
-
-      <h1>
-        Latest press-release
-      </h1>
-
+    <!-- BG -->
+    <div class="press-release-bg">
+      <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=1800&auto=format&fit=crop" alt="">
+      <div class="press-release-overlay"></div>
     </div>
 
-  </div>
+    <div class="container">
 
-</section>
+      <div class="press-release-hero-content">
 
+        <span class="press-release-label" id="pressCategory"></span>
 
-<!-- =========================
-press-release CONTENT
-========================= -->
-
-<section class="press-release-section">
-
-  <div class="container">
-
-    <div class="press-release-wrapper">
-
-      <!-- TITLE -->
-      <div class="press-release-heading">
-
-        <div class="press-release-line"></div>
-
-        <h2>
-          Catalyzing Global Stories in Southeast Asia
-        </h2>
-
-      </div>
-
-
-      <!-- HIGHLIGHT -->
-      <div class="press-release-highlight">
-
-        In a landmark move to cement Jakarta’s status as a premier global filming destination,
-        the Jakarta Film Commission (JFC) is proud to announce the launch of the
-        "Jakarta Greenlight" International Co-Production Grant for the 2025 fiscal year.
-
-      </div>
-
-
-      <!-- CONTENT -->
-      <div class="press-release-content">
-
-        <p>
-          Designed to foster creative collaboration between Indonesian filmmakers and
-          international production houses, the grant offers up to USD 250,000 USD in direct
-          financial support for qualifying projects that showcase the unique urban landscape
-          and cultural richness of the Indonesian capital.
-        </p>
-
-        <p>
-          The initiative comes at a time when Southeast Asian narratives are gaining
-          unprecedented traction on the world stage. Jakarta Greenlight aims to reduce
-          the financial barriers for international crews filming in the city while ensuring
-          that local talent—from cinematographers to post-production specialists—is integrated
-          into world-class workflows.
-        </p>
-
-        <blockquote>
-          “This is more than just a financial incentive,” says Budi Santoso,
-          Executive Director of the Jakarta Film Commission.
-          “It is an invitation for the world's best storytellers to discover the
-          limitless possibility of our city. From the futuristic glass towers
-          of the CBD to the historic alleys of Kota Tua, Jakarta is a character
-          waiting to be written.”
-        </blockquote>
+        <h1 id="heroPressTitle"></h1>
 
       </div>
 
     </div>
 
-  </div>
+  </section>
 
-</section>
+
+  <!-- =========================
+  press-release CONTENT
+  ========================= -->
+
+  <section class="press-release-section">
+
+    <div class="container">
+      <div class="press-meta">
+
+        <span id="pressDate"></span>
+
+      </div>
+
+      <div class="press-release-wrapper">
+
+        <!-- TITLE -->
+        <div class="press-release-heading">
+
+          <div class="press-release-line"></div>
+
+          <h2 id="pressTitle"></h2>
+
+        </div>
+    
+        <!-- CONTENT -->
+        <div class="press-release-content" id="pressContent"></div>
+
+      </div>
+
+    </div>
+
+  </section>
   
 
   <!-- FOOTER -->
@@ -126,6 +88,83 @@ press-release CONTENT
 
 <!-- JAVASCRIPT -->
   <script src="assets/js/components.js"></script>
-  <script src="assets/js/custom.js"></script>
- 
+<script src="assets/js/custom.js"></script>
+
+<!-- DATA -->
+<script src="assets/data/press-release-data.js"></script>
+
+<script>
+
+function generateSlug(title){
+
+  return title
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-");
+
+}
+
+function loadPressDetail(){
+
+  // ambil slug URL
+  const params = new URLSearchParams(window.location.search);
+  const slug = params.get("slug");
+
+  // cari data dari pressData.js
+  const press = pressData.find(item =>
+    generateSlug(item.title) === slug
+  );
+
+  // kalau tidak ketemu
+  if(!press){
+
+    document.getElementById("heroPressTitle").textContent =
+      "Press Release Not Found";
+
+    document.getElementById("pressTitle").textContent =
+      "Press Release Not Found";
+
+    return;
+  }
+
+  // HERO TITLE
+  document.getElementById("heroPressTitle").textContent =
+    press.title;
+
+  // TITLE
+  document.getElementById("pressTitle").textContent =
+    press.title;
+
+  // CATEGORY
+  document.getElementById("pressCategory").textContent =
+    press.category;
+
+  // DATE
+  document.getElementById("pressDate").textContent =
+    press.date;
+
+  // CONTENT
+  const content =
+    document.getElementById("pressContent");
+
+  content.innerHTML = "";
+
+  press.content.forEach(paragraph => {
+
+    content.innerHTML += `
+      <p>${paragraph}</p>
+    `;
+
+  });
+
+  // browser title
+  document.title =
+    press.title + " | Jakarta Film Commission";
+
+}
+
+loadPressDetail();
+
+</script>
 </html>

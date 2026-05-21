@@ -253,7 +253,7 @@
 <!-- JAVASCRIPT -->
   <script src="assets/js/components.js"></script>
   <script src="assets/js/custom.js"></script>
-  
+  <script src="assets/data/press-release-data.js"></script>
  <script>
 /* =========================
    FILMS
@@ -297,55 +297,74 @@ fetch("assets/data/films.json")
 /* =========================
    PRESS RELEASE
 ========================= */
-fetch("assets/data/press.json")
-  .then(response => response.json())
-  .then(data => {
+const data = pressData;
 
-    const pressGrid =
-    document.getElementById("pressGrid");
+    
+function generateSlug(title){
 
-    // FUNCTION LIMIT 10 WORDS
-    function limitWords(text, limit){
+  return title
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-");
 
-      return text
-        .split(" ")
-        .slice(0, limit)
-        .join(" ") + "...";
+}
 
-    }
+const pressGrid =
+document.getElementById("pressGrid");
 
-    // MAX 3 CARD
-    data.slice(0,3).forEach(item => {
+// ambil data dari press-release-data.js
+const latestPress = [...pressData]
+.sort((a,b)=> new Date(b.date) - new Date(a.date))
+.slice(0,3);
 
-      pressGrid.innerHTML += `
-        <article class="press-card">
 
-          <div>
+// FUNCTION LIMIT WORDS
+function limitWords(text, limit){
 
-            <div class="press-category">
-              ${item.category}
-            </div>
+  return text
+    .split(" ")
+    .slice(0, limit)
+    .join(" ") + "...";
 
-            <h3>
-              ${item.title}
-            </h3>
+}
 
-            <p>
-              ${limitWords(item.description, 10)}
-            </p>
 
-          </div>
+// RENDER
+latestPress.forEach(item => {
 
-          <div class="press-bottom">
-            <span>${item.date}</span>
-            <span>↗</span>
-          </div>
+  pressGrid.innerHTML += `
 
-        </article>
-      `;
+    <a 
+      href="press-release.html?slug=${generateSlug(item.title)}"
+      class="press-card"
+    >
 
-    });
+      <div>
 
-  });
+        <div class="press-category">
+          ${item.category}
+        </div>
+
+        <h3>
+          ${item.title}
+        </h3>
+
+        <p>
+          ${limitWords(item.description, 10)}
+        </p>
+
+      </div>
+
+      <div class="press-bottom">
+        <span>${item.date}</span>
+        <span>↗</span>
+      </div>
+
+    </a>
+
+  `;
+
+});
 </script>
 </html>
