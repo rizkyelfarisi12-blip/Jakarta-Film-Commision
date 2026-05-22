@@ -24,9 +24,9 @@ async function loadComponent(id, file){
 
 async function initComponents(){
 
-  await loadComponent("navbar", "/components/navbar.html");
+  await loadComponent("navbar", "components/navbar.html");
 
-  await loadComponent("footer", "/components/footer.html");
+  await loadComponent("footer", "components/footer.html");
 
   initNavbar();
 
