@@ -1,22 +1,22 @@
 const eventData = [
 
   {
-    title: "Jakarta Premiere Night 2024",
+    title: "Nonton Bareng",
 
     category: "JFS",
 
-    date: "Oct 12, 2024",
+    date: "June 1, 2026",
 
-    time: "19:00 – 22:00 WIB",
+    time: "16:00 – 21:00 WIB",
 
-    location: "Taman Ismail Marzuki",
+    location: "Taman Bendera Pusaka",
 
-    address: "Cikini, Jakarta Pusat",
+    address: "Kebayoran Baru, Jakarta Selatan",
 
     maps:
-      "https://maps.google.com/?q=Taman+Ismail+Marzuki+Jakarta",
+      "https://maps.app.goo.gl/CpkYoxVwafYgHhrH9",
 
-    image: "assets/images/event-1.jpg",
+    image: "../gallery/events/taman-siang.avif",
 
     description:
       "Join the city's most prestigious screening event.",
