@@ -3585,6 +3585,7 @@ PRESS RELEASE HERO
 .press-release-bg img{
   width:100%;
   height:100%;
+  filter: brightness(60%);
 
   object-fit:cover;
 }
