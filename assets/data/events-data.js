@@ -16,7 +16,7 @@ const eventData = [
     maps:
       "https://maps.app.goo.gl/CpkYoxVwafYgHhrH9",
 
-    image: "../gallery/events/taman-siang.avif",
+    image: "./gallery/events/taman-siang.avif",
 
     description:
       "Join the city's most prestigious screening event.",

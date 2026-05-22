@@ -3,24 +3,24 @@
     "title": "Jakarta Noir",
     "director": "Aria Wijaya",
     "year": "2025",
-    "image": "../gallery/films/13-bomb-di-jakarta.jpg"
+    "image": "./gallery/films/13-bomb-di-jakarta.jpg"
   },
   {
     "title": "Bangkit 2016",
     "director": "Putra",
     "year": "2016",
-    "image": "../gallery/films/bangkit-2016.jpg"
+    "image": "./gallery/films/bangkit-2016.jpg"
   },
     {
     "title": "Tiba Tiba Setan",
     "director": "Putra",
     "year": "2024",
-    "image": "../gallery/films/tiba-tiba-setan.webp"
+    "image": "./gallery/films/tiba-tiba-setan.webp"
   },
   {
     "title": "Mang Sung",
     "director": "Nadia Yusuf",
     "year": "2025",
-    "image": "../gallery/films/mang-sung.jpeg"
+    "image": "./gallery/films/mang-sung.jpeg"
   }
 ]
