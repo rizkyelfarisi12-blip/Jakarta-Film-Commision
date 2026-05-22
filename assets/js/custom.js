@@ -20,7 +20,6 @@
   });
 
 //======================= HERO SLIDER SCRIPT=======================
-
   const slides = document.querySelectorAll('.hero-slide');
   const dots = document.querySelectorAll('.dot');
   const nextBtn = document.querySelector('.next');
