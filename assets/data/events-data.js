@@ -16,7 +16,7 @@ const eventData = [
     maps:
       "https://maps.app.goo.gl/CpkYoxVwafYgHhrH9",
 
-    image: "../gallery/events/lapangan-banteng.webp",
+    image: "../../gallery/events/lapangan-banteng.webp",
 
     description:
       "Join the city's most prestigious screening event.",
