@@ -250,6 +250,90 @@
     }
     }
 
+    /* =========================
+    NAVBAR DROPDOWN
+    ========================= */
+
+    .nav-dropdown{
+      position:relative;
+      display:flex;
+      align-items:center;
+    }
+
+    .nav-dropdown-toggle{
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .dropdown-arrow{
+      font-size:12px;
+      transition:.3s;
+    }
+
+    /* MENU */
+    .nav-dropdown-menu{
+      position:absolute;
+
+      top:calc(100% + 20px);
+      left:0;
+
+      min-width:220px;
+
+      background:#111;
+
+      border:1px solid rgba(255,255,255,.08);
+
+      border-radius:18px;
+
+      padding:12px;
+
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+
+      opacity:0;
+      visibility:hidden;
+
+      transform:translateY(10px);
+
+      transition:.3s;
+
+      z-index:999;
+    }
+
+    /* SHOW ON HOVER */
+    .nav-dropdown:hover .nav-dropdown-menu{
+
+      opacity:1;
+      visibility:visible;
+
+      transform:translateY(0);
+
+    }
+
+    /* ROTATE ICON */
+    .nav-dropdown:hover .dropdown-arrow{
+      transform:rotate(45deg);
+    }
+
+    /* DROPDOWN LINKS */
+    .nav-dropdown-menu a{
+
+      padding:12px 14px;
+
+      border-radius:12px;
+
+      text-decoration:none;
+
+      color:#fff;
+
+      transition:.3s;
+    }
+
+    .nav-dropdown-menu a:hover{
+      background:rgba(255,255,255,.08);
+    }
 
     /*============== CORE SERVICES ===================*/
     .core-services-box{
