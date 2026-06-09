@@ -11,10 +11,17 @@
  <!-- internal resources -->
  <link rel="stylesheet" href="assets/css/custom.css">
 
-
 </head>
 
 <body>
+  <!-- LOADER -->
+  <div id="loader-container"></div>
+  
+  <!-- Hamburger Menu -->
+  <div class="menu-overlay" id="menuOverlay"></div>
+
+  <!-- WHATSAPP -->
+  <div id="whatsapp-container"></div>
   
   <!-- NAVBAR -->
   <div id="navbar"></div>
@@ -34,9 +41,7 @@
             <span class="hero-eyebrow">
               Explore Jakarta through cinematic storytelling
             </span>
-            <h1>
-              A bold headline that delivers
-            </h1>
+            <h1>A bold headline that delivers</h1>
           </div>
         </div>
       </div>
@@ -54,9 +59,7 @@
             <span class="hero-eyebrow">
               Film production support in Jakarta
             </span>
-            <h1>
-              Bringing stories to life in the capital city
-            </h1>
+            <h1>Bringing stories to life in the capital city</h1>
           </div>
         </div>
       </div>
@@ -74,9 +77,7 @@
             <span class="hero-eyebrow">
               Supporting local & international productions
             </span>
-            <h1>
-              Jakarta as the next cinematic destination
-            </h1>
+            <h1>Jakarta as the next cinematic destination</h1>
           </div>
         </div>
       </div>
@@ -100,106 +101,77 @@
   </section>
 
   <!-- CORE SERVICES -->
-  <section class="core-services-section">
-    <div class="container">
-      <div class="core-services-wrapper">
+  <section class="services-expand">
 
-        <!-- LEFT -->
-        <div class="core-services-left">
+      <div class="service-panel active">
 
-          <h2 class="core-services-heading">
-            CORE SERVICES</h2>
-          <p class="core-services-desc">
-            A little line about what’s being said and who’s saying it.</p>
+          <div class="service-bg">
+              <img src="gallery/cover/sdm.jpg">
+          </div>
 
-          <!-- ITEM -->
-          <div class="accordion-item active">
-            <button class="accordion-header">
-              <div>
-                <h3>SDM & Talent Management</h3>
-                <span>BY FILMING IN JAKARTA</span>
-              </div>
-              <div class="accordion-icon">+</div>
-            </button>
-            <div class="accordion-content">
+          <div class="service-overlay"></div>
+          <div class="service-label">SDM & TALENT</div>
+
+          <div class="service-content">
+              <span>BY FILMING IN JAKARTA</span>
+              <h2>SDM & Talent Management</h2>
               <p>
-                Jakarta Film Commission supports production crews, talent
-                development, networking, and industry collaboration for local
-                and international filmmakers.
+                  Connecting productions with local crews,
+                  actors, filmmakers and creative professionals
+                  across Jakarta.
               </p>
-            </div>
+              <a href="#">Learn More</a>
           </div>
 
-          <!-- ITEM -->
-          <div class="accordion-item">
-            <button class="accordion-header">
-              <div>
-                <h3>Incentives</h3>
-              </div>
-              <div class="accordion-icon">+</div>
-            </button>
-            <div class="accordion-content">
-              <p>
-                Incentive programs include production facilitation,
-                administrative support, and strategic collaboration opportunities.
-              </p>
-            </div>
-          </div>
-
-          <!-- ITEM -->
-          <div class="accordion-item">
-            <button class="accordion-header">
-              <div>
-                <h3>One Stop Service</h3>
-                <span>BY FILMING IN JAKARTA</span>
-              </div>
-              <div class="accordion-icon">+</div>
-            </button>
-            <div class="accordion-content">
-              <p>
-                Simplified permit coordination and integrated production support
-                services for filmmakers operating across Jakarta.
-              </p>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- RIGHT -->
-        <div class="core-services-right">
-          <div class="core-services-label">
-            INDONESIAN STUDY
-          </div>
-
-          <div class="stat-item">
-            <h2>01</h2>
-            <div>
-              <h4>100+</h4>
-              <p>Supported productions annually</p>
-            </div>
-          </div>
-
-          <div class="stat-item">
-            <h2>02</h2>
-            <div>
-              <h4>750+</h4>
-              <p>Film facilitators and crew</p>
-            </div>
-          </div>
-
-          <div class="stat-item">
-            <h2>03</h2>
-            <div>
-              <h4>24H</h4>
-              <p>Response for production assistance</p>
-            </div>
-          </div>
-        </div>
       </div>
-    </div>
 
+      <div class="service-panel">
+
+          <div class="service-bg">
+              <img src="gallery/cover/incentive.jpg">
+          </div>
+
+          <div class="service-overlay"></div>
+          <div class="service-label">INCENTIVES</div>
+
+          <div class="service-content">
+              <h2>Production Incentives</h2>
+              <p>
+                  Strategic support and facilitation
+                  programs for local and international productions.
+              </p>
+              <a href="#">Learn More</a>
+          </div>
+
+      </div>
+
+      <div class="service-panel">
+
+          <div class="service-bg">
+              <img src="gallery/cover/service.jpg">
+          </div>
+
+          <div class="service-overlay"></div>
+          <div class="service-label">ONE STOP SERVICE</div>
+
+          <div class="service-content">
+              <h2>One Stop Service</h2>
+              <p>
+                  Film permits, coordination,
+                  production assistance and local support.
+              </p>
+              <a href="#">Learn More</a>
+          </div>
+
+      </div>
   </section>
 
+
+  <!-- Featured EVENTS -->
+  <section class="featured-event">
+    <div id="featuredEventContainer"></div>
+  </section>
+  
   <!-- FILMS -->
   <section class="section">
     <div class="container">
@@ -216,8 +188,7 @@
         </div>
 
         <a href="films-list.html" class="archive-link">
-          VIEW ARCHIVE →
-        </a>
+          VIEW ARCHIVE →</a>
       </div>
 
       <!-- FILM GRID -->
@@ -225,6 +196,7 @@
 
     </div>
   </section>
+
 
   <!-- PRESS RELEASE -->
   <section class="section">
@@ -237,8 +209,7 @@
         </h2>
       </div>
       <a href="press-release-list.html" class="archive-link">
-          VIEW ALL →
-        </a>
+          VIEW ALL →</a>
     </div>
     
     <!-- PRESS GRID -->
@@ -247,10 +218,45 @@
   </div>
 </section>
 
+<section class="quick-nav-section">
+    <div class="container">
+
+        <div class="section-header">
+            <h2>Explore Our Programs</h2>
+            <p>
+                Access services and support
+                available for filmmakers and
+                production companies.
+            </p>
+        </div>
+
+        <div class="quick-nav-grid">
+            <a href="programs.html" class="quick-nav-card">
+                <h3>Programs & Incentives</h3>
+                <p>
+                    Discover funding,
+                    facilitation and support.
+                </p>
+                <span>Explore →</span>
+            </a>
+
+            <a href="events.html" class="quick-nav-card">
+                <h3>Events</h3>
+                <p>
+                    Film festivals, forums
+                    and networking sessions.
+                </p>
+                <span>View Events →</span>
+            </a>
+        </div>
+
+    </div>
+</section>
+
+
   <!-- FOOTER -->
   <div id="footer"></div>
  
-
 </body>
 
 <!-- JAVASCRIPT -->
@@ -258,16 +264,17 @@
   <script src="assets/js/custom.js"></script>
   <script src="assets/data/press-release-data.js"></script>
  <script>
-/* =========================
-   FILMS
-========================= */
+
+  /* =========================
+    FILMS
+  ========================= */
   const filmGrid = document.getElementById("filmGrid");
 
-fetch("assets/data/films.json")
+  fetch("assets/data/films.json")
   .then(res => res.json())
   .then(data => {
 
-    const films = data.slice(0,3);
+    const films = data.slice(0,6);
 
     films.forEach(film => {
 
@@ -293,81 +300,164 @@ fetch("assets/data/films.json")
         </div>
       `;
     });
+  });
 
+  /* =========================
+    PRESS RELEASE
+  ========================= */
+  const data = pressData;
+
+  function generateSlug(title){
+
+    return title
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s-]/g, "")
+      .replace(/\s+/g, "-");
+  }
+
+  const pressGrid =
+  document.getElementById("pressGrid");
+
+  // ambil data dari press-release-data.js
+  const latestPress = [...pressData]
+  .sort((a,b)=> new Date(b.date) - new Date(a.date))
+  .slice(0,3);
+
+  // FUNCTION LIMIT WORDS
+  function limitWords(text, limit){
+
+    return text
+      .split(" ")
+      .slice(0, limit)
+      .join(" ") + "...";
+  }
+
+  // RENDER
+  latestPress.forEach(item => {
+
+    pressGrid.innerHTML += `
+
+      <a 
+        href="press-release.html?slug=${generateSlug(item.title)}"
+        class="press-card">
+
+        <div>
+          <div class="press-category">
+            ${item.category}
+          </div>
+
+          <h3>
+            ${item.title}
+          </h3>
+
+          <p>
+            ${limitWords(item.description, 10)}
+          </p>
+        </div>
+
+        <div class="press-bottom">
+          <span>${item.date}</span>
+          <span>↗</span>
+        </div>
+
+      </a>
+    `;
+  });
+
+  // Core SERVICE
+  const panels =
+  document.querySelectorAll(".service-panel");
+
+  panels.forEach(panel => {
+
+      panel.addEventListener(
+          "mouseenter",
+          () => {
+              panels.forEach(p => {
+                  p.classList.remove("active");
+              });
+
+              panel.classList.add("active");
+          }
+      );
   });
 
 
-/* =========================
-   PRESS RELEASE
-========================= */
-const data = pressData;
+  function formatDate(date){
 
-    
-function generateSlug(title){
+      return new Date(date)
+      .toLocaleDateString(
+          "id-ID",
+          {
+              day:"numeric",
+              month:"long",
+              year:"numeric"
+          }
+      );
+  }
 
-  return title
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9\s-]/g, "")
-    .replace(/\s+/g, "-");
+  function renderFeaturedEvent(event){
 
-}
+      if(!event) return;
 
-const pressGrid =
-document.getElementById("pressGrid");
+      document.getElementById(
+          "featuredEventContainer"
+      ).innerHTML = `
 
-// ambil data dari press-release-data.js
-const latestPress = [...pressData]
-.sort((a,b)=> new Date(b.date) - new Date(a.date))
-.slice(0,3);
-
-
-// FUNCTION LIMIT WORDS
-function limitWords(text, limit){
-
-  return text
-    .split(" ")
-    .slice(0, limit)
-    .join(" ") + "...";
-
-}
-
-
-// RENDER
-latestPress.forEach(item => {
-
-  pressGrid.innerHTML += `
-
-    <a 
-      href="press-release.html?slug=${generateSlug(item.title)}"
-      class="press-card"
-    >
-
-      <div>
-
-        <div class="press-category">
-          ${item.category}
-        </div>
-
-        <h3>
-          ${item.title}
-        </h3>
-
-        <p>
-          ${limitWords(item.description, 10)}
-        </p>
-
+      <div class="featured-event-bg">
+          <img src="${event.image}">
+          <div class="featured-event-overlay"></div>
       </div>
 
-      <div class="press-bottom">
-        <span>${item.date}</span>
-        <span>↗</span>
+      <div class="container">
+          <div class="featured-event-content">
+              <span>
+                  Upcoming Event
+              </span>
+              <h2>
+                  ${event.title}
+              </h2>
+              <p>
+                  ${event.description}
+              </p>
+              <div class="event-meta">
+
+                  <div>
+                      <strong>Date</strong>
+                      <p>
+                          ${formatDate(event.event_date)}
+                      </p>
+                  </div>
+
+                  <div>
+                      <strong>Location</strong>
+                      <p>
+                          ${event.location}
+                      </p>
+                  </div>
+
+              </div>
+
+              <a
+                href="event-detail.html?slug=${event.slug}"
+                class="featured-event-btn">
+
+                View Event
+              </a>
+
+          </div>
+
       </div>
+      `;
+  }
 
-    </a>
+  fetch("api/get-featured-event.php")
+  .then(res => res.json())
+  .then(event => {
 
-  `;
+      renderFeaturedEvent(event);
 
-});
+  });
 </script>
 </html>

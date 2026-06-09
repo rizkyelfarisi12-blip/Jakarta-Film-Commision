@@ -11,10 +11,17 @@
  <!-- internal resources -->
  <link rel="stylesheet" href="assets/css/custom.css">
 
-
 </head>
 
 <body>
+  <!-- LOADER -->
+  <div id="loader-container"></div>
+  
+  <!-- Hamburger Menu -->
+  <div class="menu-overlay" id="menuOverlay"></div>
+
+  <!-- WHATSAPP -->
+  <div id="whatsapp-container"></div>
   
   <!-- NAVBAR -->
   <div id="navbar"></div>
@@ -41,19 +48,185 @@
         </div>
         
       <div class="hero-program-button-wrap">
-        <a href="#programs-showcase" class="hero-program-button">
+
+        <button
+          class="hero-program-main-btn"
+          id="programToggle">
           Explore Programs
-        </a>
+        </button>
+
+        <div class="hero-program-links" id="programLinks">
+
+          <a href="#sdm" class="program-link left">
+            SDM & Talent Management
+          </a>
+
+          <a href="#incentives" class="program-link center">
+            Incentives
+          </a>
+
+          <a href="#one-stop-service" class="program-link right">
+            One Stop Service
+          </a>
+
+        </div>
+
       </div>
+
     </div>
 
     </section>
 
-   <!-- =========================
+  <!-- =========================
+  SDM & Talent Management
+  ========================= -->
+  <section class="program-section" id="sdm">
+    <div class="container">
+
+      <div class="program-showcase-heading">
+          <span>Our Network</span>
+          <h2>SDM & Talent Management</h2>
+
+          <p>
+            Discover initiatives, events, and creative platforms
+            connected to Jakarta Film Commission.
+          </p>
+        </div>
+
+      <div class="program-wrapper">
+
+        <!-- ITEM -->
+        <div class="program-card active">
+          <!-- HEADER -->
+          <button class="program-header">
+            <div class="program-title">
+              <span>01</span>
+              <h2>Certification</h2>
+            </div>
+            <div class="program-icon">+</div>
+          </button>
+
+          <!-- CONTENT -->
+          <div class="program-content">
+            <div class="program-grid">
+
+              <!-- TEXT -->
+              <div class="program-text">
+
+                <p>
+                  Kami menyediakan bantuan penuh untuk tim produksi
+                  dalam mengeksplorasi berbagai lokasi Jakarta mulai
+                  dari kawasan heritage hingga metropolitan modern.
+                </p>
+                <ul>
+                  <li>Bantuan transportasi lokal untuk kru inti</li>
+                  <li>Akses lokasi eksklusif dan heritage</li>
+                  <li>Konsultasi lokasi tanpa biaya</li>
+                </ul>
+                <a href="#" class="program-button">Download PDF</a>
+
+              </div>
+
+              <!-- IMAGE -->
+              <div class="program-image">
+                <img src="gallery/cover/incentive.jpg">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ITEM -->
+        <div class="program-card">
+          <button class="program-header">
+
+            <div class="program-title">
+              <span>02</span>
+              <h2>Talent and Human Resources</h2>
+            </div>
+            <div class="program-icon">+</div>
+
+          </button>
+
+          <div class="program-content">
+            <div class="program-grid">
+              <div class="program-text">
+                <p>
+                  Dukungan penuh selama proses produksi agar
+                  aktivitas pengambilan gambar berjalan lancar.
+                </p>
+
+                <ul>
+                  <li>Pendampingan produksi</li>
+                  <li>Bantuan koordinasi izin</li>
+                  <li>Dukungan keamanan dan traffic</li>
+                </ul>
+
+                <a href="#" class="program-button">
+                  Download PDF
+                </a>
+              </div>
+              <div class="program-image">
+                <img src="gallery/cover/camera-take-person.webp">
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ITEM -->
+        <div class="program-card">
+          
+          <button class="program-header">
+            <div class="program-title">
+              <span>03</span>
+              <h2>Partnership</h2>
+            </div>
+            <div class="program-icon">+</div>
+          </button>
+
+          <div class="program-content">
+            <div class="program-grid">
+              <div class="program-text">
+                <p>
+                  Setelah produksi selesai, JFC membantu
+                  promosi film melalui jaringan internasional.
+                </p>
+                <ul>
+                  <li>Media & PR support</li>
+                  <li>Festival film internasional</li>
+                  <li>Aktivasi premiere lokal</li>
+                </ul>
+                <a href="#" class="program-button">Download PDF</a>
+              </div>
+
+              <div class="program-image">
+                <img src="gallery/cover/crew-film-warm.webp">
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================
   PROGRAM ACCORDION
   ========================= -->
-  <section class="program-section">
+  <section class="program-section" id="incentives">
     <div class="container">
+
+      <div class="program-showcase-heading">
+          <span>Our Network</span>
+          <h2>Explore Jakarta Film Ecosystem</h2>
+
+          <p>
+            Discover initiatives, events, and creative platforms
+            connected to Jakarta Film Commission.
+          </p>
+        </div>
+
       <div class="program-wrapper">
 
         <!-- ITEM -->
@@ -80,19 +253,11 @@
                   dari kawasan heritage hingga metropolitan modern.
                 </p>
                 <ul>
-                  <li>
-                    Bantuan transportasi lokal untuk kru inti
-                  </li>
-                  <li>
-                    Akses lokasi eksklusif dan heritage
-                  </li>
-                  <li>
-                    Konsultasi lokasi tanpa biaya
-                  </li>
+                  <li>Bantuan transportasi lokal untuk kru inti</li>
+                  <li>Akses lokasi eksklusif dan heritage</li>
+                  <li>Konsultasi lokasi tanpa biaya</li>
                 </ul>
-                <a href="#" class="program-button">
-                  Download PDF
-                </a>
+                <a href="#" class="program-button">Download PDF</a>
 
               </div>
 
@@ -126,9 +291,7 @@
 
                 <ul>
                   <li>Pendampingan produksi</li>
-
                   <li>Bantuan koordinasi izin</li>
-
                   <li>Dukungan keamanan dan traffic</li>
                 </ul>
 
@@ -142,44 +305,32 @@
 
             </div>
           </div>
-
         </div>
 
         <!-- ITEM -->
         <div class="program-card">
-
+          
           <button class="program-header">
-
             <div class="program-title">
               <span>03</span>
               <h2>Promotion & Activation</h2>
             </div>
             <div class="program-icon">+</div>
-
           </button>
 
           <div class="program-content">
             <div class="program-grid">
-
               <div class="program-text">
                 <p>
                   Setelah produksi selesai, JFC membantu
                   promosi film melalui jaringan internasional.
                 </p>
                 <ul>
-                  <li>
-                    Media & PR support
-                  </li>
-                  <li>
-                    Festival film internasional
-                  </li>
-                  <li>
-                    Aktivasi premiere lokal
-                  </li>
+                  <li>Media & PR support</li>
+                  <li>Festival film internasional</li>
+                  <li>Aktivasi premiere lokal</li>
                 </ul>
-                <a href="#" class="program-button">
-                  Download PDF
-                </a>
+                <a href="#" class="program-button">Download PDF</a>
               </div>
 
               <div class="program-image">
@@ -188,7 +339,6 @@
 
             </div>
           </div>
-
         </div>
 
       </div>
@@ -198,13 +348,10 @@
     <!-- =========================
     CONTACT
     ========================= -->
-
-    <section class="contact-section">
+    <!-- <section class="contact-section">
     <div class="container">
-
         <div class="contact-wrapper">
 
-        <!-- LEFT -->
         <div class="contact-info">
             <h2>Start Your Production</h2>
 
@@ -212,18 +359,6 @@
             Our team is available 24/7 to assist with location scouting, film permits, and local crew connections. Let’s bring your vision to Jakarta.
             </p>
 
-            <div class="contact-list">
-
-            <div class="contact-item">📞 +62 21 555 FILM</div>
-
-            <div class="contact-item">✉ hello@jakartafilm.com</div>
-
-            <div class="contact-item">📍 Jl. Sudirman No. 12A Jakarta Selatan</div>
-
-            </div>
-        </div>
-
-        <!-- FORM -->
         <div class="contact-form">
             <form>
             <div class="form-group">
@@ -239,14 +374,14 @@
         </div>
 
         </div>
+        </div>
     </div>
-    </section>
-
+    </section> -->
 
     <!-- =========================
     PROGRAM SHOWCASE
     ========================= -->
-    <section class="program-showcase-section" id="programs-showcase">
+    <section class="program-showcase-section" id="one-stop-service">
       <div class="container">
 
         <div class="program-showcase-heading">
@@ -307,43 +442,17 @@
             </div>
           </a>
 
-          <!-- ITEM -->
-          <!-- <a href="#" class="showcase-card">
-            <div class="showcase-bg">
-              <img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=1974&auto=format&fit=crop">
-            </div>
-            <div class="showcase-overlay"></div>
-            <div class="showcase-content">
-              <div class="showcase-left">
-                <span class="showcase-label">Creative Development</span>
-                <h3>Jakarta Film Lab</h3>
-                <p>
-                  Supporting emerging filmmakers through
-                  mentorship, workshops, and labs.
-                </p>
-              </div>
-              <div class="showcase-right">
-                <span class="showcase-button">
-                  Visit Website
-                </span>
-              </div>
-            </div>
-          </a> -->
-
         </div>
       </div>
     </section>
 
   <!-- FOOTER -->
   <div id="footer"></div>
- 
 
 </body>
-
 <!-- JAVASCRIPT -->
   <script src="assets/js/components.js"></script>
   <script src="assets/js/custom.js"></script>
- 
   <script>
   document.addEventListener("DOMContentLoaded", () => {
 
@@ -351,12 +460,10 @@
   document.querySelectorAll(".program-card");
 
   cards.forEach(card => {
-
     const button =
     card.querySelector(".program-header");
 
     button.addEventListener("click", () => {
-
       const isActive =
       card.classList.contains("active");
 
@@ -371,8 +478,22 @@
       }
 
     });
-
   });
+});
+
+// Tombol Hero
+
+const toggleBtn =
+document.getElementById("programToggle");
+
+const wrapper =
+document.querySelector(
+".hero-program-button-wrap"
+);
+
+toggleBtn.addEventListener("click", () => {
+
+    wrapper.classList.add("active");
 
 });
   </script>

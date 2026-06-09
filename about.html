@@ -14,6 +14,14 @@
 
 </head>
 <body>
+  <!-- LOADER -->
+  <div id="loader-container"></div>
+  
+  <!-- Hamburger Menu -->
+  <div class="menu-overlay" id="menuOverlay"></div>
+
+  <!-- WHATSAPP -->
+  <div id="whatsapp-container"></div>
   
   <!-- NAVBAR -->
   <div id="navbar"></div>
@@ -61,6 +69,109 @@
             </div>
         </div>
     </section>
+    
+    
+  <!-- CORE SERVICES -->
+  <section class="services-expand" style="position: relative; z-index: 10; background-color: black; padding-left: 50px; padding-right: 50px;">
+
+      <div class="service-panel active">
+
+          <div class="service-bg">
+              <img src="gallery/cover/sdm.jpg">
+          </div>
+
+          <div class="service-overlay"></div>
+
+          <div class="service-label">
+              SDM & TALENT
+          </div>
+
+          <div class="service-content">
+
+              <span>BY FILMING IN JAKARTA</span>
+
+              <h2>
+                  SDM & Talent Management
+              </h2>
+
+              <p>
+                  Connecting productions with local crews,
+                  actors, filmmakers and creative professionals
+                  across Jakarta.
+              </p>
+
+              <a href="#">
+                  Learn More
+              </a>
+
+          </div>
+
+      </div>
+
+      <div class="service-panel">
+
+          <div class="service-bg">
+              <img src="gallery/cover/incentive.jpg">
+          </div>
+
+          <div class="service-overlay"></div>
+
+          <div class="service-label">
+              INCENTIVES
+          </div>
+
+          <div class="service-content">
+
+              <h2>
+                  Production Incentives
+              </h2>
+
+              <p>
+                  Strategic support and facilitation
+                  programs for local and international productions.
+              </p>
+
+              <a href="#">
+                  Learn More
+              </a>
+
+          </div>
+
+      </div>
+
+      <div class="service-panel">
+
+          <div class="service-bg">
+              <img src="gallery/cover/service.jpg">
+          </div>
+
+          <div class="service-overlay"></div>
+
+          <div class="service-label">
+              ONE STOP SERVICE
+          </div>
+
+          <div class="service-content">
+
+              <h2>
+                  One Stop Service
+              </h2>
+
+              <p>
+                  Film permits, coordination,
+                  production assistance and local support.
+              </p>
+
+              <a href="#">
+                  Learn More
+              </a>
+
+          </div>
+
+      </div>
+
+  </section>
+
 
     <!-- VISION MISSION -->
     <section class="vision-section">
@@ -165,11 +276,10 @@
     </section>
 
     <!-- CORE SERVICE -->
-    <section class="core-services-section">
+    <!-- <section class="core-services-section">
     <div class="container">
         <div class="core-services-wrapper">
 
-        <!-- LEFT -->
         <div class="core-services-left">
             <h2 class="core-services-heading">
             CORE SERVICE
@@ -178,7 +288,6 @@
             A lifetime into award-winning storytelling and world-class filmmaking.
             </p>
 
-            <!-- ACCORDION -->
             <div class="accordion">
             <div class="accordion-item active">
                 <button class="accordion-header">
@@ -195,8 +304,6 @@
                 </div>
             </div>
 
-            <!-- ITEM -->
-
             <div class="accordion-item">
                 <button class="accordion-header">
                 <div>
@@ -210,8 +317,6 @@
                 </p>
                 </div>
             </div>
-
-            <!-- ITEM -->
 
             <div class="accordion-item">
                 <button class="accordion-header">
@@ -231,7 +336,6 @@
             </div>
         </div>
 
-        <!-- RIGHT -->
         <div class="core-services-right">
             <div class="core-services-label">
             Production Stats
@@ -263,10 +367,10 @@
         </div>
         </div>
     </div>
-    </section>
+    </section> -->
 
     <!-- CONTACT -->
-    <section class="contact-section">
+    <section class="contact-section" id="contact">
     <div class="container">
         <div class="contact-wrapper">
 
@@ -323,4 +427,27 @@
   <script src="assets/js/components.js"></script>
   <script src="assets/js/custom.js"></script>
   
+  <script>
+    
+// Core SERVICE
+const panels =
+document.querySelectorAll(".service-panel");
+
+panels.forEach(panel => {
+
+    panel.addEventListener(
+        "mouseenter",
+        () => {
+
+            panels.forEach(p => {
+                p.classList.remove("active");
+            });
+
+            panel.classList.add("active");
+
+        }
+    );
+
+});
+  </script>
 </html>

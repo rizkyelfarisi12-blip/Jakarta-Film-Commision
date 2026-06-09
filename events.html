@@ -11,11 +11,18 @@
  <!-- internal resources -->
  <link rel="stylesheet" href="assets/css/custom.css">
 
-
 </head>
 
 <body>
+  <!-- LOADER -->
+  <div id="loader-container"></div>
   
+  <!-- Hamburger Menu -->
+  <div class="menu-overlay" id="menuOverlay"></div>
+
+  <!-- WHATSAPP -->
+  <div id="whatsapp-container"></div>
+
   <!-- NAVBAR -->
   <div id="navbar"></div>
 
@@ -107,18 +114,35 @@
   <!-- FOOTER -->
   <div id="footer"></div>
  
-
 </body>
 
 <!-- JAVASCRIPT -->
   <script src="assets/js/components.js"></script>
   <script src="assets/js/custom.js"></script>
-  <script src="assets/data/events-data.js"></script>
+  <!-- <script src="assets/data/events-data.js"></script> -->
  
   <script>
 
-let allEvents = [...eventData];
-let filteredEvents = [...eventData];
+let allEvents = [];
+let filteredEvents = [];
+
+fetch("api/get-events.php")
+.then(res => res.json())
+.then(data => {
+
+  console.log("DATA:", data);
+
+  allEvents = data;
+  filteredEvents = [...data];
+
+  renderEvents();
+
+})
+.catch(error => {
+
+  console.error(error);
+
+});
 
 let visibleCount = 6;
 
@@ -139,9 +163,7 @@ function generateSlug(title){
     .trim()
     .replace(/[^a-z0-9\s-]/g, "")
     .replace(/\s+/g, "-");
-
 }
-
 
 /* =========================
 RENDER EVENTS
@@ -172,7 +194,7 @@ function renderEvents() {
         <div class="event-content">
 
           <div class="event-date">
-            ${event.date}
+            ${event.event_date}
           </div>
 
           <h3>
@@ -194,43 +216,28 @@ function renderEvents() {
             </a>
 
           </div>
-
         </div>
-
       </article>
-
     `;
-
   });
-
 
   /* =========================
   SHOW/HIDE LOAD MORE
   ========================= */
   if (visibleCount >= filteredEvents.length) {
-
     loadMoreBtn.style.display = "none";
-
   } else {
-
     loadMoreBtn.style.display = "inline-flex";
-
   }
-
 }
-
 
 /* =========================
 LOAD MORE
 ========================= */
 loadMoreBtn.addEventListener("click", () => {
-
   visibleCount += 3;
-
   renderEvents();
-
 });
-
 
 /* =========================
 FILTER
@@ -239,7 +246,6 @@ const filterBtns =
 document.querySelectorAll(".filter-btn");
 
 filterBtns.forEach(btn => {
-
   btn.addEventListener("click", () => {
 
     // ACTIVE BUTTON
@@ -266,21 +272,15 @@ filterBtns.forEach(btn => {
       allEvents.filter(event =>
         event.category === category
       );
-
     }
-
     renderEvents();
-
   });
-
 });
-
 
 /* =========================
 INITIAL LOAD
 ========================= */
 renderEvents();
-
 </script>
 
 </html>

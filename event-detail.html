@@ -15,6 +15,14 @@
 </head>
 
 <body>
+  <!-- LOADER -->
+  <div id="loader-container"></div>
+  
+  <!-- Hamburger Menu -->
+  <div class="menu-overlay" id="menuOverlay"></div>
+
+  <!-- WHATSAPP -->
+  <div id="whatsapp-container"></div>
   
   <!-- NAVBAR -->
   <div id="navbar"></div>
@@ -176,7 +184,7 @@
 <!-- JAVASCRIPT -->
   <script src="assets/js/components.js"></script>
   <script src="assets/js/custom.js"></script>
-  <script src="assets/data/events-data.js"></script>
+  <!-- <script src="assets/data/events-data.js"></script> -->
  
   <script>
 
@@ -190,42 +198,30 @@ function generateSlug(title){
 
 }
 
-const params =
-new URLSearchParams(window.location.search);
-
-const slug = params.get("slug");
+const slug =
+new URLSearchParams(window.location.search)
+.get("slug");
 
 console.log("URL SLUG:", slug);
 
-console.log(eventData);
+fetch(
+  `api/get-event-detail.php?slug=${slug}`
+)
+.then(res => res.json())
+.then(currentEvent => {
 
-let currentEvent = null;
+  console.log("EVENT DATA:", currentEvent);
 
-eventData.forEach(item => {
+  if(!currentEvent){
 
-  console.log(
-    generateSlug(item.title)
-  );
+    document.body.innerHTML = `
+      <h1 style="padding:40px">
+        Event Not Found
+      </h1>
+    `;
 
-  if(generateSlug(item.title) === slug){
-
-    currentEvent = item;
-
+    return;
   }
-
-});
-
-console.log(currentEvent);
-
-if(!currentEvent){
-
-  document.body.innerHTML = `
-    <h1 style="padding:40px">
-      Event Not Found
-    </h1>
-  `;
-
-}else{
 
   document.getElementById("eventTitle")
   .textContent =
@@ -237,23 +233,23 @@ if(!currentEvent){
 
   document.getElementById("eventDate")
   .innerHTML =
-  `📅 ${currentEvent.date}`;
+  `📅 ${currentEvent.event_date}`;
 
   document.getElementById("eventLocation")
   .innerHTML =
   `📍 ${currentEvent.location}`;
-  
+
   document.getElementById("mapsLink")
   .href =
-  currentEvent.maps;
+  currentEvent.map_url;
 
   document.getElementById("sidebarDate")
   .textContent =
-  currentEvent.date;
+  currentEvent.event_date;
 
   document.getElementById("eventTime")
   .textContent =
-  currentEvent.time;
+  currentEvent.event_time;
 
   document.getElementById("sidebarLocation")
   .textContent =
@@ -267,54 +263,95 @@ if(!currentEvent){
   .src =
   currentEvent.image;
 
-    const content =
-    document.getElementById("eventContent");
+  let content = [];
+  try{
 
-    currentEvent.content.forEach(paragraph => {
+      content =
+      JSON.parse(
+          currentEvent.content
+      );
+  }catch(error){
 
-    content.innerHTML += `
-        <p>${paragraph}</p>
-    `;
+      console.error(error);
+  }
+  content.forEach(paragraph => {
 
-    });
+      document
+      .getElementById("eventContent")
+      .innerHTML += `
+          <p>${paragraph}</p>
+      `;
+  });
 
-    const scheduleList =
-    document.getElementById("scheduleList");
+  let schedules = [];
+  try{
 
-    if(currentEvent.schedule){
+      schedules =
+      JSON.parse(
+          currentEvent.schedule
+      );
+  }catch(error){
+      console.error(error);
+  }
+  let scheduleHTML = "";
+  
+  schedules.forEach(item => {
 
-    currentEvent.schedule.forEach(item => {
+    scheduleHTML += `
 
-        scheduleList.innerHTML += `
+      <div class="schedule-item">
 
-        <div class="schedule-item">
-
-            <div class="schedule-time">
-            ${item.time}
-            </div>
-
-            <div class="schedule-content">
-
-            <h3>
-                ${item.title}
-            </h3>
-
-            <p>
-                ${item.description}
-            </p>
-
-            </div>
-
+        <div class="schedule-time">
+          ${item.time}
         </div>
 
-        `;
+        <div class="schedule-content">
+          <h3>${item.title}</h3>
+          <p>${item.description}</p>
+        </div>
+
+      </div>
+
+    `;
+
+  });
+
+  document.getElementById("scheduleList")
+  .innerHTML = scheduleHTML;
+
+});
+
+document
+.querySelectorAll("a")
+.forEach(link=>{
+
+    link.addEventListener("click",function(e){
+
+        const href = this.getAttribute("href");
+
+        if(
+            href &&
+            !href.startsWith("#") &&
+            !href.startsWith("http")
+        ){
+
+            e.preventDefault();
+
+            document
+            .getElementById("loader")
+            .classList.remove("hide");
+
+            setTimeout(()=>{
+
+                window.location = href;
+
+            },500);
+
+        }
 
     });
 
-    }
-
-}
-
+});
 </script>
 
 </html>
