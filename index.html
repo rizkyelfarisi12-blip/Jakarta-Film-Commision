@@ -3,14 +3,138 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Jakarta Film Commission</title>
+  <meta name="google-site-verification" content="vlalvp6LkK935uGO7C0oQy7xvq78EjCUUFdO-BurhG8" />
 
+  <title>Jakarta Film Commission | Official Film Office of Jakarta</title>
+
+  <meta name="description" content="Jakarta Film Commission is the official film office providing filming permits, production services, incentives, location scouting, and support for filmmakers in Jakarta.">
+  <meta name="keywords" content="Jakarta Film Commission, filming in Jakarta, film permit Indonesia, production services Jakarta, film incentives Jakarta">
+
+  <link rel="canonical" href="https://jfc.co.id/">
+  
+  <link rel="icon" type="image/png" href="assets/icon/JakartaFilmCommissionLogo-9.ico">
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
  <!-- internal resources -->
  <link rel="stylesheet" href="assets/css/custom.css">
 
+ <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"GovernmentOrganization",
+    "name":"Jakarta Film Commission",
+    "url":"https://jfc.co.id",
+    "logo":"https://jfc.co.id/assets/icon/JakartaFilmCommissionLogo-Colored-White2.png",
+    "description":"Official Jakarta Film Commission supporting local and international film productions in Jakarta.",
+    "address":{
+        "@type":"PostalAddress",
+        "addressLocality":"Jakarta",
+        "addressCountry":"Indonesia"
+    },
+    "sameAs":[
+        "https://www.instagram.com/jakartafilmcommission"  ]
+  }
+
+</script>
+
+ <style>
+  
+  .section-title {
+            font-size: 2.25rem;
+            margin-bottom: 0.5rem;
+            color: #FF5A1F;
+        }
+
+        
+        .checklist {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .checklist li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .checklist li::before {
+            content: '✓';
+            width: 1.5rem;
+            height: 1.5rem;
+            background: #FF5A1F;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            font-weight: bold;
+            flex-shrink: 0;
+            margin-top: 0.25rem;
+        }
+
+        .checklist li span {
+            color: #526E3E;
+        }
+
+        
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: #526E3E;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        @media (min-width: 768px) {
+            .section-title {
+                font-size: 3rem;
+            }
+        }
+        .section-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .section-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .section-grid.reverse {
+            direction: rtl;
+        }
+
+        .section-grid.reverse > * {
+            direction: ltr;
+        }
+
+        .btn-primary {
+            padding: 1rem 2rem;
+            background: #FF5A1F;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .btn-primary:hover {
+            background: #FF5A1F;
+            transform: translateY(-2px);
+        }
+ </style>
 </head>
 
 <body>
@@ -21,7 +145,7 @@
   <div class="menu-overlay" id="menuOverlay"></div>
 
   <!-- WHATSAPP -->
-  <div id="whatsapp-container"></div>
+  <!-- <div id="whatsapp-container"></div> -->
   
   <!-- NAVBAR -->
   <div id="navbar"></div>
@@ -32,16 +156,17 @@
     <!-- SLIDE 1 -->
     <div class="hero-slide active">
       <img 
-        src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=1974&auto=format&fit=crop"
+        src="gallery/cover/shoot-double.webp"
         alt="">
       <div class="hero-overlay"></div>
       <div class="container hero-content">
         <div class="hero-inner">
           <div class="hero-text">
-            <span class="hero-eyebrow">
-              Explore Jakarta through cinematic storytelling
+            <span class="hero-eyebrow" style="font-size: 40px;">
+              Jakarta Film Commission
             </span>
-            <h1>A bold headline that delivers</h1>
+            <h1 style="font-size: 50px;">
+              Connecting Film, City, and People</h1>
           </div>
         </div>
       </div>
@@ -50,7 +175,7 @@
     <!-- SLIDE 2 -->
     <div class="hero-slide">
       <img 
-        src="https://images.unsplash.com/photo-1494526585095-c41746248156?q=80&w=1974&auto=format&fit=crop"
+        src="gallery/cover/sdm.jpg"
         alt="">
       <div class="hero-overlay"></div>
       <div class="container hero-content">
@@ -68,7 +193,7 @@
     <!-- SLIDE 3 -->
     <div class="hero-slide">
       <img 
-        src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1974&auto=format&fit=crop"
+        src="gallery/cover/jakarta-cinematis-sepi.webp"
         alt="">
       <div class="hero-overlay"></div>
       <div class="container hero-content">
@@ -100,80 +225,115 @@
 
   </section>
 
-  <!-- CORE SERVICES -->
-  <section class="services-expand">
 
-      <div class="service-panel active">
+   <!-- CORE SERVICES -->
+        <!-- Services Expand Section -->
+        <section class="services-expand">
+            <!-- Panel 1: One-Stop Service -->
+            <div class="service-panel active">
+                <div class="service-bg">
+                    <img src="gallery/cover/banner-filming-in-jakarta.webp" alt="One-Stop Service">
+                </div>
+                <div class="service-overlay"></div>
+                <div class="service-label">One Stop Services</div>
+                <div class="service-content">
+                    <span>BY FILMING IN JAKARTA</span>
+                    <h2>One-Stop Film Service</h2>
+                    <!-- <p>Mempermudah proses produksi melalui koordinasi perizinan lintas OPD, database lokasi syuting, dan standarisasi biaya yang transparan.</p> -->
+                    <a href="#" onclick="event.preventDefault()">Learn More →</a>
+                </div>
+            </div>
 
-          <div class="service-bg">
-              <img src="gallery/cover/sdm.jpg">
+            <!-- Panel 2: Talent Development -->
+            <div class="service-panel">
+                <div class="service-bg">
+                    <img src="gallery/cover/camera-take-person.webp" alt="Talent Development">
+                </div>
+                <div class="service-overlay"></div>
+                <div class="service-label">Talent Development</div>
+                <div class="service-content">
+                    <span>Menyiapkan talenta dan tenaga profesional perfilman</span>
+                    <h2>Pengembangan Talenta & Ekosistem Industri</h2>
+                    <!-- <p>Program pelatihan intensif, sertifikasi profesi, dan penguatan jejaring antara industri, perguruan tinggi, dan komunitas film Jakarta.</p> -->
+                    <a href="#" onclick="event.preventDefault()">Learn More →</a>
+                </div>
+            </div>
+
+            <!-- Panel 3: Production Support -->
+            <div class="service-panel">
+                <div class="service-bg">
+                    <img src="gallery/cover/incentive.jpg" alt="Production Support">
+                </div>
+                <div class="service-overlay"></div>
+                <div class="service-label">Incentives</div>
+                <div class="service-content">
+                    <span>Mendorong pertumbuhan investasi dan aktivitas produksi film</span>
+                    <h2>Dukungan Produksi & Insentif</h2>
+                    <!-- <p>Meningkatkan akses dan partisipasi masyarakat dalam ekosistem perfilman Meningkatkan akses dan partisipasi masyarakat dalam ekosistem perfilman.</p> -->
+                    <a href="#" onclick="event.preventDefault()">Learn More →</a>
+                </div>
+            </div>
+
+            <!-- Panel 4: Public Access -->
+            <div class="service-panel">
+                <div class="service-bg">
+                    <img src="gallery/cover/Nobar-di-Taman-Bendera-Pusaka-main.jpeg" alt="Public Access">
+                </div>
+                <div class="service-overlay"></div>
+                <div class="service-label">Akses Public</div>
+                <div class="service-content">
+                    <span>Meningkatkan akses dan partisipasi masyarakat dalam ekosistem perfilman</span>
+                    <h2>Akses Public & Literasi Film</h2>
+                    <!-- <p>Meningkatkan akses dan partisipasi masyarakat dalam ekosistem perfilman Meningkatkan akses dan partisipasi masyarakat dalam ekosistem perfilman.</p> -->
+                    <a href="#" onclick="event.preventDefault()">Learn More →</a>
+                </div>
+            </div>
+
+            <!-- Panel 5: Global Promotion -->
+            <div class="service-panel">
+                <div class="service-bg">
+                    <img src="gallery/cover/1b8b311c-8000-467b-94cc-f97f2b210579.jpg" alt="Global Promotion">
+                </div>
+                <div class="service-overlay"></div>
+                <div class="service-label">Promotion</div>
+                <div class="service-content">
+                    <span>Memperkuat posisi Jakarta di panggung perfilman dunia</span>
+                    <h2>Promosi & Diplomasi Budaya</h2>
+                    <!-- <p>Memperkuat posisi Jakarta di festival film internasional, membangun kolaborasi global, dan mempromosikan Jakarta sebagai kota produksi film kelas dunia.</p> -->
+                    <a href="#" onclick="event.preventDefault()">Learn More →</a>
+                </div>
+            </div>
+        </section>
+
+  <section id="services" class="white" style="padding: 50px; background-color: #F8F0DF;">
+      <div class="container">
+          <div class="section-grid">
+              <div class="section-image">
+                  <img src="gallery/cover/rendy-novantino-vsVRBLBitaA-unsplash.jpg.jpeg" alt="One-Stop Film Service">
+              </div>
+              <div>
+                  <h2 class="section-title">Jakarta Film Commission</h2>
+                  <p class="section-subtitle">Jakarta Film Commission menghadirkan berbagai program untuk mempermudah proses produksi, mengembangkan talenta dan tenaga profesional perfilman, mendorong investasi dan aktivitas produksi, memperluas partisipasi masyarakat dalam ekosistem film, serta memperkuat posisi Jakarta sebagai kota kreatif dan destinasi produksi film bertaraf internasional.</p>
+                  <ul class="checklist">
+                      <li><span>Mempermudah proses produksi melalui Filming in Jakarta</span></li>
+                      <li><span>Menyiapkan talenta dan tenaga profesional perfilman</span></li>
+                      <li><span>Mendorong pertumbuhan investasi dan aktivitas produksi film</span></li>
+                      <li><span>Meningkatkan akses dan partisipasi masyarakat dalam ekosistem perfilman</span></li>
+                      <li><span>Memperkuat posisi Jakarta di panggung perfilman dunia</span></li>
+                  </ul>
+                  <a href="programs.html"><button class="btn-primary">Jelajahi Layanan →</button></a>
+              </div>
           </div>
-
-          <div class="service-overlay"></div>
-          <div class="service-label">SDM & TALENT</div>
-
-          <div class="service-content">
-              <span>BY FILMING IN JAKARTA</span>
-              <h2>SDM & Talent Management</h2>
-              <p>
-                  Connecting productions with local crews,
-                  actors, filmmakers and creative professionals
-                  across Jakarta.
-              </p>
-              <a href="#">Learn More</a>
-          </div>
-
-      </div>
-
-      <div class="service-panel">
-
-          <div class="service-bg">
-              <img src="gallery/cover/incentive.jpg">
-          </div>
-
-          <div class="service-overlay"></div>
-          <div class="service-label">INCENTIVES</div>
-
-          <div class="service-content">
-              <h2>Production Incentives</h2>
-              <p>
-                  Strategic support and facilitation
-                  programs for local and international productions.
-              </p>
-              <a href="#">Learn More</a>
-          </div>
-
-      </div>
-
-      <div class="service-panel">
-
-          <div class="service-bg">
-              <img src="gallery/cover/service.jpg">
-          </div>
-
-          <div class="service-overlay"></div>
-          <div class="service-label">ONE STOP SERVICE</div>
-
-          <div class="service-content">
-              <h2>One Stop Service</h2>
-              <p>
-                  Film permits, coordination,
-                  production assistance and local support.
-              </p>
-              <a href="#">Learn More</a>
-          </div>
-
       </div>
   </section>
-
 
   <!-- Featured EVENTS -->
-  <section class="featured-event">
+  <!-- <section class="featured-event">
     <div id="featuredEventContainer"></div>
-  </section>
+  </section> -->
   
   <!-- FILMS -->
-  <section class="section">
+  <!-- <section class="section">
     <div class="container">
 
       <div class="section-header">
@@ -191,15 +351,15 @@
           VIEW ARCHIVE →</a>
       </div>
 
-      <!-- FILM GRID -->
+
       <div class="film-grid" id="filmGrid"></div>
 
     </div>
-  </section>
+  </section> -->
 
 
   <!-- PRESS RELEASE -->
-  <section class="section">
+  <!-- <section class="section">
   <div class="container">
 
     <div class="section-header">
@@ -212,13 +372,12 @@
           VIEW ALL →</a>
     </div>
     
-    <!-- PRESS GRID -->
     <div class="press-grid" id="pressGrid"></div>
 
   </div>
-</section>
+</section> -->
 
-<section class="quick-nav-section">
+<!-- <section class="quick-nav-section">
     <div class="container">
 
         <div class="section-header">
@@ -251,7 +410,7 @@
         </div>
 
     </div>
-</section>
+</section> -->
 
 
   <!-- FOOTER -->
@@ -262,6 +421,7 @@
 <!-- JAVASCRIPT -->
   <script src="assets/js/components.js"></script>
   <script src="assets/js/custom.js"></script>
+  <script src="assets/js/services-script.js"></script>
   <script src="assets/data/press-release-data.js"></script>
  <script>
 
@@ -364,25 +524,6 @@
       </a>
     `;
   });
-
-  // Core SERVICE
-  const panels =
-  document.querySelectorAll(".service-panel");
-
-  panels.forEach(panel => {
-
-      panel.addEventListener(
-          "mouseenter",
-          () => {
-              panels.forEach(p => {
-                  p.classList.remove("active");
-              });
-
-              panel.classList.add("active");
-          }
-      );
-  });
-
 
   function formatDate(date){
 
