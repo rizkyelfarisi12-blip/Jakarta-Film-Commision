@@ -15,6 +15,7 @@
  <link rel="icon" type="image/x-icon" href="assets\icon\logo&icon.ico">
  <link rel="shortcut icon" href="assets\icon\logo&icon.ico">
   <link rel="icon" type="image/png" href="assets/icon/JakartaFilmCommissionLogo-9.ico">
+  
  <!-- Link Swiper's CSS -->
  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
  <!-- Google tag (gtag.js) -->

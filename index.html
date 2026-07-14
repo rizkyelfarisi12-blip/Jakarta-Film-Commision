@@ -36,105 +36,8 @@
     "sameAs":[
         "https://www.instagram.com/jakartafilmcommission"  ]
   }
-
 </script>
 
- <style>
-  
-  .section-title {
-            font-size: 2.25rem;
-            margin-bottom: 0.5rem;
-            color: #FF5A1F;
-        }
-
-        
-        .checklist {
-            list-style: none;
-            margin-bottom: 2rem;
-        }
-
-        .checklist li {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-        }
-
-        .checklist li::before {
-            content: '✓';
-            width: 1.5rem;
-            height: 1.5rem;
-            background: #FF5A1F;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.875rem;
-            font-weight: bold;
-            flex-shrink: 0;
-            margin-top: 0.25rem;
-        }
-
-        .checklist li span {
-            color: #526E3E;
-        }
-
-        
-        .section-subtitle {
-            font-size: 1.125rem;
-            color: #526E3E;
-            margin-bottom: 2rem;
-            line-height: 1.8;
-        }
-
-        @media (min-width: 768px) {
-            .section-title {
-                font-size: 3rem;
-            }
-        }
-        .section-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 3rem;
-            align-items: center;
-        }
-
-        @media (min-width: 768px) {
-            .section-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        .section-grid.reverse {
-            direction: rtl;
-        }
-
-        .section-grid.reverse > * {
-            direction: ltr;
-        }
-
-        .btn-primary {
-            padding: 1rem 2rem;
-            background: #FF5A1F;
-            color: white;
-            border: none;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            font-size: 1rem;
-        }
-
-        .btn-primary:hover {
-            background: #FF5A1F;
-            transform: translateY(-2px);
-        }
- </style>
 </head>
 
 <body>
@@ -225,85 +128,83 @@
 
   </section>
 
-
    <!-- CORE SERVICES -->
-        <!-- Services Expand Section -->
-        <section class="services-expand">
-            <!-- Panel 1: One-Stop Service -->
-            <div class="service-panel active">
-                <div class="service-bg">
-                    <img src="gallery/cover/banner-filming-in-jakarta.webp" alt="One-Stop Service">
-                </div>
-                <div class="service-overlay"></div>
-                <div class="service-label">One Stop Services</div>
-                <div class="service-content">
-                    <span>BY FILMING IN JAKARTA</span>
-                    <h2>One-Stop Film Service</h2>
-                    <!-- <p>Mempermudah proses produksi melalui koordinasi perizinan lintas OPD, database lokasi syuting, dan standarisasi biaya yang transparan.</p> -->
-                    <a href="#" onclick="event.preventDefault()">Learn More →</a>
-                </div>
-            </div>
+  <section class="services-expand">
+    <!-- Panel 1: One-Stop Service -->
+    <div class="service-panel active">
+        <div class="service-bg">
+            <img src="gallery/cover/banner-filming-in-jakarta.webp" alt="One-Stop Service">
+        </div>
+        <div class="service-overlay"></div>
+        <div class="service-label">One Stop Services</div>
+        <div class="service-content">
+            <span>BY FILMING IN JAKARTA</span>
+            <h2>One-Stop Film Service</h2>
+            <!-- <p>Mempermudah proses produksi melalui koordinasi perizinan lintas OPD, database lokasi syuting, dan standarisasi biaya yang transparan.</p> -->
+            <a href="#" onclick="event.preventDefault()">Learn More →</a>
+        </div>
+    </div>
 
-            <!-- Panel 2: Talent Development -->
-            <div class="service-panel">
-                <div class="service-bg">
-                    <img src="gallery/cover/camera-take-person.webp" alt="Talent Development">
-                </div>
-                <div class="service-overlay"></div>
-                <div class="service-label">Talent Development</div>
-                <div class="service-content">
-                    <span>Menyiapkan talenta dan tenaga profesional perfilman</span>
-                    <h2>Pengembangan Talenta & Ekosistem Industri</h2>
-                    <!-- <p>Program pelatihan intensif, sertifikasi profesi, dan penguatan jejaring antara industri, perguruan tinggi, dan komunitas film Jakarta.</p> -->
-                    <a href="#" onclick="event.preventDefault()">Learn More →</a>
-                </div>
-            </div>
+    <!-- Panel 2: Talent Development -->
+    <div class="service-panel">
+        <div class="service-bg">
+            <img src="gallery/cover/camera-take-person.webp" alt="Talent Development">
+        </div>
+        <div class="service-overlay"></div>
+        <div class="service-label">Talent Development</div>
+        <div class="service-content">
+            <span>Menyiapkan talenta dan tenaga profesional perfilman</span>
+            <h2>Pengembangan Talenta & Ekosistem Industri</h2>
+            <!-- <p>Program pelatihan intensif, sertifikasi profesi, dan penguatan jejaring antara industri, perguruan tinggi, dan komunitas film Jakarta.</p> -->
+            <a href="#" onclick="event.preventDefault()">Learn More →</a>
+        </div>
+    </div>
 
-            <!-- Panel 3: Production Support -->
-            <div class="service-panel">
-                <div class="service-bg">
-                    <img src="gallery/cover/incentive.jpg" alt="Production Support">
-                </div>
-                <div class="service-overlay"></div>
-                <div class="service-label">Incentives</div>
-                <div class="service-content">
-                    <span>Mendorong pertumbuhan investasi dan aktivitas produksi film</span>
-                    <h2>Dukungan Produksi & Insentif</h2>
-                    <!-- <p>Meningkatkan akses dan partisipasi masyarakat dalam ekosistem perfilman Meningkatkan akses dan partisipasi masyarakat dalam ekosistem perfilman.</p> -->
-                    <a href="#" onclick="event.preventDefault()">Learn More →</a>
-                </div>
-            </div>
+    <!-- Panel 3: Production Support -->
+    <div class="service-panel">
+        <div class="service-bg">
+            <img src="gallery/cover/incentive.jpg" alt="Production Support">
+        </div>
+        <div class="service-overlay"></div>
+        <div class="service-label">Incentives</div>
+        <div class="service-content">
+            <span>Mendorong pertumbuhan investasi dan aktivitas produksi film</span>
+            <h2>Dukungan Produksi & Insentif</h2>
+            <!-- <p>Meningkatkan akses dan partisipasi masyarakat dalam ekosistem perfilman Meningkatkan akses dan partisipasi masyarakat dalam ekosistem perfilman.</p> -->
+            <a href="#" onclick="event.preventDefault()">Learn More →</a>
+        </div>
+    </div>
 
-            <!-- Panel 4: Public Access -->
-            <div class="service-panel">
-                <div class="service-bg">
-                    <img src="gallery/cover/Nobar-di-Taman-Bendera-Pusaka-main.jpeg" alt="Public Access">
-                </div>
-                <div class="service-overlay"></div>
-                <div class="service-label">Akses Public</div>
-                <div class="service-content">
-                    <span>Meningkatkan akses dan partisipasi masyarakat dalam ekosistem perfilman</span>
-                    <h2>Akses Public & Literasi Film</h2>
-                    <!-- <p>Meningkatkan akses dan partisipasi masyarakat dalam ekosistem perfilman Meningkatkan akses dan partisipasi masyarakat dalam ekosistem perfilman.</p> -->
-                    <a href="#" onclick="event.preventDefault()">Learn More →</a>
-                </div>
-            </div>
+    <!-- Panel 4: Public Access -->
+    <div class="service-panel">
+        <div class="service-bg">
+            <img src="gallery/cover/Nobar-di-Taman-Bendera-Pusaka-main.jpeg" alt="Public Access">
+        </div>
+        <div class="service-overlay"></div>
+        <div class="service-label">Akses Public</div>
+        <div class="service-content">
+            <span>Meningkatkan akses dan partisipasi masyarakat dalam ekosistem perfilman</span>
+            <h2>Akses Public & Literasi Film</h2>
+            <!-- <p>Meningkatkan akses dan partisipasi masyarakat dalam ekosistem perfilman Meningkatkan akses dan partisipasi masyarakat dalam ekosistem perfilman.</p> -->
+            <a href="#" onclick="event.preventDefault()">Learn More →</a>
+        </div>
+    </div>
 
-            <!-- Panel 5: Global Promotion -->
-            <div class="service-panel">
-                <div class="service-bg">
-                    <img src="gallery/cover/1b8b311c-8000-467b-94cc-f97f2b210579.jpg" alt="Global Promotion">
-                </div>
-                <div class="service-overlay"></div>
-                <div class="service-label">Promotion</div>
-                <div class="service-content">
-                    <span>Memperkuat posisi Jakarta di panggung perfilman dunia</span>
-                    <h2>Promosi & Diplomasi Budaya</h2>
-                    <!-- <p>Memperkuat posisi Jakarta di festival film internasional, membangun kolaborasi global, dan mempromosikan Jakarta sebagai kota produksi film kelas dunia.</p> -->
-                    <a href="#" onclick="event.preventDefault()">Learn More →</a>
-                </div>
-            </div>
-        </section>
+    <!-- Panel 5: Global Promotion -->
+    <div class="service-panel">
+        <div class="service-bg">
+            <img src="gallery/cover/1b8b311c-8000-467b-94cc-f97f2b210579.jpg" alt="Global Promotion">
+        </div>
+        <div class="service-overlay"></div>
+        <div class="service-label">Promotion</div>
+        <div class="service-content">
+            <span>Memperkuat posisi Jakarta di panggung perfilman dunia</span>
+            <h2>Promosi & Diplomasi Budaya</h2>
+            <!-- <p>Memperkuat posisi Jakarta di festival film internasional, membangun kolaborasi global, dan mempromosikan Jakarta sebagai kota produksi film kelas dunia.</p> -->
+            <a href="#" onclick="event.preventDefault()">Learn More →</a>
+        </div>
+    </div>
+  </section>
 
   <section id="services" class="white" style="padding: 50px; background-color: #F8F0DF;">
       <div class="container">
@@ -328,21 +229,21 @@
   </section>
 
   <!-- Featured EVENTS -->
-  <!-- <section class="featured-event">
+  <section class="featured-event">
     <div id="featuredEventContainer"></div>
-  </section> -->
+  </section>
   
   <!-- FILMS -->
-  <!-- <section class="section">
+  <section class="section" style="background-color: #EF3932;">
     <div class="container">
 
       <div class="section-header">
         <div>
-          <h2 class="section-title">
+          <h2 class="section-title" style="color: #fff;">
             SUPPORTED FILMS
           </h2>
 
-          <p class="section-subtitle">
+          <p class="section-subtitle" style="color: #fff;">
             Showcasing cinematic productions supported through our Jakarta film initiatives.
           </p>
         </div>
@@ -355,11 +256,10 @@
       <div class="film-grid" id="filmGrid"></div>
 
     </div>
-  </section> -->
-
+  </section>
 
   <!-- PRESS RELEASE -->
-  <!-- <section class="section">
+  <section class="section" style="background-color: #F8F0DF;">
   <div class="container">
 
     <div class="section-header">
@@ -375,7 +275,7 @@
     <div class="press-grid" id="pressGrid"></div>
 
   </div>
-</section> -->
+</section>
 
 <!-- <section class="quick-nav-section">
     <div class="container">
@@ -412,7 +312,6 @@
     </div>
 </section> -->
 
-
   <!-- FOOTER -->
   <div id="footer"></div>
  
@@ -441,24 +340,28 @@
       filmGrid.innerHTML += `
         <div class="film-card">
 
-          <div class="film-poster">
-            <img src="${film.image}" alt="${film.title}">
-          </div>
-
-          <div class="film-info">
-            <h3 class="film-title">${film.title}</h3>
-
-            <div class="film-meta">
-              Directed by ${film.director} • ${film.year}
+            <div class="film-poster">
+                <img src="${film.image}" alt="${film.title}">
             </div>
 
-            <div class="film-status">
-              Supported Production
+            <div class="film-content">
+
+                <h3 class="film-title">
+                    ${film.title} (${film.year})
+                </h3>
+
+                <div class="film-director">
+                    Dir. ${film.director}
+                </div>
+
+                <div class="film-company">
+                    ${film.company}
+                </div>
+
             </div>
-          </div>
 
         </div>
-      `;
+        `;
     });
   });
 
@@ -466,16 +369,6 @@
     PRESS RELEASE
   ========================= */
   const data = pressData;
-
-  function generateSlug(title){
-
-    return title
-      .toLowerCase()
-      .trim()
-      .replace(/[^a-z0-9\s-]/g, "")
-      .replace(/\s+/g, "-");
-  }
-
   const pressGrid =
   document.getElementById("pressGrid");
 
@@ -486,118 +379,166 @@
 
   // FUNCTION LIMIT WORDS
   function limitWords(text, limit){
-
     return text
       .split(" ")
       .slice(0, limit)
       .join(" ") + "...";
   }
 
+  function getCategoryClass(category){
+    switch(category.toLowerCase()){
+
+      case "industry":
+        return "industry";
+
+      case "official release":
+        return "official-release";
+
+      case "program":
+        return "program";
+
+      default:
+        return "";
+    }
+
+  }
+
   // RENDER
   latestPress.forEach(item => {
+  pressGrid.innerHTML += `
+    <a href="press-release.html?slug=${generateSlug(item.title)}"
+       class="press-card ${getCategoryClass(item.category)}">
 
-    pressGrid.innerHTML += `
+      <div class="press-image">
+        <img src="${item.image}" alt="${item.title}">
+      </div>
 
-      <a 
-        href="press-release.html?slug=${generateSlug(item.title)}"
-        class="press-card">
-
-        <div>
+      <div class="press-content">
+        <div class="press-top">
           <div class="press-category">
             ${item.category}
           </div>
-
-          <h3>
-            ${item.title}
-          </h3>
-
-          <p>
-            ${limitWords(item.description, 10)}
-          </p>
+          <div class="press-date">
+            ${item.date}
+          </div>
         </div>
+        <h3>
+          ${item.title}
+        </h3>
+        <p>
+          ${limitWords(item.description,16)}
+        </p>
+      </div>
 
-        <div class="press-bottom">
-          <span>${item.date}</span>
-          <span>↗</span>
-        </div>
-
-      </a>
-    `;
-  });
+    </a>
+  `;
+});
 
   function formatDate(date){
-
-      return new Date(date)
-      .toLocaleDateString(
-          "id-ID",
-          {
-              day:"numeric",
-              month:"long",
-              year:"numeric"
-          }
-      );
+    return new Date(date)
+    .toLocaleDateString(
+      "id-ID",
+      {
+          day:"numeric",
+          month:"long",
+          year:"numeric"
+      }
+    );
   }
 
   function renderFeaturedEvent(event){
+    if(!event) return;
 
-      if(!event) return;
+    document.getElementById(
+        "featuredEventContainer"
+    ).innerHTML = `
 
-      document.getElementById(
-          "featuredEventContainer"
-      ).innerHTML = `
+    <div class="featured-event-bg">
+        <img src="${event.image}">
+        <div class="featured-event-overlay"></div>
+    </div>
 
-      <div class="featured-event-bg">
-          <img src="${event.image}">
-          <div class="featured-event-overlay"></div>
-      </div>
+    <div class="container">
+        <div class="featured-event-content">
+            <span>
+                Upcoming Event
+            </span>
+            <h2>
+                ${event.title}
+            </h2>
+            <p>
+                ${event.description}
+            </p>
+            <div class="event-meta">
 
-      <div class="container">
-          <div class="featured-event-content">
-              <span>
-                  Upcoming Event
-              </span>
-              <h2>
-                  ${event.title}
-              </h2>
-              <p>
-                  ${event.description}
-              </p>
-              <div class="event-meta">
+                <div>
+                    <strong>Date</strong>
+                    <p>
+                        ${formatDate(event.event_date)}
+                    </p>
+                </div>
 
-                  <div>
-                      <strong>Date</strong>
-                      <p>
-                          ${formatDate(event.event_date)}
-                      </p>
-                  </div>
+                <div>
+                    <strong>Location</strong>
+                    <p>
+                        ${event.location}
+                    </p>
+                </div>
 
-                  <div>
-                      <strong>Location</strong>
-                      <p>
-                          ${event.location}
-                      </p>
-                  </div>
+            </div>
 
-              </div>
+            <a href="event-detail.html?slug=${event.slug}" class="featured-event-btn">
+              View Event
+            </a>
 
-              <a
-                href="event-detail.html?slug=${event.slug}"
-                class="featured-event-btn">
-
-                View Event
-              </a>
-
-          </div>
-
-      </div>
-      `;
+        </div>
+    </div>
+    `;
   }
+
+  function renderComingSoon(){
+    document.getElementById("featuredEventContainer").innerHTML = `
+
+    <div class="featured-event-bg">
+        <img src="assets/images/event-coming-soon.jpg">
+        <div class="featured-event-overlay"></div>
+    </div>
+
+    <div class="container">
+        <div class="featured-event-content">
+
+            <span>Upcoming Event</span>
+            <h2>
+                New Events Coming Soon
+            </h2>
+
+            <p>
+                We are preparing our next programs, screenings, networking sessions,
+                and industry activities. Stay connected to be the first to know
+                when registration opens.
+            </p>
+            <a href="events.html" class="featured-event-btn">
+                Explore Past Events
+            </a>
+
+        </div>
+    </div>
+    `;
+}
 
   fetch("api/get-featured-event.php")
   .then(res => res.json())
-  .then(event => {
+  .then(data => {
 
-      renderFeaturedEvent(event);
+      if(data.status === "success"){
+
+          renderFeaturedEvent(data.event);
+
+      }else{
+
+          renderComingSoon();
+
+      }
 
   });
 </script>

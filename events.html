@@ -152,19 +152,6 @@ document.getElementById("eventsGrid");
 const loadMoreBtn =
 document.getElementById("loadMoreBtn");
 
-
-/* =========================
-AUTO SLUG
-========================= */
-function generateSlug(title){
-
-  return title
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9\s-]/g, "")
-    .replace(/\s+/g, "-");
-}
-
 /* =========================
 RENDER EVENTS
 ========================= */

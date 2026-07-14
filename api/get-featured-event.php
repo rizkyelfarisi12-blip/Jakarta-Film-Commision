@@ -10,9 +10,19 @@ ORDER BY event_date ASC
 LIMIT 1
 ";
 
-$result =
-mysqli_query($conn,$sql);
+$result = mysqli_query($conn,$sql);
 
-echo json_encode(
-    mysqli_fetch_assoc($result)
-);
+if(mysqli_num_rows($result) > 0){
+
+    echo json_encode([
+        "status" => "success",
+        "event" => mysqli_fetch_assoc($result)
+    ]);
+
+}else{
+
+    echo json_encode([
+        "status" => "empty"
+    ]);
+
+}

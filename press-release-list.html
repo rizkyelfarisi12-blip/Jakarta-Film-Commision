@@ -54,7 +54,7 @@
 
     </section>
 
-    <!-- =========================
+<!-- =========================
 PRESS RELEASE LIST
 ========================= -->
 <section class="section">
@@ -127,7 +127,7 @@ PRESS RELEASE LIST
 </body>
 
 <!-- JAVASCRIPT -->
-  <script src="assets/js/components.js"></script>
+  <script src="assets/js/components.js"></script> 
   <script src="assets/js/custom.js"></script>
   <script src="assets/data/press-release-data.js"></script>
 
@@ -219,16 +219,6 @@ function renderPress(){
     loadBtn.style.display = "inline-flex";
 
   }
-
-}
-
-function generateSlug(title){
-
-  return title
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9\s-]/g, "")
-    .replace(/\s+/g, "-");
 
 }
 

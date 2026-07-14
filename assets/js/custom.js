@@ -29,6 +29,19 @@
 
 });
 
+
+/* =========================
+AUTO SLUG
+========================= */
+function generateSlug(title){
+
+  return title
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-");
+}
+
 //======================= HERO SLIDER SCRIPT=======================
   const slides = document.querySelectorAll('.hero-slide');
   const dots = document.querySelectorAll('.dot');

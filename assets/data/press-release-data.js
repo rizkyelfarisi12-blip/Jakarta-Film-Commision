@@ -1,8 +1,9 @@
 const pressData = [
 
   {
-    category: "Official",
+    category: "Official Release",
     date: "2026-05-20",
+    image:"gallery/cover/Event-Cannes-Pavilion.jpg",
     title: "Jakarta Launches Global Film Incentive Program",
 
     description:
@@ -23,6 +24,7 @@ const pressData = [
   {
     category: "Industry",
     date: "2026-05-25",
+    image:"gallery/cover/camera-take-person.webp",
     title: "Jakarta Hosts ASEAN Film Summit",
 
     description:
