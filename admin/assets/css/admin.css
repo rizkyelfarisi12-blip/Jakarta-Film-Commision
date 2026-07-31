@@ -1,0 +1,343 @@
+/* ==========================================================
+   JAKARTA FILM COMMISSION
+   ADMIN PANEL
+   ========================================================== */
+
+
+/* ==========================================================
+   GOOGLE FONT
+   ========================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+
+/* ==========================================================
+   VARIABLES
+   ========================================================== */
+
+:root{
+
+    --bg:#F8F0DF;
+
+    --white:#ffffff;
+
+    --black:#221F1F;
+
+    --orange:#FF6A14;
+
+    --yellow:#FFC72C;
+
+    --red:#DA291C;
+
+    --green:#526E3E;
+
+    --lime:#97B300;
+
+    --text:#4B4646;
+
+    --border:#E8DFCF;
+
+    --shadow:
+        0 12px 40px rgba(0,0,0,.08);
+
+    --radius:18px;
+
+    --transition:.3s ease;
+
+}
+
+
+
+/* ==========================================================
+   RESET
+   ========================================================== */
+
+*{
+
+    margin:0;
+
+    padding:0;
+
+    box-sizing:border-box;
+
+}
+
+html{
+
+    scroll-behavior:smooth;
+
+}
+
+body{
+
+    font-family:'Inter',sans-serif;
+
+    background:var(--bg);
+
+    color:var(--text);
+
+    overflow-x:hidden;
+
+}
+
+img{
+
+    max-width:100%;
+
+    display:block;
+
+}
+
+a{
+
+    text-decoration:none;
+
+    color:inherit;
+
+}
+
+button{
+
+    cursor:pointer;
+
+    font-family:inherit;
+
+}
+
+input,
+textarea,
+select{
+
+    font-family:inherit;
+
+    outline:none;
+
+}
+
+
+
+/* ==========================================================
+   SCROLLBAR
+   ========================================================== */
+
+::-webkit-scrollbar{
+
+    width:10px;
+
+}
+
+::-webkit-scrollbar-track{
+
+    background:#ece3d5;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:var(--orange);
+
+    border-radius:50px;
+
+}
+
+
+
+/* ==========================================================
+   TYPOGRAPHY
+   ========================================================== */
+
+h1{
+
+    font-size:34px;
+
+    font-weight:700;
+
+}
+
+h2{
+
+    font-size:28px;
+
+    font-weight:700;
+
+}
+
+h3{
+
+    font-size:22px;
+
+    font-weight:600;
+
+}
+
+h4{
+
+    font-size:18px;
+
+    font-weight:600;
+
+}
+
+p{
+
+    line-height:1.8;
+
+}
+
+
+
+/* ==========================================================
+   LAYOUT
+   ========================================================== */
+
+.wrapper{
+
+    display:flex;
+
+    min-height:100vh;
+
+}
+
+.main{
+
+    flex:1;
+
+    padding:35px;
+
+}
+
+
+
+/* ==========================================================
+   SIDEBAR
+   ========================================================== */
+
+.sidebar{
+
+    width:280px;
+
+    background:var(--black);
+
+    color:white;
+
+    min-height:100vh;
+
+    padding:25px;
+
+    position:fixed;
+
+    left:0;
+
+    top:0;
+
+}
+
+.logo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    margin-bottom:50px;
+
+}
+
+.logo img{
+
+    width:55px;
+
+}
+
+.logo h3{
+
+    color:white;
+
+}
+
+.menu{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+}
+
+.menu a{
+
+    padding:14px 18px;
+
+    border-radius:14px;
+
+    transition:.3s;
+
+}
+
+.menu a:hover{
+
+    background:rgba(255,255,255,.08);
+
+}
+
+.menu .active{
+
+    background:var(--orange);
+
+}
+
+
+
+/* ==========================================================
+   MAIN
+   ========================================================== */
+
+.content{
+
+    margin-left:280px;
+
+    width:100%;
+
+}
+
+
+
+/* ==========================================================
+   HEADER
+   ========================================================== */
+
+.header{
+
+    height:85px;
+
+    background:white;
+
+    border-bottom:1px solid var(--border);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 40px;
+
+}
+
+.header-left h2{
+
+    color:var(--black);
+
+}
+
+.header-right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:20px;
+
+}

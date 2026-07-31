@@ -1,0 +1,1 @@
+limit word use "truncateWords" function in custom.js by using truncateWords(item.description, 16);

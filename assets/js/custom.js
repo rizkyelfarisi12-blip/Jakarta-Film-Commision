@@ -29,6 +29,28 @@
 
 });
 
+/* =========================
+LIMIT TEXT
+========================= */
+function limitText(text, limit = 120){
+
+    if(!text) return "";
+
+    text = text.trim();
+
+    if(text.length <= limit){
+        return text;
+    }
+
+    let shortened = text.substring(0, limit);
+
+    shortened = shortened.substring(
+        0,
+        shortened.lastIndexOf(" ")
+    );
+
+    return shortened + "...";
+}
 
 /* =========================
 AUTO SLUG

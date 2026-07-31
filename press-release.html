@@ -5,12 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Jakarta Film Commission</title>
 
+  <link rel="icon" type="image/png" href="assets/icon/JakartaFilmCommissionLogo-9.ico">
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
  <!-- internal resources -->
  <link rel="stylesheet" href="assets/css/custom.css">
-
 
 </head>
 
@@ -30,7 +31,6 @@
   <!-- =========================
   PRESS RELEASE HERO
   ========================= -->
-
   <section class="press-release-hero">
 
     <!-- BG -->
@@ -40,139 +40,211 @@
     </div>
 
     <div class="container">
-
       <div class="press-release-hero-content">
-
         <span class="press-release-label" id="pressCategory"></span>
-
         <h1 id="heroPressTitle"></h1>
-
       </div>
-
     </div>
 
   </section>
-
 
   <!-- =========================
   press-release CONTENT
   ========================= -->
-
   <section class="press-release-section">
-
     <div class="container">
+
+      <!-- Breadcrumb -->
+      <nav class="press-breadcrumb">
+        <a href="index.html">Home</a>
+        <span>/</span>
+        <a href="press-release-list.html">Press Releases</a>
+        <span>/</span>
+        <span id="breadcrumbTitle"></span>
+      </nav>
+
       <div class="press-meta">
-
+        <span class="meta-category" id="pressCategoryMeta"></span>
+        <span class="meta-dot"></span>
         <span id="pressDate"></span>
-
+        <span class="meta-dot"></span>
+        <span id="pressReadTime"></span>
       </div>
 
-      <div class="press-release-wrapper">
+      <div class="press-layout">
+        <!-- LEFT -->
+        <div class="press-main">
 
-        <!-- TITLE -->
-        <div class="press-release-heading">
+          <div class="press-featured-image">
+              <img id="pressImage" src="" alt="">
+          </div>
 
-          <div class="press-release-line"></div>
-
-          <h2 id="pressTitle"></h2>
-
+          <div class="press-release-heading">
+              <div class="press-release-line"></div>
+              <h2 id="pressTitle"></h2>
+          </div>
+          <div
+              id="pressContent"
+              class="press-release-content">
+          </div>
+          
         </div>
-    
-        <!-- CONTENT -->
-        <div class="press-release-content" id="pressContent"></div>
+
+        <!-- RIGHT -->
+        <aside class="press-sidebar">
+          <div class="sidebar-latest">
+            <h3 class="sidebar-title">
+                Latest Press
+            </h3>
+            <div id="latestPressSidebar"></div>
+            <a
+                href="press-release-list.html"
+                class="sidebar-more">
+                See All Press Releases →
+            </a>
+          </div>
+        </aside>
 
       </div>
 
     </div>
-
-  </section>
+</section>
   
-
   <!-- FOOTER -->
   <div id="footer"></div>
- 
 
 </body>
 
 <!-- JAVASCRIPT -->
   <script src="assets/js/components.js"></script>
-<script src="assets/js/custom.js"></script>
+  <script src="assets/js/custom.js"></script>
+  <script src="assets/js/press-release.js"></script>
 
 <!-- DATA -->
 <script src="assets/data/press-release-data.js"></script>
 
-<script>
+  <script>
+    function loadPressDetail(){
 
-function generateSlug(title){
+      // ambil slug URL
+      const params = new URLSearchParams(window.location.search);
+      const slug = params.get("slug");
 
-  return title
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9\s-]/g, "")
-    .replace(/\s+/g, "-");
+      // cari data dari pressData.js
+      const press = pressData.find(item =>
+        generateSlug(item.title) === slug
+      );
 
-}
+      // kalau tidak ketemu
+      if(!press){
 
-function loadPressDetail(){
+        document.getElementById("heroPressTitle").textContent =
+          "Press Release Not Found";
 
-  // ambil slug URL
-  const params = new URLSearchParams(window.location.search);
-  const slug = params.get("slug");
+        document.getElementById("pressTitle").textContent =
+          "Press Release Not Found";
 
-  // cari data dari pressData.js
-  const press = pressData.find(item =>
-    generateSlug(item.title) === slug
-  );
+        return;
+      }
 
-  // kalau tidak ketemu
-  if(!press){
+      // HERO TITLE
+      document.getElementById("heroPressTitle").textContent =
+        press.title;
 
-    document.getElementById("heroPressTitle").textContent =
-      "Press Release Not Found";
+      // TITLE
+      document.getElementById("pressTitle").textContent =
+        press.title;
 
-    document.getElementById("pressTitle").textContent =
-      "Press Release Not Found";
+      // TIME
+      document.getElementById("pressReadTime").textContent =
+        calculateReadTime(press.content);
 
-    return;
-  }
+      document.getElementById("breadcrumbTitle").textContent =
+        limitText(press.title,40);
 
-  // HERO TITLE
-  document.getElementById("heroPressTitle").textContent =
-    press.title;
+      // CATEGORY
+      document.getElementById("pressCategory").textContent =
+        press.category;
 
-  // TITLE
-  document.getElementById("pressTitle").textContent =
-    press.title;
+      // DATE
+      document.getElementById("pressDate").textContent =
+        formatDate(press.date);
 
-  // CATEGORY
-  document.getElementById("pressCategory").textContent =
-    press.category;
+      // IMAGE
+      document.getElementById("pressImage").src =
+        press.image;
 
-  // DATE
-  document.getElementById("pressDate").textContent =
-    press.date;
+      // CONTENT
+      const content =
+        document.getElementById("pressContent");
 
-  // CONTENT
-  const content =
-    document.getElementById("pressContent");
+      content.innerHTML = "";
 
-  content.innerHTML = "";
+      press.content.forEach(paragraph => {
 
-  press.content.forEach(paragraph => {
+        content.innerHTML += `
+          <p>${paragraph}</p>
+        `;
 
-    content.innerHTML += `
-      <p>${paragraph}</p>
-    `;
+      });
 
-  });
+      // browser title
+      document.title =
+        press.title + " | Jakarta Film Commission";
 
-  // browser title
-  document.title =
-    press.title + " | Jakarta Film Commission";
+      const sidebar =
+      document.getElementById("latestPressSidebar");
 
-}
+      sidebar.innerHTML = "";
 
-loadPressDetail();
+      const latestPress = [...pressData]
 
-</script>
+      .sort((a,b)=>new Date(b.date)-new Date(a.date))
+
+      .filter(item=>generateSlug(item.title)!==slug)
+
+      .slice(0,3);
+
+      latestPress.forEach(item=>{
+
+          sidebar.innerHTML += `
+
+          <a href="press-release.html?slug=${generateSlug(item.title)}"
+            class="sidebar-card-press ${getCategoryClass(item.category)}">
+
+              <img src="${item.image}" alt="${item.title}">
+
+              <div class="sidebar-card-body">
+
+                  <span class="sidebar-category">
+
+                      ${item.category}
+
+                  </span>
+
+                  <h4>
+
+                      ${limitText(item.title,55)}
+
+                  </h4>
+
+                  <small>
+
+                      ${formatDate(item.date)}
+
+                  </small>
+
+              </div>
+
+          </a>
+
+          `;
+
+      });
+
+    }
+
+    loadPressDetail();
+
+  </script>
 </html>

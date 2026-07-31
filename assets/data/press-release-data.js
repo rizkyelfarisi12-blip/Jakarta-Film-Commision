@@ -20,6 +20,27 @@ const pressData = [
     ]
 
   },
+  
+  {
+    category: "Program",
+    date: "2026-05-20",
+    image:"gallery/cover/Event-Cannes-Pavilion.jpg",
+    title: "Launching JFC",
+
+    description:
+      "Jakarta Film Commission introduces a new international production incentive program.",
+
+    content: [
+
+      "Jakarta Film Commission officially launched a new international production incentive program.",
+
+      "The initiative aims to attract global studios and strengthen Jakarta’s creative economy.",
+
+      "Officials believe the program will position Jakarta as Southeast Asia’s leading production hub."
+
+    ]
+
+  },
 
   {
     category: "Industry",

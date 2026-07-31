@@ -260,22 +260,22 @@
 
   <!-- PRESS RELEASE -->
   <section class="section" style="background-color: #F8F0DF;">
-  <div class="container">
+    <div class="container">
 
-    <div class="section-header">
-      <div>
-        <h2 class="section-title">
-          PRESS RELEASE
-        </h2>
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">
+            PRESS RELEASE
+          </h2>
+        </div>
+        <a href="press-release-list.html" class="archive-link">
+            VIEW ALL →</a>
       </div>
-      <a href="press-release-list.html" class="archive-link">
-          VIEW ALL →</a>
-    </div>
-    
-    <div class="press-grid" id="pressGrid"></div>
+      
+      <div class="press-grid" id="pressGrid"></div>
 
-  </div>
-</section>
+    </div>
+  </section>
 
 <!-- <section class="quick-nav-section">
     <div class="container">
@@ -320,6 +320,7 @@
 <!-- JAVASCRIPT -->
   <script src="assets/js/components.js"></script>
   <script src="assets/js/custom.js"></script>
+  <script src="assets/js/press-release.js"></script>
   <script src="assets/js/services-script.js"></script>
   <script src="assets/data/press-release-data.js"></script>
  <script>
@@ -377,75 +378,38 @@
   .sort((a,b)=> new Date(b.date) - new Date(a.date))
   .slice(0,3);
 
-  // FUNCTION LIMIT WORDS
-  function limitWords(text, limit){
-    return text
-      .split(" ")
-      .slice(0, limit)
-      .join(" ") + "...";
-  }
-
-  function getCategoryClass(category){
-    switch(category.toLowerCase()){
-
-      case "industry":
-        return "industry";
-
-      case "official release":
-        return "official-release";
-
-      case "program":
-        return "program";
-
-      default:
-        return "";
-    }
-
-  }
-
   // RENDER
   latestPress.forEach(item => {
-  pressGrid.innerHTML += `
-    <a href="press-release.html?slug=${generateSlug(item.title)}"
-       class="press-card ${getCategoryClass(item.category)}">
+    pressGrid.innerHTML += `
+      <a href="press-release.html?slug=${generateSlug(item.title)}"
+        class="press-card ${getCategoryClass(item.category)}">
 
-      <div class="press-image">
-        <img src="${item.image}" alt="${item.title}">
-      </div>
-
-      <div class="press-content">
-        <div class="press-top">
-          <div class="press-category">
-            ${item.category}
-          </div>
-          <div class="press-date">
-            ${item.date}
-          </div>
+        <div class="press-image">
+          <img src="${item.image}" alt="${item.title}">
         </div>
-        <h3>
-          ${item.title}
-        </h3>
-        <p>
-          ${limitWords(item.description,16)}
-        </p>
-      </div>
 
-    </a>
-  `;
-});
+        <div class="press-content">
+          <div class="press-top">
+            <div class="press-category">
+              ${item.category}
+            </div>
+            <div class="press-date">
+              ${item.date}
+            </div>
+          </div>
+          <h3>
+            ${item.title}
+          </h3>
+          <p>
+            ${limitText(item.description, 90)}
+          </p>
+        </div>
 
-  function formatDate(date){
-    return new Date(date)
-    .toLocaleDateString(
-      "id-ID",
-      {
-          day:"numeric",
-          month:"long",
-          year:"numeric"
-      }
-    );
-  }
+      </a>
+    `;
+  });
 
+  // Featuret Event
   function renderFeaturedEvent(event){
     if(!event) return;
 
@@ -496,6 +460,7 @@
     `;
   }
 
+  // Coming soon event
   function renderComingSoon(){
     document.getElementById("featuredEventContainer").innerHTML = `
 
@@ -524,7 +489,7 @@
         </div>
     </div>
     `;
-}
+  }
 
   fetch("api/get-featured-event.php")
   .then(res => {

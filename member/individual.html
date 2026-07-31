@@ -1,0 +1,1080 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Jakarta Film Commission | Individual Membership</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
+    <link rel="stylesheet" href="member-assets/member.css" />
+</head>
+
+<body>
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-overlay"></div>
+
+        <div class="hero-content">
+            <span class="hero-tag"> INDIVIDUAL MEMBERSHIP </span>
+
+            <h1>
+                Jadilah Bagian dari<br />Ekosistem Film Jakarta
+            </h1>
+
+            <p>
+                Bergabunglah dengan jaringan profesional, akses berbagai sumber daya
+                eksklusif, serta percepat perkembangan karier Anda di industri film
+                Indonesia.
+            </p>
+        </div>
+    </section>
+
+    <!-- FORM -->
+    <section class="membership-section">
+        <div class="membership-card">
+            <form id="memberForm">
+
+                <!-- ========================= -->
+                <!-- PHOTO -->
+                <!-- ========================= -->
+                <div class="upload-wrapper">
+                    <div class="upload-area" id="dropArea">
+                        <input type="file" id="photo" accept="image/*" hidden />
+
+                        <img id="previewImage" class="preview-image" />
+
+                        <div class="upload-placeholder">
+                            <h3>
+                                Upload Profile Photo
+                            </h3>
+                            <p>
+                                Drag & Drop<br>or<br>Click to Browse
+                            </p>
+                        </div>
+
+                        <div class="error-text">
+                            Foto wajib diisi.
+                        </div>
+
+                        <div class="upload-success" id="uploadSuccess">
+                            <div class="success-icon">✓</div>
+
+                            <span> Photo Ready </span>
+
+                            <small> Click to change photo </small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================= -->
+                <!-- PERSONAL -->
+                <!-- ========================= -->
+                <div class="section-title">Personal Information</div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label> Nama Lengkap * </label>
+
+                        <input type="text" name="fullname" required placeholder="Masukkan nama lengkap" />
+                        <div class="error-text">
+                            Nama lengkap wajib diisi.
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label> Nomor WhatsApp * </label>
+
+                        <input type="tel" name="whatsapp" required placeholder="+62" />
+                        <div class="error-text">
+                            Nomor Whatsapp wajib diisi.
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label> Email * </label>
+
+                    <input type="email" name="email" required placeholder="nama@email.com" />
+                    <div class="error-text">
+                        Email wajib diisi.
+                    </div>
+
+                </div>
+
+                <!-- ========================= -->
+                <!-- ROLE -->
+                <!-- ========================= -->
+                <div class="section-title">Peran dalam Ekosistem</div>
+
+                <div class="checkbox-grid">
+                    <label class="check-card">
+                        <input type="checkbox" name="role" value="Praktisi Industri Aktif" />
+
+                        <span> Praktisi Industri Aktif </span>
+                    </label>
+
+                    <label class="check-card">
+                        <input type="checkbox" name="role" value="Filmmaker Independen" />
+
+                        <span> Filmmaker Independen </span>
+                    </label>
+
+                    <label class="check-card">
+                        <input type="checkbox" name="role" value="Pelajar" />
+
+                        <span> Pelajar </span>
+                    </label>
+
+                    <label class="check-card">
+                        <input type="checkbox" name="role" value="Penggiat Film" />
+
+                        <span> Penggiat Film </span>
+                    </label>
+
+                    <label class="check-card">
+                        <input type="checkbox" name="role" value="Komunitas" />
+
+                        <span> Komunitas </span>
+                    </label>
+
+                    <label class="check-card">
+                        <input type="checkbox" name="role" value="Pelaku Usaha" />
+
+                        <span> Pelaku Usaha </span>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <input type="text" id="roleOtherInput" placeholder="Lainnya..." />
+                </div>
+                <div class="error-text">
+                    Silahkan pilih salah satu atau lebih.
+                </div>
+
+                <!-- ========================= -->
+                <!-- PORTFOLIO -->
+                <!-- ========================= -->
+                <div class="section-title">Portfolio & Media Sosial</div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <input type="url" name="imdb" placeholder="IMDb" />
+                    </div>
+
+                    <div class="form-group">
+                        <input type="url" name="vimeo" placeholder="Vimeo" />
+                    </div>
+
+                    <div class="form-group">
+                        <input type="url" name="youtube" placeholder="YouTube" />
+                    </div>
+
+                    <div class="form-group">
+                        <input type="url" name="instagram" placeholder="Instagram" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <input type="url" name="website" placeholder="Website" />
+                </div>
+                <div class="error-text">
+                    Silahkan isi salah satu atau lebih.
+                </div>
+
+                <!-- ========================= -->
+                <!-- INTEREST -->
+                <!-- ========================= -->
+                <div class="section-title">Minat di Jakarta Film Commission</div>
+
+                <div class="checkbox-grid">
+                    <label class="check-card">
+                        <input type="checkbox" name="interest" value="Informasi Produksi" />
+
+                        <span> Informasi Produksi </span>
+                    </label>
+
+                    <label class="check-card">
+                        <input type="checkbox" name="interest" value="Pengembangan Kompetensi" />
+
+                        <span> Pengembangan Kompetensi </span>
+                    </label>
+
+                    <label class="check-card">
+                        <input type="checkbox" name="interest" value="Promosi Karya" />
+
+                        <span> Promosi Karya </span>
+                    </label>
+
+                    <label class="check-card">
+                        <input type="checkbox" name="interest" value="Jejaring Industri" />
+
+                        <span> Jejaring Industri </span>
+                    </label>
+
+                    <label class="check-card">
+                        <input type="checkbox" name="interest" value="Kemitraan Bisnis" />
+
+                        <span> Kemitraan Bisnis </span>
+                    </label>
+
+                    <label class="check-card">
+                        <input type="checkbox" name="interest" value="Kolaborasi Proyek" />
+
+                        <span> Kolaborasi Proyek </span>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <input type="text" id="interestOtherInput" placeholder="Lainnya..." />
+                </div>
+                <div class="error-text">
+                    Silahkan pilih salah satu atau lebih.
+                </div>
+
+                <!-- ========================= -->
+                <!-- ACTION -->
+                <!-- ========================= -->
+                <div class="action-area">
+                    <button type="button" id="previewBtn">Preview Data</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- ========================= -->
+    <!-- REVIEW MODAL -->
+    <!-- ========================= -->
+    <div class="review-modal" id="reviewModal">
+        <div class="review-card">
+            <div class="review-header">
+                <h2>Review Your Registration</h2>
+
+                <button type="button" id="closeReview">✕</button>
+            </div>
+
+            <div id="reviewContent"></div>
+
+            <div class="review-footer">
+                <label class="agree-box">
+                    <input type="checkbox" id="agree" />
+
+                    <span>
+                        Saya menyatakan seluruh data yang saya masukkan adalah benar dan
+                        menyetujui Terms & Conditions Jakarta Film Commission.
+                    </span>
+                </label>
+
+                <button type="submit" id="submitBtn" disabled>
+                    Submit Registration
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="crop-modal" id="cropModal">
+        <div class="crop-card">
+
+            <h2>
+                Crop Profile Photo
+            </h2>
+
+            <div class="crop-container">
+                <img id="cropImage">
+            </div>
+
+            <div class="crop-actions">
+
+                <button type="button" id="cancelCrop">
+                    Cancel
+                </button>
+
+                <button type="button" id="saveCrop">
+                    Save Photo
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+
+
+    <script>
+        
+        /*==========================================================
+              JAKARTA FILM COMMISSION
+              MEMBER REGISTRATION
+        ==========================================================*/
+        const MemberRegistration = {
+            form: null,
+            photoInput: null,
+            dropArea: null,
+            previewImage: null,
+            uploadPlaceholder: null,
+            draftKey: "jfc-individual-member",
+            cropper:null,
+
+            init() {
+                this.form = document.getElementById("memberForm");
+
+                this.photoInput = document.getElementById("photo");
+
+                this.dropArea = document.getElementById("dropArea");
+
+                this.previewImage = document.getElementById("previewImage");
+
+                this.cropModal=document.getElementById("cropModal");
+
+                this.cropImage=document.getElementById("cropImage");
+
+                this.saveCrop=document.getElementById("saveCrop");
+
+                this.cancelCrop=document.getElementById("cancelCrop");
+
+                this.previewBtn=document.getElementById("previewBtn");
+
+                this.previewModal = document.getElementById("reviewModal");
+
+                this.closePreview = document.getElementById("closeReview");
+
+                this.uploadSuccess = document.getElementById("uploadSuccess");
+
+                this.submitBtn = document.getElementById("submitBtn");
+
+                this.agreeCheckbox = document.getElementById("agree");
+
+                this.backToEdit = null;
+
+                this.uploadSuccess.style.display="flex";
+
+                this.uploadSuccess.style.display="none";
+
+                // this.backToEdit=document.getElementById("backToEdit");
+
+                this.uploadPlaceholder = this.dropArea.querySelector(
+                    ".upload-placeholder",
+                );
+
+                this.previewBtn.addEventListener("click",()=>{
+                    if(!this.validate()) return;
+                    this.openPreviewModal();
+                });
+                
+                if(this.closePreview){
+                    this.closePreview.addEventListener("click",()=>{
+                        this.previewModal.style.display="none";
+                    });
+                }
+
+                if(this.backToEdit){
+                    this.backToEdit.addEventListener("click",()=>{
+                        this.previewModal.style.display="none";
+                    });
+                }
+
+                this.previewModal.addEventListener("click",(e)=>{
+                    if(e.target===this.previewModal){
+                        this.previewModal.style.display="none";
+                    }
+                });
+
+                this.agreeCheckbox.addEventListener("change", () => {
+                    this.submitBtn.disabled = !this.agreeCheckbox.checked;
+                });
+
+                this.submitBtn.addEventListener("click",(e)=>{
+                    e.preventDefault();
+
+                    if(!this.agreeCheckbox.checked){
+                        alert("Please agree to the Terms & Conditions.");
+                        return;
+                    }
+
+                    this.submitRegistration();
+                });
+
+                this.bindUpload();
+
+                this.restoreDraft();
+
+                this.autoSave();
+
+                this.liveValidation();
+
+            },
+
+            /*==============================================
+                UPLOAD PHOTO
+            ==============================================*/
+            bindUpload() {
+                this.dropArea.addEventListener("click", () => {
+                    this.photoInput.click();
+                });
+
+                this.photoInput.addEventListener("change", (e) => {
+
+                    const file = e.target.files[0];
+
+                    if (!file) return;
+
+                    if(!this.validateImage(file)){
+                        return;
+                    }
+
+                    this.showPhotoCrop(file);
+
+                });
+
+                this.dropArea.addEventListener("dragover", (e) => {
+                    e.preventDefault();
+
+                    this.dropArea.classList.add("dragging");
+                });
+
+                this.dropArea.addEventListener("dragleave", () => {
+                    this.dropArea.classList.remove("dragging");
+                });
+
+                this.dropArea.addEventListener("drop", (e) => {
+                    e.preventDefault();
+                    this.dropArea.classList.remove("dragging");
+                    const file=e.dataTransfer.files[0];
+
+                    if(!file) return;
+
+                    if(!this.validateImage(file)){
+                        return;
+                    }
+
+                    this.setFile(file);
+
+                    this.showPhotoCrop(file);
+                });
+
+                    this.saveCrop.addEventListener("click",()=>{
+
+                    if(!this.cropper) return;
+
+                    const canvas=this.cropper.getCroppedCanvas({
+                        width:800,
+                        height:1000
+                    });
+
+                    canvas.toBlob((blob)=>{
+
+                        const file=new File(
+                            [blob],
+                            "profile.jpg",
+                            {
+                                type:"image/jpeg"
+                            }
+                        );
+
+                        this.setFile(file);
+
+                        const url=URL.createObjectURL(file);
+
+                        this.previewImage.onload=()=>{
+                            URL.revokeObjectURL(url);
+                        };
+
+                        this.previewImage.src=url;
+
+                        this.previewImage.style.display="block";
+
+                        this.dropArea.classList.add("has-image");
+
+                        this.cropModal.style.display="none";
+
+                        this.cropper.destroy();
+
+                        this.cropper=null;
+
+                    },"image/jpeg",0.9);
+
+                });
+
+                
+                this.cancelCrop.addEventListener("click",()=>{
+
+                    this.cropModal.style.display="none";
+
+                    this.photoInput.value="";
+
+                    this.dropArea.classList.remove("has-image");
+
+                    this.previewImage.removeAttribute("src");
+
+                    this.previewImage.style.display="none";
+
+                    this.uploadPlaceholder.style.display="flex";
+
+                    if(this.cropper){
+
+                        this.cropper.destroy();
+
+                        this.cropper=null;
+
+                    }
+
+                });
+            },
+
+            setFile(file) {
+                const dt = new DataTransfer();
+
+                dt.items.add(file);
+
+                this.photoInput.files = dt.files;
+            },
+
+            validateImage(file){
+
+                const allowed=[
+                    "image/jpeg",
+                    "image/png",
+                    "image/webp"
+                ];
+
+                if(!allowed.includes(file.type)){
+
+                    alert("Only JPG, PNG and WEBP are allowed.");
+
+                    return false;
+
+                }
+
+                if(file.size>5*1024*1024){
+
+                    alert("Maximum image size is 5 MB.");
+
+                    return false;
+
+                }
+
+                return true;
+
+            },
+
+            showPhotoCrop(file){
+
+                const reader = new FileReader();
+
+                reader.onload = (e)=>{
+
+                    this.cropImage.onload = ()=>{
+
+                        if(this.cropper){
+                            this.cropper.destroy();
+                        }
+
+                        this.cropper = new Cropper(this.cropImage,{
+                            aspectRatio:4/5,
+                            viewMode:1,
+                            autoCropArea:1,
+                            responsive:true,
+                            movable:true,
+                            zoomable:true,
+                            scalable:false,
+                            rotatable:false
+                        });
+
+                    };
+
+                    this.cropImage.src = e.target.result;
+
+                    this.cropModal.style.display = "flex";
+
+                };
+
+                reader.readAsDataURL(file);
+
+            },
+
+            /*==============================================
+                SAVE DRAFT
+            ==============================================*/
+            autoSave() {
+                this.form.addEventListener("input", () => {
+                    this.saveDraft();
+                });
+
+                this.form.addEventListener("change", () => {
+                    this.saveDraft();
+                });
+            },
+
+            saveDraft() {
+                const draft = {};
+
+                this.form.querySelectorAll("input, textarea, select").forEach((input) => {
+                    switch (input.type) {
+                        case "checkbox":
+                            if (!draft[input.name]) {
+                                draft[input.name] = [];
+                            }
+
+                            if (input.checked) {
+                                draft[input.name].push(input.value);
+                            }
+
+                            break;
+
+                        case "file":
+                            break;
+
+                        default:
+                            draft[input.name] = input.value;
+
+                            break;
+                    }
+                });
+
+                localStorage.setItem(
+                    this.draftKey,
+
+                    JSON.stringify(draft),
+                );
+            },
+
+            /*==============================================
+                RESTORE DRAFT
+            ==============================================*/
+            restoreDraft() {
+                const draft = localStorage.getItem(this.draftKey);
+
+                if (!draft) return;
+
+                const data = JSON.parse(draft);
+
+                this.form.querySelectorAll("input, textarea, select").forEach((input) => {
+                    switch (input.type) {
+                        case "checkbox":
+                            if (
+                                data[input.name] &&
+                                data[input.name].includes(input.value)
+                            ) {
+                                input.checked = true;
+                            }
+
+                            break;
+
+                        case "file":
+                            break;
+
+                        default:
+                            if (data[input.name]) {
+                                input.value = data[input.name];
+                            }
+
+                            break;
+                    }
+                });
+            },
+
+            /*======================================
+            CLEAR ERROR
+            ======================================*/
+            clearErrors(){
+                this.form
+                    .querySelectorAll(".error-text")
+                    .forEach(el=>{
+                        el.style.display="none";
+                    });
+
+                this.form
+                    .querySelectorAll(".error-field")
+                    .forEach(el=>{
+                        el.classList.remove("error-field");
+                    });
+
+                this.form
+                    .querySelectorAll(".error-card")
+                    .forEach(el=>{
+                        el.classList.remove("error-card");
+                    });
+
+                this.dropArea.classList.remove("error-card");
+            },
+
+            showError(input,message){
+
+                input.classList.add("error-field");
+                const group=input.closest(".form-group");
+
+                if(!group) return;
+                const error=group.querySelector(".error-text");
+
+                if(error){
+                    error.innerHTML=message;
+                    error.style.display="block";
+                }
+            },
+
+            async submitRegistration(){
+                if(!this.validate()) return;
+                const data = new FormData(this.form);
+                console.log(data);
+                alert("Registration Submitted!");
+                this.clearDraft();
+            },
+
+            /*======================================
+            VALIDATE
+            ======================================*/
+            validate(){
+                this.clearErrors();
+                let valid=true;
+                let firstError=null;
+
+                const required=this.form.querySelectorAll("[required]");
+                required.forEach(input=>{
+
+                    if(input.value.trim()==""){
+                        valid=false;
+
+                        this.showError(
+                            input,
+                            "Field ini wajib diisi."
+                        );
+
+                        if(!firstError){
+                            firstError=input;
+                        }
+
+                    }
+
+                });
+
+                // PHOTO
+                if(this.photoInput.files.length===0 && !this.dropArea.classList.contains("has-image")){
+                    valid=false;
+
+                    this.dropArea.classList.add("error-card");
+
+                    if(!firstError){
+                        firstError=this.dropArea;
+                    }
+
+                }
+
+                // ROLE
+                const role=this.form.querySelectorAll(
+                    'input[name="role"]:checked'
+                );
+
+                const roleOther=document
+                    .getElementById("roleOtherInput")
+                    .value
+                    .trim();
+
+                if(role.length===0 && roleOther===""){
+
+                    valid=false;
+
+                    document
+                        .querySelectorAll('input[name="role"]')
+                        .forEach(i=>{
+
+                            i.closest(".check-card")
+                            ?.classList.add("error-card");
+
+                        });
+
+                    document
+                        .getElementById("roleOtherInput")
+                        .classList.add("error-field");
+
+                    if(!firstError){
+
+                        firstError=this.form.querySelector(
+                            'input[name="role"]'
+                        );
+
+                    }
+
+                }
+
+                // INTEREST
+                const interest=this.form.querySelectorAll(
+                    'input[name="interest"]:checked'
+                );
+
+                const interestOther=document
+                    .getElementById("interestOtherInput")
+                    .value
+                    .trim();
+
+                if(interest.length===0 && interestOther===""){
+
+                    valid=false;
+
+                    document
+                        .querySelectorAll('input[name="interest"]')
+                        .forEach(i=>{
+
+                            i.closest(".check-card")
+                            ?.classList.add("error-card");
+
+                        });
+
+                    document
+                        .getElementById("interestOtherInput")
+                        .classList.add("error-field");
+
+                    if(!firstError){
+
+                        firstError=this.form.querySelector(
+                            'input[name="interest"]'
+                        );
+
+                    }
+
+                }
+
+                // PORTFOLIO
+                const portfolioFields = [
+                    "imdb",
+                    "vimeo",
+                    "youtube",
+                    "instagram",
+                    "website"
+                ];
+
+                let hasPortfolio = false;
+
+                portfolioFields.forEach(name => {
+
+                    const field = this.form.querySelector(`[name="${name}"]`);
+
+                    if(field && field.value.trim() !== ""){
+
+                        hasPortfolio = true;
+
+                    }
+
+                });
+
+                if(!hasPortfolio){
+
+                    valid = false;
+
+                    portfolioFields.forEach(name => {
+
+                        const field = this.form.querySelector(`[name="${name}"]`);
+
+                        if(field){
+
+                            field.classList.add("error-field");
+
+                        }
+
+                    });
+
+                    if(!firstError){
+
+                        firstError = this.form.querySelector('[name="imdb"]');
+
+                    }
+
+                }
+
+                if(firstError){
+
+                    firstError.scrollIntoView({
+                        behavior:"smooth",
+                        block:"center"
+                    });
+
+                    if(typeof firstError.focus==="function"){
+                        firstError.focus();
+                    }
+
+                }
+
+                return valid;
+            },
+
+            /*======================================
+            LIVE VALIDATION
+            ======================================*/
+            liveValidation(){
+
+            this.form.querySelectorAll("input, textarea, select").forEach(input=>{
+                input.addEventListener("input",()=>{
+
+                    input.classList.remove("error-field");
+                    const group=input.closest(".form-group");
+                    if(group){
+
+                        const err=group.querySelector(".error-text");
+                        if(err){
+                            err.style.display="none";
+                        }
+
+                    }
+
+                });
+            });
+
+            // Role Other
+            const roleOther=document.getElementById("roleOtherInput");
+            roleOther.addEventListener("input",()=>{
+                if(roleOther.value.trim()!==""){
+
+                    roleOther.classList.remove("error-field");
+
+                    document
+                    .querySelectorAll('input[name="role"]')
+                    .forEach(i=>{
+
+                        i.closest(".check-card")
+                        ?.classList.remove("error-card");
+
+                    });
+
+                }
+            });
+
+            // Interest Other
+            const interestOther=document.getElementById("interestOtherInput");
+            interestOther.addEventListener("input",()=>{
+                if(interestOther.value.trim()!==""){
+
+                    interestOther.classList.remove("error-field");
+
+                    document
+                    .querySelectorAll('input[name="interest"]')
+                    .forEach(i=>{
+
+                        i.closest(".check-card")
+                        ?.classList.remove("error-card");
+
+                    });
+
+                }
+            });
+
+            // Portfolio
+            const portfolio=[
+                "imdb",
+                "vimeo",
+                "youtube",
+                "instagram",
+                "website"
+            ];
+
+            portfolio.forEach(name=>{
+
+                const field=this.form.querySelector(`[name="${name}"]`);
+                if(!field) return;
+                field.addEventListener("input",()=>{
+
+                    portfolio.forEach(n=>{
+
+                        const f=this.form.querySelector(`[name="${n}"]`);
+                        if(f){
+                            f.classList.remove("error-field");
+                        }
+
+                    });
+
+                });
+            });
+
+        },
+
+        openPreviewModal(){
+            this.previewModal.style.display="flex";
+
+            // Photo
+            if(this.previewImage.src){
+                document.getElementById("previewModalPhoto").src =
+                this.previewImage.src;
+            }
+
+            // Basic info
+            document.getElementById("pvName").textContent=
+                this.form.querySelector('[name="fullname"]').value;
+
+            document.getElementById("pvWhatsapp").textContent=
+                this.form.querySelector('[name="whatsapp"]').value;
+
+            document.getElementById("pvEmail").textContent=
+                this.form.querySelector('[name="email"]').value;
+
+            // Roles
+            const roleBox=document.getElementById("pvRoles");
+            roleBox.innerHTML="";
+
+            this.form.querySelectorAll('input[name="role"]:checked').forEach(el=>{
+                roleBox.innerHTML += `<span>${el.value}</span>`;
+            });
+
+            const roleOther=this.form.querySelector("#roleOtherInput").value.trim();
+            if(roleOther){
+                roleBox.innerHTML += `<span>${roleOther}</span>`;
+            }
+
+            // Interests
+            const interestBox=document.getElementById("pvInterests");
+            interestBox.innerHTML="";
+
+            this.form.querySelectorAll('input[name="interest"]:checked').forEach(el=>{
+                interestBox.innerHTML += `<span>${el.value}</span>`;
+            });
+
+            const interestOther=this.form.querySelector("#interestOtherInput").value.trim();
+            if(interestOther){
+                interestBox.innerHTML += `<span>${interestOther}</span>`;
+            }
+
+            // Portfolio links
+            const setLink=(id,name)=>{
+                const el=document.getElementById(id);
+                const value=this.form.querySelector(`[name="${name}"]`)?.value.trim();
+
+                if(value){
+                    el.textContent=value;
+                    el.href=value;
+                }else{
+                    el.textContent="-";
+                    el.removeAttribute("href");
+                }
+            };
+
+            setLink("pvImdb","imdb");
+            setLink("pvVimeo","vimeo");
+            setLink("pvYoutube","youtube");
+            setLink("pvInstagram","instagram");
+            setLink("pvWebsite","website");
+        },
+
+            /*==============================================
+                CLEAR DRAFT
+            ==============================================*/
+            clearDraft() {
+                localStorage.removeItem(this.draftKey);
+            },
+        };
+
+        document.addEventListener("DOMContentLoaded", () => {
+            MemberRegistration.init();
+        });
+
+    </script>
+</body>
+
+</html>
