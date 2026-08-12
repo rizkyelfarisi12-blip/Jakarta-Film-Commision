@@ -36,24 +36,24 @@
         <div class="event-hero-overlay"></div>
     </div>
 
-    <div class="container">
-        
-            <div class="event-hero-content">
-            <span class="event-hero-label">
-                Featured Event
-            </span>
-            <h1>
-                Jakarta Premiere <br>
-                Night 2026
-            </h1>
-            <p>
-                Join the city's most prestigious screening event featuring the latest masterpieces from local visionaries.
-            </p>
-            <!-- <a href="#" class="event-hero-button">
-                Book Premiere Tickets
-            </a> -->
-            </div>
-    </div>
+      <div class="container">
+          
+        <div class="event-hero-content">
+          <span class="event-hero-label">
+              Featured Event
+          </span>
+          <h1>
+              Jakarta Premiere <br>
+              Night 2026
+          </h1>
+          <p>
+              Join the city's most prestigious screening event featuring the latest masterpieces from local visionaries.
+          </p>
+          <!-- <a href="#" class="event-hero-button">
+              Book Premiere Tickets
+          </a> -->
+        </div>
+      </div>
     </section>
 
     <!-- =========================
@@ -66,7 +66,7 @@
         <div class="events-header">
         <div>
             <span class="events-label">Discover The Pulse of Jakarta's Film Community</span>
-            <h2 class="events-title">Upcoming Events</h2>
+            <h2 class="events-title"  style="color: #FF6A14;">Upcoming Events</h2>
         </div>
 
         <!-- <a href="#" class="events-filter">
@@ -74,8 +74,9 @@
         </a> -->
         </div>
 
-            <!-- FILTER -->
-            <div class="events-filter">
+          <!-- FILTER -->
+          <div class="events-category-filter">
+
             <button class="filter-btn active" data-category="All">
                 All
             </button>
@@ -84,21 +85,22 @@
                 Nonton Di
             </button>
 
-            <button class="filter-btn" data-category="JFS">
-                JFS
+            <button class="filter-btn" data-category="Nonton Bareng">
+                Nonton Bareng
             </button>
 
-            <button class="filter-btn" data-category="Fam Night">
-                Fam Night
+            <button class="filter-btn" data-category="Jakarta Film Lab">
+                Jakarta Film Lab
             </button>
 
-            <button class="filter-btn" data-category="Forum">
-                Forum
+            <button class="filter-btn" data-category="Others">
+                Others
             </button>
-            </div>
 
-            <!-- GRID -->
-            <div class="events-grid" id="eventsGrid"></div>
+          </div>
+
+        <!-- GRID -->
+        <div class="events-grid" id="eventsGrid"></div>
 
 
         <!-- BUTTON -->
@@ -119,155 +121,5 @@
 <!-- JAVASCRIPT -->
   <script src="assets/js/components.js"></script>
   <script src="assets/js/custom.js"></script>
-  <!-- <script src="assets/data/events-data.js"></script> -->
- 
-  <script>
-
-let allEvents = [];
-let filteredEvents = [];
-
-fetch("api/get-events.php")
-.then(res => res.json())
-.then(data => {
-
-  console.log("DATA:", data);
-
-  allEvents = data;
-  filteredEvents = [...data];
-
-  renderEvents();
-
-})
-.catch(error => {
-
-  console.error(error);
-
-});
-
-let visibleCount = 6;
-
-const eventsGrid =
-document.getElementById("eventsGrid");
-
-const loadMoreBtn =
-document.getElementById("loadMoreBtn");
-
-/* =========================
-RENDER EVENTS
-========================= */
-function renderEvents() {
-
-  eventsGrid.innerHTML = "";
-
-  const visibleEvents =
-  filteredEvents.slice(0, visibleCount);
-
-  visibleEvents.forEach(event => {
-
-    eventsGrid.innerHTML += `
-
-      <article class="event-card">
-
-        <div class="event-image">
-
-          <img src="${event.image}" alt="${event.title}">
-
-          <span class="event-category">
-            ${event.category}
-          </span>
-
-        </div>
-
-        <div class="event-content">
-
-          <div class="event-date">
-            ${event.event_date}
-          </div>
-
-          <h3>
-            ${event.title}
-          </h3>
-
-          <p>
-            ${event.description}
-          </p>
-
-          <div class="event-footer">
-
-            <span>
-              ${event.location}
-            </span>
-
-            <a href="event-detail.html?slug=${generateSlug(event.title)}">
-              View Details →
-            </a>
-
-          </div>
-        </div>
-      </article>
-    `;
-  });
-
-  /* =========================
-  SHOW/HIDE LOAD MORE
-  ========================= */
-  if (visibleCount >= filteredEvents.length) {
-    loadMoreBtn.style.display = "none";
-  } else {
-    loadMoreBtn.style.display = "inline-flex";
-  }
-}
-
-/* =========================
-LOAD MORE
-========================= */
-loadMoreBtn.addEventListener("click", () => {
-  visibleCount += 3;
-  renderEvents();
-});
-
-/* =========================
-FILTER
-========================= */
-const filterBtns =
-document.querySelectorAll(".filter-btn");
-
-filterBtns.forEach(btn => {
-  btn.addEventListener("click", () => {
-
-    // ACTIVE BUTTON
-    filterBtns.forEach(b =>
-      b.classList.remove("active")
-    );
-
-    btn.classList.add("active");
-
-    const category =
-    btn.dataset.category;
-
-    // RESET COUNT
-    visibleCount = 6;
-
-    // FILTER DATA
-    if(category === "All") {
-
-      filteredEvents = [...allEvents];
-
-    } else {
-
-      filteredEvents =
-      allEvents.filter(event =>
-        event.category === category
-      );
-    }
-    renderEvents();
-  });
-});
-
-/* =========================
-INITIAL LOAD
-========================= */
-renderEvents();
-</script>
-
+  <script src="assets/js/events.js"></script> 
 </html>
