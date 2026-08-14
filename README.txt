@@ -8,7 +8,9 @@ jfc/
 │   ├── db.php
 │   ├── events/
 │   │     create-event.php
+│   │     dashboard-events.php
 │   │     delete-event.php
+│   │     get-admin-events.php
 │   │     get-event-detail.php
 │   │     get-events.php
 │   │     get-featured-event.php
@@ -16,18 +18,14 @@ jfc/
 │   │     upload-image.php
 │   │
 │   ├── press-release/
-│   │     get-all.php
-│   │     get.php
-│   │     create.php
-│   │     update.php
-│   │     delete.php
-│   │
 │   ├── members/
 │   ├── contacts/
 │   └── dashboard/
 │
 ├── admin/
 │   ├── dashboard.php
+│   ├── index.php
+│   ├── login.php
 │   ├── events/
 │   │     index.php
 │   │     form.php
@@ -36,8 +34,15 @@ jfc/
 │   │     index.php
 │   │     form.php
 │   │
-│   ├── gallery/
 │   ├── assets/
+│   │   ├── js/
+│   │   | 	└── dashboard.js
+│   │   | 	└── events.js
+│   │   ├── css/
+│   │   | 	└── admin.css
+│   │   └── icon/
+│   │   		└──
+│   ├── auth/
 │   ├── includes/
 │   └── ...
 │

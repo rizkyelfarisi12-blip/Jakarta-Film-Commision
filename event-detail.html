@@ -2,59 +2,35 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Jakarta Film Commission</title>
-
+    
+    <link rel="icon" type="image/png" href="assets/icon/JakartaFilmCommissionLogo-9.ico">
 
     <!-- FONT -->
-
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com"
-    >
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet"
-    >
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
 
     <!-- CSS -->
-
-    <link
-        rel="stylesheet"
-        href="assets/css/custom.css"
-    >
-
+    <link rel="stylesheet" href="assets/css/custom.css">
 </head>
 
-
 <body>
-
-
 <!-- =====================================================
      LOADER
 ===================================================== -->
-
 <div id="loader-container"></div>
-
 
 <!-- =====================================================
      MENU
 ===================================================== -->
-
 <div
     class="menu-overlay"
     id="menuOverlay"
 ></div>
-
 
 <!-- =====================================================
      NAVBAR
@@ -62,26 +38,16 @@
 
 <div id="navbar"></div>
 
-
-
 <!-- =====================================================
      EVENT DETAIL HERO
 ===================================================== -->
-
 <section class="event-detail-hero">
 
     <!-- BACKGROUND -->
 
     <div class="event-detail-bg">
-
-        <img
-            id="eventCover"
-            src=""
-            alt=""
-        >
-
+        <img id="eventCover" src="" alt="">
         <div class="event-detail-overlay"></div>
-
     </div>
 
 
@@ -303,11 +269,6 @@
 
 
 <script>
-
-/* =========================================================
-   EVENT DETAIL
-========================================================= */
-
 
 /* =========================================================
    GET SLUG
@@ -703,7 +664,7 @@ async function loadEvent(){
 
 
         eventDate.innerHTML = `
-            <span>📅</span>
+            <span class="event-date-icon"><img src="assets/icon/date.png" alt="Location"></span>
             ${dateText}
         `;
 
@@ -740,7 +701,7 @@ async function loadEvent(){
 
 
         eventLocation.innerHTML = `
-            <span>📍</span>
+            <span class="location-icon"><img src="assets/icon/pin.png" alt="Location"></span>
             ${location}
         `;
 
@@ -751,7 +712,7 @@ async function loadEvent(){
 
         sidebarAddress.textContent =
             address ||
-            "Address not specified";
+            "Address TBA";
 
 
         /* ============================================
@@ -841,41 +802,90 @@ async function loadEvent(){
 
             content.forEach(block => {
 
-                if(block.type === "paragraph"){
+                /* =========================================
+                PARAGRAPH
+                ========================================= */
 
-                    const p = document.createElement("p");
+                if(
+                    block &&
+                    block.type === "paragraph"
+                ){
 
-                    p.textContent = block.text;
+                    const p =
+                        document.createElement("p");
+
+
+                    p.textContent =
+                        block.text || "";
+
 
                     eventContent.appendChild(p);
 
                 }
 
-                if(block.type === "image"){
+                /* =========================================
+                IMAGE
+                ========================================= */
 
-                    const figure = document.createElement("figure");
+                if(
+                    block &&
+                    block.type === "image"
+                ){
 
-                    const img = document.createElement("img");
+                    const figure =
+                        document.createElement("figure");
 
-                    img.src = ROOT_PATH + "/" + block.src;
 
-                    img.alt = block.alt || "";
+                    figure.className =
+                        "event-article-image";
+
+
+                    const img =
+                        document.createElement("img");
+
+
+                    img.src =
+                        block.src;
+
+
+                    img.alt =
+                        block.alt ||
+                        "";
+
+
+                    img.loading =
+                        "lazy";
+
 
                     figure.appendChild(img);
+
+
+                    /* =====================================
+                    CAPTION
+                    ===================================== */
 
                     if(block.caption){
 
                         const caption =
-                            document.createElement("figcaption");
+                            document.createElement(
+                                "figcaption"
+                            );
+
 
                         caption.textContent =
                             block.caption;
 
-                        figure.appendChild(caption);
+
+                        figure.appendChild(
+                            caption
+                        );
 
                     }
 
-                    eventContent.appendChild(figure);
+
+                    eventContent.appendChild(
+                        figure
+                    );
 
                 }
 
@@ -891,97 +901,189 @@ async function loadEvent(){
 
         }
 
+        //         if(block.type === "image"){
 
-        /* ============================================
-           SCHEDULE
-        ============================================ */
+        //             const figure = document.createElement("figure");
 
-        scheduleList.innerHTML =
-            "";
+        //             const img = document.createElement("img");
 
+        //             img.src = ROOT_PATH + "/" + block.src;
 
-        let schedules = [];
+        //             img.alt = block.alt || "";
 
+        //             figure.appendChild(img);
 
-        if(
-            currentEvent.schedule
-        ){
+        //             if(block.caption){
 
-            try{
+        //                 const caption =
+        //                     document.createElement("figcaption");
 
-                schedules =
-                    JSON.parse(
-                        currentEvent.schedule
-                    );
+        //                 caption.textContent =
+        //                     block.caption;
 
-            }catch(error){
+        //                 figure.appendChild(caption);
 
-                console.error(
-                    "SCHEDULE JSON ERROR:",
-                    error
-                );
+        //             }
 
-            }
+        //             eventContent.appendChild(figure);
 
-        }
+        //         }
 
+        //     });
 
-        if(
-            Array.isArray(schedules) &&
-            schedules.length
-        ){
+        // }else{
 
-            schedules.forEach(
-                item => {
+        //     eventContent.innerHTML = `
+        //         <p>
+        //             No event description available.
+        //         </p>
+        //     `;
 
-                    const scheduleItem =
-                        document.createElement(
-                            "div"
-                        );
+        // }
 
+/* ============================================
+   SCHEDULE
+============================================ */
 
-                    scheduleItem.className =
-                        "schedule-item";
+scheduleList.innerHTML = "";
+
+let schedules = [];
 
 
-                    scheduleItem.innerHTML = `
+/* ============================================
+   PARSE SCHEDULE
+============================================ */
 
-                        <div class="schedule-time">
-                            ${item.time || ""}
-                        </div>
+if(currentEvent.schedule){
 
-                        <div class="schedule-content">
+    try{
 
-                            <h3>
-                                ${item.title || ""}
-                            </h3>
-
-                            <p>
-                                ${item.description || ""}
-                            </p>
-
-                        </div>
-
-                    `;
-
-
-                    scheduleList.appendChild(
-                        scheduleItem
-                    );
-
-                }
+        schedules =
+            JSON.parse(
+                currentEvent.schedule
             );
 
+    }catch(error){
 
-            scheduleSection.style.display =
-                "";
+        console.error(
+            "SCHEDULE JSON ERROR:",
+            error
+        );
 
-        }else{
+        schedules = [];
 
-            scheduleSection.style.display =
-                "none";
+    }
+
+}
+
+
+/* ============================================
+   HAS SCHEDULE
+============================================ */
+
+if(
+    Array.isArray(schedules) &&
+    schedules.length > 0
+){
+
+    schedules.forEach(
+        item => {
+
+            const scheduleItem =
+                document.createElement(
+                    "div"
+                );
+
+
+            scheduleItem.className =
+                "schedule-item";
+
+
+            scheduleItem.innerHTML = `
+
+                <div class="schedule-time">
+                    ${item.time || "TBA"}
+                </div>
+
+
+                <div class="schedule-content">
+
+                    <h3>
+                        ${item.title || "Coming Soon"}
+                    </h3>
+
+                    <p>
+                        ${item.description || ""}
+                    </p>
+
+                </div>
+
+            `;
+
+
+            scheduleList.appendChild(
+                scheduleItem
+            );
 
         }
+    );
+
+
+    /*
+    |------------------------------------------
+    | SHOW SCHEDULE
+    |------------------------------------------
+    */
+
+    scheduleSection.style.display =
+        "";
+
+
+}else{
+
+
+    /* =========================================
+       NO SCHEDULE
+    ========================================= */
+
+    scheduleList.innerHTML = `
+
+        <div class="schedule-empty">
+
+            <div class="schedule-empty-icon">
+
+                <img
+                    src="assets/icon/date.png"
+                    alt=""
+                >
+
+            </div>
+
+
+            <h3>
+                Coming Soon
+            </h3>
+
+
+            <p>
+                The event schedule will be announced soon.
+            </p>
+
+        </div>
+
+    `;
+
+
+    /*
+    |------------------------------------------
+    | KEEP SECTION VISIBLE
+    |------------------------------------------
+    */
+
+    scheduleSection.style.display =
+        "";
+
+}
 
 
     }catch(error){

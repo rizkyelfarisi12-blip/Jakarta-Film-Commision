@@ -8,10 +8,11 @@ require_once __DIR__ . "/../db.php";
 |--------------------------------------------------------------------------
 | GET ALL EVENTS FOR ADMIN
 |--------------------------------------------------------------------------
+|
 | Admin dapat melihat:
-| - published
 | - draft
-| - archived
+| - published
+|
 |--------------------------------------------------------------------------
 */
 
@@ -20,10 +21,9 @@ $sql = "
     FROM events
     ORDER BY
         CASE status
-            WHEN 'published' THEN 1
-            WHEN 'draft' THEN 2
-            WHEN 'archived' THEN 3
-            ELSE 4
+            WHEN 'draft' THEN 1
+            WHEN 'published' THEN 2
+            ELSE 3
         END,
         start_date DESC,
         created_at DESC

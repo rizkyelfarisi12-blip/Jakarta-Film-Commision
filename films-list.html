@@ -58,7 +58,7 @@
 
     </section>
 
-    <section class="section">
+    <section class="section" style="background-color: #FF6A14;">
     <div class="container">
 
         <div class="section-header">
@@ -68,7 +68,7 @@
             Production Archive
             </span>
 
-            <h2 class="section-title">
+            <h2 class="section-title" style="color: #fff;">
             Film Catalogue
             </h2>
         </div>
@@ -122,19 +122,23 @@
         <div class="film-card">
 
             <div class="film-poster">
-            <img src="${film.image}" alt="${film.title}">
+                <img src="${film.image}" alt="${film.title}">
             </div>
 
-            <div class="film-info">
-            <h3 class="film-title">${film.title}</h3>
+            <div class="film-content">
 
-            <div class="film-meta">
-                Directed by ${film.director} • ${film.year}
-            </div>
+                <h3 class="film-title">
+                    ${film.title} (${film.year})
+                </h3>
 
-            <div class="film-status">
-                Supported Production
-            </div>
+                <div class="film-director">
+                    Dir. ${film.director}
+                </div>
+
+                <div class="film-company">
+                    ${film.company}
+                </div>
+
             </div>
 
         </div>

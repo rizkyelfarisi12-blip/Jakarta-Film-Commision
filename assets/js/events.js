@@ -408,7 +408,10 @@ function renderEvents(){
                 <div class="event-card-date">
 
                     <span class="event-date-icon">
-                        📅
+                        <img
+                            src="assets/icon/date.png"
+                            alt="Date"
+                        >
                     </span>
 
                     <span>
@@ -432,7 +435,10 @@ function renderEvents(){
                 <div class="event-card-location">
 
                     <span class="location-icon">
-                        📍
+                        <img
+                            src="assets/icon/pin.png"
+                            alt="Location"
+                        >
                     </span>
 
                     <span>

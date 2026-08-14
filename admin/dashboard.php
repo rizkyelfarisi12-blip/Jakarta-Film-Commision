@@ -45,8 +45,8 @@ include 'includes/header.php';
 
         <div class="stat-card green">
             <h4>Events</h4>
-            <h2>12</h2>
-            <span>Upcoming</span>
+            <h2 id="totalEvents">0</h2>
+            <span>Published</span>
         </div>
 
         <div class="stat-card yellow">
@@ -63,24 +63,70 @@ include 'includes/header.php';
 
     </section>
 
-    <section class="dashboard-row">
+    <!-- =========================================
+        EVENT DASHBOARD
+    ========================================= -->
 
-        <div class="dashboard-card quick-action">
-            <h2>Quick Actions</h2>
-            <a href="#">+ New Press Release</a>
-            <a href="#">+ New Event</a>
-            <a href="#">+ New Gallery</a>
+    <section class="dashboard-event-grid">
+
+        <!-- LATEST EVENTS -->
+        <div class="dashboard-card">
+
+            <div class="card-header">
+
+                <div>
+                    <h2>Latest Events</h2>
+                    <p class="dashboard-section-description">
+                        Recently added events
+                    </p>
+                </div>
+
+                <a
+                    href="events/index.php"
+                    class="dashboard-view-all">
+
+                    View All
+
+                </a>
+
+            </div>
+
+            <div
+                id="latestEvents"
+                class="latest-events">
+
+                <div class="dashboard-loading">
+                    Loading events...
+                </div>
+
+            </div>
+
         </div>
 
-        <div class="dashboard-card activity">
 
-            <h2>Recent Activity</h2>
+        <!-- FEATURED EVENT -->
+        <div class="dashboard-card">
 
-            <ul>
-                <li>Published "Jakarta Film Summit"</li>
-                <li>Edited Event "Festival Film"</li>
-                <li>Gallery Updated</li>
-            </ul>
+            <div class="card-header">
+
+                <div>
+                    <h2>Featured Event</h2>
+                    <p class="dashboard-section-description">
+                        Currently featured event
+                    </p>
+                </div>
+
+            </div>
+
+            <div
+                id="featuredEvent"
+                class="featured-event">
+
+                <div class="dashboard-loading">
+                    Loading featured event...
+                </div>
+
+            </div>
 
         </div>
 

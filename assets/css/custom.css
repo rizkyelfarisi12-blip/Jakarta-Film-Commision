@@ -438,7 +438,7 @@ NAVBAR DROPDOWN
   letter-spacing:-.04em;
   font-weight:800;
   margin-bottom: 0.5rem;
-  color: #FF5A1F;
+  color: #FF6A14;
 }
 
 .section-grid {
@@ -2375,7 +2375,7 @@ transform:scale(1.2);
   .section-label{
     display:inline-block;
 
-    color:#ff5a1f;
+    color:#fff;
 
     font-size:12px;
 
@@ -5209,12 +5209,9 @@ EVENT SECTION
 /* =========================================================
    SCHEDULE
 ========================================================= */
-
 .schedule-list{
     display:flex;
-
     flex-direction:column;
-
     gap:14px;
 }
 
@@ -5222,20 +5219,13 @@ EVENT SECTION
 /* =========================================================
    SCHEDULE ITEM
 ========================================================= */
-
 .schedule-item{
     display:grid;
-
     grid-template-columns:130px minmax(0,1fr);
-
     overflow:hidden;
-
     background:#171817;
-
     color:#fff;
-
     border:none;
-
     transition:
         transform .3s ease,
         box-shadow .3s ease;
@@ -5253,30 +5243,19 @@ EVENT SECTION
    SCHEDULE TIME
 ========================================================= */
 .schedule-time{
-
     display:flex;
-
     align-items:center;
-
     justify-content:center;
-
     padding:26px 20px;
-
     background:
         var(--event-category-color);
 
     color:#fff;
-
     font-size:12px;
-
     font-weight:800;
-
     letter-spacing:.08em;
-
     text-transform:uppercase;
-
     text-align:center;
-
 }
 
 
@@ -5286,44 +5265,75 @@ EVENT SECTION
 
 .schedule-content{
     min-width:0;
-
     padding:25px 28px;
 }
 
 .schedule-content h3{
     margin:0 0 8px;
-
     color:#fff;
-
     font-size:21px;
-
     line-height:1.2;
-
     font-weight:700;
-
     letter-spacing:-.02em;
-
     overflow:hidden;
-
     text-overflow:ellipsis;
 }
 
 .schedule-content p{
     margin:0;
-
     color:rgba(255,255,255,.62);
-
     font-size:13px;
-
     line-height:1.65;
-
     display:-webkit-box;
-
     -webkit-box-orient:vertical;
-
     -webkit-line-clamp:3;
-
     overflow:hidden;
+}
+
+.schedule-empty{
+    padding:45px 30px;
+    text-align:center;
+
+    border:3px dashed 
+      var(--event-category-color);
+
+    border-radius:18px;
+    
+    background:#171817;
+    color:#fff;
+
+}
+
+.schedule-empty-icon{
+    width:52px;
+    height:52px;
+
+    margin:0 auto 18px;
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+}
+
+.schedule-empty-icon img{
+    width:32px;
+    height:32px;
+    object-fit:contain;
+    opacity:.55;
+}
+
+.schedule-empty h3{
+    margin:0 0 8px;
+    font-size:20px;
+    font-weight:700;
+    color:#fff;
+}
+
+.schedule-empty p{
+    margin:0;
+    color:#888;
+    font-size:14px;
+    line-height:1.6;
 }
 
 /* =========================================================
@@ -5364,25 +5374,52 @@ EVENT SECTION
 .gallery-item:hover img{
     transform:scale(1.06);
 }
-
 .event-article-image{
     margin:40px 0;
+    width:100%;
 }
 
 .event-article-image img{
     display:block;
     width:100%;
     max-width:900px;
+    height:auto;
     margin:0 auto;
     border-radius:16px;
 }
 
 .event-article-image figcaption{
-    margin-top:12px;
+    max-width:900px;
+    margin:12px auto 0;
     text-align:center;
     font-size:14px;
+    line-height:1.6;
     color:#777;
     font-style:italic;
+}
+
+.event-date-icon,
+.location-icon{
+
+    flex-shrink:0;
+
+    width:18px;
+    height:18px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+}
+
+.event-date-icon img,
+.location-icon img{
+    width:18px;
+    height:18px;
+
+    object-fit:contain;
+    display:block;
 }
 
 /* =========================================================
@@ -5672,7 +5709,7 @@ SUPPORTED FILMS
 }
 
 .film-title{
-    color:white;
+    color:#111;
     font-size:22px;
     line-height:1.2;
     margin:0;
@@ -5680,7 +5717,7 @@ SUPPORTED FILMS
 }
 
 .film-year{
-    color:#666;
+    color:#111;
     font-size:13px;
     margin-top:auto;
 }
@@ -5711,12 +5748,12 @@ SUPPORTED FILMS
   background:#ff5a1f;
   border-color:#ff5a1f;
 }
-
+/* 
 .film-card{
     background:#fff;
     overflow:hidden;
     transition:.3s;
-}
+} */
 
 .film-card:hover{
     transform:translateY(-6px);
@@ -6161,7 +6198,6 @@ SUPPORTED FILMS
 
 }
 .menu-overlay{
-
     position:fixed;
     inset:0;
 
@@ -6171,12 +6207,10 @@ SUPPORTED FILMS
     visibility:hidden;
 
     transition:.3s;
-
     z-index:9998;
 }
 
 .menu-overlay.active{
-
     opacity:1;
     visibility:visible;
 
@@ -6241,32 +6275,25 @@ SUPPORTED FILMS
 .hero-menu-wrapper.active .hero-sub-btn{
     opacity:1;
     pointer-events:auto;
-
 }
 .hero-menu-wrapper.active .left{
     transform:
     translateX(-240px);
-
 }
 
 .hero-menu-wrapper.active .center{
     transform:
     translateY(70px);
-
 }
 
 .hero-menu-wrapper.active .right{
     transform:
     translateX(240px);
-
 }
 .hero-menu-wrapper.active .hero-main-btn{
     opacity:0;
-
     transform:scale(.8);
-
     pointer-events:none;
-
 }
 
 .hero-program-button-wrap{
@@ -6419,9 +6446,7 @@ SUPPORTED FILMS
     );
 
     color:#111;
-
     font-weight:700;
-
     border:none;
 
     box-shadow:

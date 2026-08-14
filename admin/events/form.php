@@ -1,16 +1,11 @@
 <?php
 
+$pageTitle = "Event Management";
+$assetPath = "../";
+
 include "../includes/header.php";
+
 ?>
-<html>
-<head>
-<meta charset="utf-8">
-<title>Admin Events</title>
-
- <link rel="stylesheet" href="../assets/css/admin.css">
-
-</head>
-<body>
 
     <div class="container">
         <div class="admin-form-page">
@@ -225,15 +220,28 @@ include "../includes/header.php";
 
                             <div
                                 class="upload-area"
-                                onclick="imageFile.click()">
+                                onclick="document.getElementById('imageFile').click()"
+                            >
 
-                                <div class="upload-icon">📷</div>
+                                <img
+                                    src="../assets/icon/image-upload.png"
+                                    class="upload-icon"
+                                    alt="Upload Image"
+                                >
 
                                 <h4>Upload Cover Image</h4>
 
                                 <p>Click to browse</p>
 
                             </div>
+
+                            
+                            <input
+                                type="hidden"
+                                id="image">
+
+                            <img
+                                id="imagePreview">
 
                             <div class="form-group" style="margin-top:20px">
 
@@ -282,12 +290,6 @@ include "../includes/header.php";
                                 </select>
 
                             </div>
-                            <input
-                                type="hidden"
-                                id="image">
-
-                            <img
-                                id="imagePreview">
 
                         </div>
 
@@ -467,15 +469,20 @@ function fillForm(event){
 
     }else{
 
-        document.getElementById("imagePreview").src = "";
+        const imagePreview =
+            document.getElementById("imagePreview");
+
+        imagePreview.src = "";
+
+        imagePreview.style.display =
+            "none";
 
         document.getElementById("imagePreview").style.display =
             "none";
     }
 
-
     /* =========================
-       ARTICLE CONTENT
+    ARTICLE CONTENT
     ========================= */
 
     const paragraphContainer =
@@ -485,15 +492,56 @@ function fillForm(event){
 
     try{
 
-        const paragraphs =
+        const content =
             event.content
             ? JSON.parse(event.content)
             : [];
 
-        if(Array.isArray(paragraphs) && paragraphs.length){
 
-            paragraphs.forEach(text => {
-                addParagraph(text);
+        if(
+            Array.isArray(content) &&
+            content.length
+        ){
+
+            content.forEach(block => {
+
+                /* =========================
+                PARAGRAPH
+                ========================= */
+
+                if(
+                    block &&
+                    block.type === "paragraph"
+                ){
+
+                    addParagraph(
+                        block.text || ""
+                    );
+
+                }
+
+                /* =========================
+                IMAGE
+                ========================= */
+
+                if(
+                    block &&
+                    block.type === "image"
+                ){
+
+                    addArticleImage({
+                        src:
+                            block.src || "",
+
+                        caption:
+                            block.caption || "",
+
+                        alt:
+                            block.alt || ""
+                    });
+
+                }
+
             });
 
         }else{
@@ -501,6 +549,7 @@ function fillForm(event){
             addParagraph();
 
         }
+
 
     }catch(error){
 
@@ -510,8 +559,8 @@ function fillForm(event){
         );
 
         addParagraph();
-    }
 
+    }
 
     /* =========================
        SCHEDULE
@@ -787,19 +836,56 @@ async function saveEvent(){
 
 
         /* =========================
-           VALIDATION
+        REQUIRED VALIDATION
         ========================= */
 
         if(!payload.title){
 
             alert("Title wajib diisi.");
+
+            document
+                .getElementById("title")
+                .focus();
+
             return;
 
         }
 
+
         if(!payload.category){
 
             alert("Category wajib dipilih.");
+
+            document
+                .getElementById("category")
+                .focus();
+
+            return;
+
+        }
+
+
+        if(!payload.cover_image){
+
+            alert("Cover Image wajib diupload.");
+
+            document
+                .getElementById("imageFile")
+                .focus();
+
+            return;
+
+        }
+
+
+        if(!payload.description){
+
+            alert("Description wajib diisi.");
+
+            document
+                .getElementById("description")
+                .focus();
+
             return;
 
         }
@@ -1150,12 +1236,17 @@ function addArticleImage(data = {}){
 
         <div class="article-image-upload">
 
+            <!-- FILE INPUT -->
+
             <input
                 type="file"
                 class="article-image-file"
-                accept="image/*"
-                hidden>
+                accept="image/jpeg,image/png,image/webp,image/avif"
+                hidden
+            >
 
+
+            <!-- UPLOAD AREA -->
 
             <div
                 class="article-image-upload-area"
@@ -1164,34 +1255,68 @@ function addArticleImage(data = {}){
                     .closest('.image-item')
                     .querySelector('.article-image-file')
                     .click()
-                ">
+                "
+            >
 
-                <div class="upload-icon">
-                    📷
-                </div>
+                <img
+                    src="${ROOT_PATH}/admin/assets/icon/image-upload.png"
+                    class="article-upload-icon"
+                    alt="Upload Image"
+                >
+
 
                 <strong>
                     Upload Article Image
                 </strong>
 
+
                 <span>
-                    Click to browse
+                    Click to browse or select an image
                 </span>
+
 
             </div>
 
 
-            <img
-                class="article-image-preview"
+            <!-- PREVIEW -->
+
+            <div
+                class="article-image-preview-wrapper"
                 style="
                     display:none;
-                    width:100%;
-                    margin-top:15px;
-                    border-radius:12px;
-                ">
+                "
+            >
+
+                <img
+                    class="article-image-preview"
+                    alt="Article Image Preview"
+                >
+
+
+                <div class="article-image-preview-footer">
+
+                    <span class="article-image-file-name">
+                        Image selected
+                    </span>
+
+
+                    <button
+                        type="button"
+                        class="article-image-change"
+                    >
+
+                        Change Image
+
+                    </button>
+
+                </div>
+
+            </div>
 
         </div>
 
+
+        <!-- CAPTION -->
 
         <div class="form-group">
 
@@ -1199,14 +1324,18 @@ function addArticleImage(data = {}){
                 Caption
             </label>
 
+
             <input
                 type="text"
                 class="article-image-caption"
                 placeholder="Image caption..."
-                value="${escapeHtml(data.caption || "")}">
+                value="${escapeHtml(data.caption || "")}"
+            >
 
         </div>
 
+
+        <!-- ALT TEXT -->
 
         <div class="form-group">
 
@@ -1214,19 +1343,24 @@ function addArticleImage(data = {}){
                 Alt Text
             </label>
 
+
             <input
                 type="text"
                 class="article-image-alt"
                 placeholder="Describe this image..."
-                value="${escapeHtml(data.alt || "")}">
+                value="${escapeHtml(data.alt || "")}"
+            >
 
         </div>
 
 
+        <!-- IMAGE PATH -->
+
         <input
             type="hidden"
             class="article-image-src"
-            value="${escapeHtml(data.src || "")}">
+            value="${escapeHtml(data.src || "")}"
+        >
 
     `;
 
@@ -1242,9 +1376,21 @@ function addArticleImage(data = {}){
 
     if(data.src){
 
+        const previewWrapper =
+            item.querySelector(
+                ".article-image-preview-wrapper"
+            );
+
+
         const preview =
             item.querySelector(
                 ".article-image-preview"
+            );
+
+
+        const uploadArea =
+            item.querySelector(
+                ".article-image-upload-area"
             );
 
 
@@ -1252,8 +1398,22 @@ function addArticleImage(data = {}){
             ROOT_PATH + "/" + data.src;
 
 
-        preview.style.display =
+        previewWrapper.style.display =
             "block";
+
+
+        uploadArea.style.display =
+            "none";
+
+
+        const fileName =
+            item.querySelector(
+                ".article-image-file-name"
+            );
+
+
+        fileName.textContent =
+            data.src.split("/").pop();
 
     }
 
@@ -1278,6 +1438,23 @@ function addArticleImage(data = {}){
                 this,
                 item
             );
+
+        }
+    );
+
+    const changeButton =
+        item.querySelector(
+            ".article-image-change"
+        );
+
+
+    changeButton.addEventListener(
+        "click",
+        function(event){
+
+            event.stopPropagation();
+
+            fileInput.click();
 
         }
     );
@@ -1356,27 +1533,52 @@ async function uploadArticleImage(
         ).value =
             result.path;
 
+    /*
+    |--------------------------------------------------------------------------
+    | PREVIEW
+    |--------------------------------------------------------------------------
+    */
 
-        /*
-        |--------------------------------------------------------------------------
-        | PREVIEW
-        |--------------------------------------------------------------------------
-        */
-
-        const preview =
-            item.querySelector(
-                ".article-image-preview"
-            );
-
-
-        preview.src =
-            ROOT_PATH +
-            "/" +
-            result.path;
+    const previewWrapper =
+        item.querySelector(
+            ".article-image-preview-wrapper"
+        );
 
 
-        preview.style.display =
-            "block";
+    const preview =
+        item.querySelector(
+            ".article-image-preview"
+        );
+
+
+    const uploadArea =
+        item.querySelector(
+            ".article-image-upload-area"
+        );
+
+
+    const fileName =
+        item.querySelector(
+            ".article-image-file-name"
+        );
+
+
+    preview.src =
+        ROOT_PATH +
+        "/" +
+        result.path;
+
+
+    previewWrapper.style.display =
+        "block";
+
+
+    uploadArea.style.display =
+        "none";
+
+
+    fileName.textContent =
+        file.name;
 
 
     }catch(error){
@@ -1467,7 +1669,6 @@ async function initForm(){
 }
 
 initForm();
-
 document
 .getElementById("imageFile")
 .addEventListener("change", async function(){
@@ -1476,42 +1677,141 @@ document
 
     if(!file) return;
 
-    const formData = new FormData();
 
-    formData.append("image", file);
+    /* =========================
+       LOCAL PREVIEW
+       ========================= */
+
+    const preview =
+        document.getElementById("imagePreview");
+
+    const localUrl =
+        URL.createObjectURL(file);
+
+    preview.src =
+        localUrl;
+
+    preview.style.display =
+        "block";
+
+
+    /* =========================
+       UPLOAD
+       ========================= */
+
+    const formData =
+        new FormData();
+
+    formData.append(
+        "image",
+        file
+    );
+
 
     try{
 
         const response =
-        await fetch(API_URL + "/events/upload-image.php",{
-            method:"POST",
-            body:formData
-        });
+            await fetch(
+                API_URL + "/events/upload-image.php",
+                {
+                    method: "POST",
+                    body: formData
+                }
+            );
+
 
         const result =
-        await response.json();
+            await response.json();
 
-        console.log(result);
+
+        console.log(
+            "COVER IMAGE UPLOAD:",
+            result
+        );
+
 
         if(result.success){
 
-            document.getElementById("image").value =
-            result.path;
+            /*
+            |----------------------------------------------------------
+            | SAVE IMAGE PATH
+            |----------------------------------------------------------
+            */
 
-            document.getElementById("imagePreview").src =
-            ROOT_PATH + "/" + result.path;
+            document
+                .getElementById("image")
+                .value =
+                    result.path;
+
+
+            /*
+            |----------------------------------------------------------
+            | USE SERVER IMAGE PATH
+            |----------------------------------------------------------
+            */
+
+            preview.src =
+                ROOT_PATH +
+                "/" +
+                result.path;
+
+
+            preview.style.display =
+                "block";
+
 
         }else{
 
-            alert("Upload gagal");
+            /*
+            |----------------------------------------------------------
+            | REMOVE PREVIEW IF UPLOAD FAILED
+            |----------------------------------------------------------
+            */
+
+            preview.src = "";
+
+            preview.style.display =
+                "none";
+
+
+            document
+                .getElementById("image")
+                .value = "";
+
+
+            alert(
+                result.message ||
+                "Upload gambar gagal."
+            );
+
         }
 
-    }catch(err){
 
-        console.error(err);
-        alert("Upload error");
+    }catch(error){
+
+        console.error(
+            "COVER IMAGE UPLOAD ERROR:",
+            error
+        );
+
+
+        preview.src = "";
+
+        preview.style.display =
+            "none";
+
+
+        document
+            .getElementById("image")
+            .value = "";
+
+
+        alert(
+            "Terjadi error saat upload gambar."
+        );
 
     }
+
 });
 
 document

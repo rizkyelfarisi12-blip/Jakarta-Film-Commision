@@ -141,7 +141,7 @@
             <span>BY FILMING IN JAKARTA</span>
             <h2>One-Stop Film Service</h2>
             <!-- <p>Mempermudah proses produksi melalui koordinasi perizinan lintas OPD, database lokasi syuting, dan standarisasi biaya yang transparan.</p> -->
-            <a href="#" onclick="event.preventDefault()">Learn More →</a>
+            <a href="https://filminginjakarta.com" >Learn More →</a>
         </div>
     </div>
 
@@ -186,7 +186,7 @@
             <span>Meningkatkan akses dan partisipasi masyarakat dalam ekosistem perfilman</span>
             <h2>Akses Public & Literasi Film</h2>
             <!-- <p>Meningkatkan akses dan partisipasi masyarakat dalam ekosistem perfilman Meningkatkan akses dan partisipasi masyarakat dalam ekosistem perfilman.</p> -->
-            <a href="#" onclick="event.preventDefault()">Learn More →</a>
+            <a href="events.html">Learn More →</a>
         </div>
     </div>
 
@@ -409,89 +409,299 @@
     `;
   });
 
-  // Featuret Event
+  // render featured event
   function renderFeaturedEvent(event){
-    if(!event) return;
 
-    document.getElementById(
-        "featuredEventContainer"
-    ).innerHTML = `
+      if(!event) return;
 
-    <div class="featured-event-bg">
-        <img src="${event.image}">
-        <div class="featured-event-overlay"></div>
-    </div>
 
-    <div class="container">
-        <div class="featured-event-content">
-            <span>
-                Upcoming Event
-            </span>
-            <h2>
-                ${event.title}
-            </h2>
-            <p>
-                ${event.description}
-            </p>
-            <div class="event-meta">
+      /*
+      |--------------------------------------------------------------------------
+      | IMAGE
+      |--------------------------------------------------------------------------
+      */
 
-                <div>
-                    <strong>Date</strong>
-                    <p>
-                        ${formatDate(event.event_date)}
-                    </p>
-                </div>
+      let image = event.cover_image || "";
 
-                <div>
-                    <strong>Location</strong>
-                    <p>
-                        ${event.location}
-                    </p>
-                </div>
+      if(image){
 
-            </div>
+          image = image.replace(/^\/+/, "");
 
-            <a href="event-detail.html?slug=${event.slug}" class="featured-event-btn">
-              View Event
-            </a>
+      }
 
-        </div>
-    </div>
-    `;
+
+      /*
+      |--------------------------------------------------------------------------
+      | DATE
+      |--------------------------------------------------------------------------
+      */
+
+      let dateText = "";
+
+      if(event.start_date){
+
+          const startDate =
+              new Date(event.start_date + "T00:00:00");
+
+          const startFormatted =
+              startDate.toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric"
+              });
+
+
+          if(event.end_date){
+
+              const endDate =
+                  new Date(event.end_date + "T00:00:00");
+
+              const endFormatted =
+                  endDate.toLocaleDateString("en-GB", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric"
+                  });
+
+
+              dateText =
+                  `${startFormatted} - ${endFormatted}`;
+
+          }else{
+
+              dateText =
+                  startFormatted;
+
+          }
+
+      }
+
+
+      /*
+      |--------------------------------------------------------------------------
+      | CONTENT
+      |--------------------------------------------------------------------------
+      */
+
+      document.getElementById(
+          "featuredEventContainer"
+      ).innerHTML = `
+
+          <div class="featured-event-bg">
+
+              <img
+                  src="${image}"
+                  alt="${event.title || "Featured Event"}">
+
+              <div class="featured-event-overlay"></div>
+
+          </div>
+
+
+          <div class="container">
+
+              <div class="featured-event-content">
+
+                  <span>
+                      ${event.status === "published"
+                          ? "Featured Event"
+                          : "Upcoming Event"
+                      }
+                  </span>
+
+
+                  <h2>
+                      ${event.title || ""}
+                  </h2>
+
+
+                  <p>
+                      ${event.description || ""}
+                  </p>
+
+
+                  <div class="event-meta">
+
+
+                      <div>
+
+                          <strong>
+                              Date
+                          </strong>
+
+                          <p>
+                              ${dateText}
+                          </p>
+
+                      </div>
+
+
+                      <div>
+
+                          <strong>
+                              Location
+                          </strong>
+
+                          <p>
+                              ${event.location || "-"}
+                          </p>
+
+                      </div>
+
+
+                  </div>
+
+
+                  <a
+                      href="event-detail.html?slug=${encodeURIComponent(event.slug)}"
+                      class="featured-event-btn">
+
+                      View Event
+
+                  </a>
+
+
+              </div>
+
+          </div>
+
+      `;
+
+  }
+
+  function formatEventDate(startDate, endDate){
+
+      if(!startDate){
+          return "-";
+      }
+
+      const start =
+          new Date(startDate + "T00:00:00");
+
+      if(!endDate){
+
+          return start.toLocaleDateString(
+              "en-US",
+              {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric"
+              }
+          );
+
+      }
+
+      const end =
+          new Date(endDate + "T00:00:00");
+
+
+      /*
+      Jika tanggal sama,
+      tampilkan satu tanggal saja.
+      */
+
+      if(startDate === endDate){
+
+          return start.toLocaleDateString(
+              "en-US",
+              {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric"
+              }
+          );
+
+      }
+
+
+      /*
+      Event beberapa hari
+      */
+
+      const startText =
+          start.toLocaleDateString(
+              "en-US",
+              {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric"
+              }
+          );
+
+
+      const endText =
+          end.toLocaleDateString(
+              "en-US",
+              {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric"
+              }
+          );
+
+
+      return `${startText} – ${endText}`;
+
   }
 
   // Coming soon event
   function renderComingSoon(){
-    document.getElementById("featuredEventContainer").innerHTML = `
 
-    <div class="featured-event-bg">
-        <img src="assets/images/event-coming-soon.jpg">
-        <div class="featured-event-overlay"></div>
-    </div>
+      document.getElementById(
+          "featuredEventContainer"
+      ).innerHTML = `
 
-    <div class="container">
-        <div class="featured-event-content">
+          <div class="featured-event-bg">
 
-            <span>Upcoming Event</span>
-            <h2>
-                New Events Coming Soon
-            </h2>
+              <img
+                  src="assets/images/event-coming-soon.jpg"
+                  alt="Events Coming Soon">
 
-            <p>
-                We are preparing our next programs, screenings, networking sessions,
-                and industry activities. Stay connected to be the first to know
-                when registration opens.
-            </p>
-            <a href="events.html" class="featured-event-btn">
-                Explore Past Events
-            </a>
+              <div class="featured-event-overlay"></div>
 
-        </div>
-    </div>
-    `;
+          </div>
+
+
+          <div class="container">
+
+              <div class="featured-event-content">
+
+                  <span>
+                      Upcoming Event
+                  </span>
+
+
+                  <h2>
+                      New Events Coming Soon
+                  </h2>
+
+
+                  <p>
+                      We are preparing our next programs,
+                      screenings, networking sessions,
+                      and industry activities.
+                      Stay connected to be the first to know
+                      when registration opens.
+                  </p>
+
+
+                  <a
+                      href="events.html"
+                      class="featured-event-btn">
+
+                      Explore Events
+
+                  </a>
+
+              </div>
+
+          </div>
+
+      `;
+
   }
 
-  fetch("api/get-featured-event.php")
+  fetch("api/events/get-featured-event.php")
   .then(res => {
     if(!res.ok){
         throw new Error("Server Error");

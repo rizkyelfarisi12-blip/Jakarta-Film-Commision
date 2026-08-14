@@ -71,6 +71,11 @@ async function loadEvents(){
             result
         );
 
+        console.log(
+            "FIRST EVENT STATUS:",
+            result.data?.[0]?.status
+        );
+
 
         if(!result.success){
 
@@ -388,22 +393,32 @@ function renderTable(data){
             `;
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | STATUS
-        |--------------------------------------------------------------------------
-        */
+        /* =========================================================
+        STATUS
+        ========================================================= */
 
-        let statusClass =
-            "status-default";
+        const status =
+            String(
+                event.status || "draft"
+            )
+            .toLowerCase()
+            .trim();
 
 
-        switch(event.status){
+        let statusClass = "status-draft";
+
+        let statusLabel = "Draft";
+
+
+        switch(status){
 
             case "published":
 
                 statusClass =
                     "status-published";
+
+                statusLabel =
+                    "Published";
 
                 break;
 
@@ -413,6 +428,9 @@ function renderTable(data){
                 statusClass =
                     "status-draft";
 
+                statusLabel =
+                    "Draft";
+
                 break;
 
 
@@ -421,10 +439,23 @@ function renderTable(data){
                 statusClass =
                     "status-archived";
 
+                statusLabel =
+                    "Archived";
+
                 break;
 
-        }
 
+            default:
+
+                statusClass =
+                    "status-draft";
+
+                statusLabel =
+                    "Draft";
+
+                break;
+
+        }      
 
         /*
         |--------------------------------------------------------------------------
@@ -477,7 +508,7 @@ function renderTable(data){
 
                     <span class="status-badge ${statusClass}">
 
-                        ${event.status || "unknown"}
+                        ${statusLabel}
 
                     </span>
 

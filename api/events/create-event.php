@@ -4,23 +4,24 @@ header("Content-Type: application/json");
 
 require_once __DIR__ . "/../db.php";
 
+
 /*
 |--------------------------------------------------------------------------
-| READ JSON
+| HELPER RESPONSE
 |--------------------------------------------------------------------------
 */
 
-$data = json_decode(
-    file_get_contents("php://input"),
-    true
-);
-
-if (!is_array($data)) {
-
-    echo json_encode([
-        "success" => false,
-        "message" => "Invalid JSON request."
-    ]);
+function response($success, $message, $extra = [])
+{
+    echo json_encode(
+        array_merge(
+            [
+                "success" => $success,
+                "message" => $message
+            ],
+            $extra
+        )
+    );
 
     exit;
 }
@@ -28,7 +29,33 @@ if (!is_array($data)) {
 
 /*
 |--------------------------------------------------------------------------
-| HELPER
+| READ JSON
+|--------------------------------------------------------------------------
+*/
+
+$rawInput =
+    file_get_contents("php://input");
+
+$data =
+    json_decode(
+        $rawInput,
+        true
+    );
+
+
+if (!is_array($data)) {
+
+    response(
+        false,
+        "Invalid JSON request."
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| HELPER VALUE
 |--------------------------------------------------------------------------
 */
 
@@ -45,19 +72,95 @@ function value($data, $key, $default = "")
 | BASIC DATA
 |--------------------------------------------------------------------------
 */
-$title = value($data, "title");
 
-$slug = value($data, "slug");
+$title =
+    trim(
+        value(
+            $data,
+            "title"
+        )
+    );
+
+
+$slug =
+    trim(
+        value(
+            $data,
+            "slug"
+        )
+    );
 
 
 $category =
-    value($data, "category");
+    trim(
+        value(
+            $data,
+            "category"
+        )
+    );
 
 
 $category_name =
     $category === "Others"
-        ? trim(value($data, "category_name"))
+        ? trim(
+            value(
+                $data,
+                "category_name"
+            )
+        )
         : null;
+
+
+/*
+|--------------------------------------------------------------------------
+| TITLE VALIDATION
+|--------------------------------------------------------------------------
+*/
+
+if ($title === "") {
+
+    response(
+        false,
+        "Title is required."
+    );
+
+}
+
+
+if (mb_strlen($title) > 255) {
+
+    response(
+        false,
+        "Title must not exceed 255 characters."
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| SLUG VALIDATION
+|--------------------------------------------------------------------------
+*/
+
+if ($slug === "") {
+
+    response(
+        false,
+        "Slug is required."
+    );
+
+}
+
+
+if (mb_strlen($slug) > 255) {
+
+    response(
+        false,
+        "Slug must not exceed 255 characters."
+    );
+
+}
 
 
 /*
@@ -66,14 +169,35 @@ $category_name =
 |--------------------------------------------------------------------------
 */
 
+$allowedCategories = [
+    "Nonton Di",
+    "Nonton Bareng",
+    "Jakarta Film Lab",
+    "Others"
+];
+
+
 if ($category === "") {
 
-    echo json_encode([
-        "success" => false,
-        "message" => "Category is required."
-    ]);
+    response(
+        false,
+        "Category is required."
+    );
 
-    exit;
+}
+
+
+if (!in_array(
+    $category,
+    $allowedCategories,
+    true
+)) {
+
+    response(
+        false,
+        "Invalid category."
+    );
+
 }
 
 
@@ -82,51 +206,424 @@ if (
     $category_name === ""
 ) {
 
-    echo json_encode([
-        "success" => false,
-        "message" => "Custom category name is required for Others."
-    ]);
+    response(
+        false,
+        "Custom category name is required for Others."
+    );
 
-    exit;
 }
 
+
+if (
+    $category_name !== null &&
+    mb_strlen($category_name) > 100
+) {
+
+    response(
+        false,
+        "Category name must not exceed 100 characters."
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DATE
+|--------------------------------------------------------------------------
+*/
+
 $start_date =
-    value($data, "start_date");
+    value(
+        $data,
+        "start_date"
+    );
+
 
 $end_date =
-    value($data, "end_date");
+    value(
+        $data,
+        "end_date"
+    );
 
+
+if ($start_date === "") {
+    $start_date = null;
+}
+
+
+if ($end_date === "") {
+    $end_date = null;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DATE VALIDATION
+|--------------------------------------------------------------------------
+*/
+
+function isValidDate($date)
+{
+    if (!$date) {
+        return false;
+    }
+
+    $d =
+        DateTime::createFromFormat(
+            "Y-m-d",
+            $date
+        );
+
+    return
+        $d &&
+        $d->format("Y-m-d") === $date;
+}
+
+
+if (
+    $start_date !== null &&
+    !isValidDate($start_date)
+) {
+
+    response(
+        false,
+        "Invalid start date."
+    );
+
+}
+
+
+if (
+    $end_date !== null &&
+    !isValidDate($end_date)
+) {
+
+    response(
+        false,
+        "Invalid end date."
+    );
+
+}
+
+
+if (
+    $start_date !== null &&
+    $end_date !== null &&
+    $end_date < $start_date
+) {
+
+    response(
+        false,
+        "End date cannot be earlier than start date."
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| TIME
+|--------------------------------------------------------------------------
+*/
 
 $start_time =
-    value($data, "start_time");
+    value(
+        $data,
+        "start_time"
+    );
+
 
 $end_time =
-    value($data, "end_time");
+    value(
+        $data,
+        "end_time"
+    );
 
+
+if ($start_time === "") {
+    $start_time = null;
+}
+
+
+if ($end_time === "") {
+    $end_time = null;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| TIME VALIDATION
+|--------------------------------------------------------------------------
+*/
+
+function isValidTime($time)
+{
+    if (!$time) {
+        return false;
+    }
+
+    $formats = [
+        "H:i",
+        "H:i:s"
+    ];
+
+    foreach ($formats as $format) {
+
+        $t =
+            DateTime::createFromFormat(
+                $format,
+                $time
+            );
+
+        if (
+            $t &&
+            $t->format($format) === $time
+        ) {
+
+            return true;
+
+        }
+
+    }
+
+    return false;
+}
+
+
+if (
+    $start_time !== null &&
+    !isValidTime($start_time)
+) {
+
+    response(
+        false,
+        "Invalid start time."
+    );
+
+}
+
+
+if (
+    $end_time !== null &&
+    !isValidTime($end_time)
+) {
+
+    response(
+        false,
+        "Invalid end time."
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| LOCATION
+|--------------------------------------------------------------------------
+*/
 
 $location =
-    value($data, "location");
+    trim(
+        value(
+            $data,
+            "location"
+        )
+    );
+
 
 $address =
-    value($data, "address");
+    trim(
+        value(
+            $data,
+            "address"
+        )
+    );
 
+
+if (mb_strlen($location) > 255) {
+
+    response(
+        false,
+        "Location must not exceed 255 characters."
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| IMAGE
+|--------------------------------------------------------------------------
+*/
 
 $cover_image =
-    value($data, "cover_image");
+    trim(
+        value(
+            $data,
+            "cover_image"
+        )
+    );
 
+
+if (mb_strlen($cover_image) > 255) {
+
+    response(
+        false,
+        "Cover image path is too long."
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DESCRIPTION
+|--------------------------------------------------------------------------
+*/
 
 $description =
-    value($data, "description");
+    trim(
+        value(
+            $data,
+            "description"
+        )
+    );
+
+
+/*
+|--------------------------------------------------------------------------
+| ARTICLE CONTENT
+|--------------------------------------------------------------------------
+*/
 
 $content =
-    value($data, "content");
+    value(
+        $data,
+        "content",
+        "[]"
+    );
+
 
 $schedule =
-    value($data, "schedule");
+    value(
+        $data,
+        "schedule",
+        "[]"
+    );
 
+
+/*
+|--------------------------------------------------------------------------
+| JSON VALIDATION
+|--------------------------------------------------------------------------
+*/
+
+$contentDecoded =
+    json_decode(
+        $content,
+        true
+    );
+
+
+if (
+    json_last_error() !== JSON_ERROR_NONE
+) {
+
+    response(
+        false,
+        "Invalid article content JSON."
+    );
+
+}
+
+
+if (!is_array($contentDecoded)) {
+
+    response(
+        false,
+        "Article content must be a JSON array."
+    );
+
+}
+
+
+$scheduleDecoded =
+    json_decode(
+        $schedule,
+        true
+    );
+
+
+if (
+    json_last_error() !== JSON_ERROR_NONE
+) {
+
+    response(
+        false,
+        "Invalid schedule JSON."
+    );
+
+}
+
+
+if (!is_array($scheduleDecoded)) {
+
+    response(
+        false,
+        "Schedule must be a JSON array."
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| GOOGLE MAP
+|--------------------------------------------------------------------------
+*/
 
 $map_url =
-    value($data, "map_url");
+    trim(
+        value(
+            $data,
+            "map_url"
+        )
+    );
+
+
+/*
+|--------------------------------------------------------------------------
+| TIMEZONE
+|--------------------------------------------------------------------------
+*/
+
+$timezone =
+    trim(
+        value(
+            $data,
+            "timezone",
+            "Asia/Jakarta"
+        )
+    );
+
+
+$timezoneList =
+    DateTimeZone::listIdentifiers();
+
+
+if (!in_array(
+    $timezone,
+    $timezoneList,
+    true
+)) {
+
+    response(
+        false,
+        "Invalid timezone."
+    );
+
+}
 
 
 /*
@@ -141,16 +638,43 @@ $featured =
         : 0;
 
 
+if (
+    $featured !== 0 &&
+    $featured !== 1
+) {
+
+    response(
+        false,
+        "Featured must be 0 or 1."
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| FEATURED DATES
+|--------------------------------------------------------------------------
+*/
+
 $featured_start =
-    value($data, "featured_start");
+    value(
+        $data,
+        "featured_start"
+    );
+
 
 $featured_until =
-    value($data, "featured_until");
+    value(
+        $data,
+        "featured_until"
+    );
 
 
 if ($featured_start === "") {
     $featured_start = null;
 }
+
 
 if ($featured_until === "") {
     $featured_until = null;
@@ -159,15 +683,125 @@ if ($featured_until === "") {
 
 /*
 |--------------------------------------------------------------------------
-| META
+| FEATURED VALIDATION
+|--------------------------------------------------------------------------
+*/
+
+if ($featured === 1) {
+
+    if ($featured_start === null) {
+
+        response(
+            false,
+            "Featured start date is required when event is featured."
+        );
+
+    }
+
+
+    if ($featured_until === null) {
+
+        response(
+            false,
+            "Featured until date is required when event is featured."
+        );
+
+    }
+
+}
+
+
+if (
+    $featured_start !== null &&
+    !isValidDate($featured_start)
+) {
+
+    response(
+        false,
+        "Invalid featured start date."
+    );
+
+}
+
+
+if (
+    $featured_until !== null &&
+    !isValidDate($featured_until)
+) {
+
+    response(
+        false,
+        "Invalid featured until date."
+    );
+
+}
+
+
+if (
+    $featured_start !== null &&
+    $featured_until !== null &&
+    $featured_until < $featured_start
+) {
+
+    response(
+        false,
+        "Featured until date cannot be earlier than featured start date."
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| IF NOT FEATURED
+|--------------------------------------------------------------------------
+|
+| Jangan simpan tanggal featured kalau featured = 0.
+|
+|--------------------------------------------------------------------------
+*/
+
+if ($featured === 0) {
+
+    $featured_start = null;
+
+    $featured_until = null;
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| SEO
 |--------------------------------------------------------------------------
 */
 
 $meta_title =
-    value($data, "meta_title");
+    trim(
+        value(
+            $data,
+            "meta_title"
+        )
+    );
+
 
 $meta_description =
-    value($data, "meta_description");
+    trim(
+        value(
+            $data,
+            "meta_description"
+        )
+    );
+
+
+if (mb_strlen($meta_title) > 255) {
+
+    response(
+        false,
+        "Meta title must not exceed 255 characters."
+    );
+
+}
 
 
 /*
@@ -176,183 +810,358 @@ $meta_description =
 |--------------------------------------------------------------------------
 */
 
-$status = "published";
+$status =
+    trim(
+        value(
+            $data,
+            "status",
+            "draft"
+        )
+    );
 
 
-/*
-|--------------------------------------------------------------------------
-| INSERT
-|--------------------------------------------------------------------------
-*/
-
-$sql = "
-
-INSERT INTO events (
-
-    title,
-    slug,
-    category,
-    category_name,
-
-    start_date,
-    end_date,
-
-    start_time,
-    end_time,
-
-    location,
-    address,
-
-    cover_image,
-
-    description,
-    content,
-    schedule,
-
-    map_url,
-
-    featured,
-    featured_start,
-    featured_until,
-
-    meta_title,
-    meta_description,
-
-    status
-
-)
-
-VALUES (
-    ?, ?, ?, ?, ?,
-    ?, ?, ?, ?, ?,
-    ?, ?, ?, ?, ?,
-    ?, ?, ?, ?, ?,
-    ?
-)
-
-";
+$allowedStatuses = [
+    "draft",
+    "published"
+];
 
 
-$stmt = $conn->prepare($sql);
+if (!in_array(
+    $status,
+    $allowedStatuses,
+    true
+)) {
 
+    response(
+        false,
+        "Invalid status. Allowed values are draft or published."
+    );
 
-/*
-|--------------------------------------------------------------------------
-| PREPARE ERROR
-|--------------------------------------------------------------------------
-*/
-
-if (!$stmt) {
-
-    echo json_encode([
-        "success" => false,
-        "message" => "Failed to prepare SQL statement.",
-        "error" => $conn->error
-    ]);
-
-    exit;
 }
 
 
 /*
 |--------------------------------------------------------------------------
-| BIND
-|--------------------------------------------------------------------------
-|
-| 14 STRING
-| 1 INTEGER
-| 5 STRING
-|
-| TOTAL = 20
-|
+| CHECK SLUG DUPLICATE
 |--------------------------------------------------------------------------
 */
-$bindResult = $stmt->bind_param(
 
-    "sssssssssssssssisssss",
+$checkSlug =
+    $conn->prepare(
+        "
+        SELECT id
+        FROM events
+        WHERE slug = ?
+        LIMIT 1
+        "
+    );
 
-    $title,
-    $slug,
-    $category,
-    $category_name,
 
-    $start_date,
-    $end_date,
+if (!$checkSlug) {
 
-    $start_time,
-    $end_time,
+    response(
+        false,
+        "Failed to prepare slug validation.",
+        [
+            "error" =>
+                $conn->error
+        ]
+    );
 
-    $location,
-    $address,
+}
 
-    $cover_image,
 
-    $description,
-    $content,
-    $schedule,
-
-    $map_url,
-
-    $featured,
-    $featured_start,
-    $featured_until,
-
-    $meta_title,
-    $meta_description,
-
-    $status
-
+$checkSlug->bind_param(
+    "s",
+    $slug
 );
 
 
+$checkSlug->execute();
+
+
+$checkResult =
+    $checkSlug->get_result();
+
+
+if ($checkResult->num_rows > 0) {
+
+    $checkSlug->close();
+
+    response(
+        false,
+        "Slug already exists. Please use another slug."
+    );
+
+}
+
+
+$checkSlug->close();
+
+
 /*
 |--------------------------------------------------------------------------
-| BIND ERROR
+| TRANSACTION
 |--------------------------------------------------------------------------
 */
 
-if (!$bindResult) {
+$conn->begin_transaction();
 
-    echo json_encode([
-        "success" => false,
-        "message" => "Failed to bind parameters.",
-        "error" => $stmt->error
-    ]);
 
-    exit;
+try {
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | ONLY ONE ACTIVE FEATURED EVENT
+    |--------------------------------------------------------------------------
+    */
+
+    if ($featured === 1) {
+
+        $reset =
+            $conn->prepare(
+                "
+                UPDATE events
+
+                SET
+                    featured = 0,
+                    featured_start = NULL,
+                    featured_until = NULL
+
+                WHERE featured = 1
+                "
+            );
+
+
+        if (!$reset) {
+
+            throw new Exception(
+                "Failed to prepare featured reset."
+            );
+
+        }
+
+
+        if (!$reset->execute()) {
+
+            throw new Exception(
+                "Failed to reset existing featured event."
+            );
+
+        }
+
+
+        $reset->close();
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | INSERT
+    |--------------------------------------------------------------------------
+    */
+
+    $sql = "
+
+        INSERT INTO events (
+
+            title,
+            slug,
+
+            category,
+            category_name,
+
+            start_date,
+            end_date,
+
+            start_time,
+            end_time,
+
+            timezone,
+
+            location,
+            address,
+
+            cover_image,
+
+            description,
+
+            content,
+            schedule,
+
+            map_url,
+
+            featured,
+            featured_start,
+            featured_until,
+
+            meta_title,
+            meta_description,
+
+            status
+
+        )
+
+        VALUES (
+
+            ?, ?,
+            ?, ?,
+            ?, ?,
+            ?, ?,
+            ?,
+            ?, ?,
+            ?,
+            ?,
+            ?, ?,
+            ?,
+            ?, ?, ?,
+            ?, ?,
+            ?
+
+        )
+
+    ";
+
+
+    $stmt =
+        $conn->prepare(
+            $sql
+        );
+
+
+    if (!$stmt) {
+
+        throw new Exception(
+            "Failed to prepare insert statement: " .
+            $conn->error
+        );
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | BIND
+    |--------------------------------------------------------------------------
+    |
+    | Semua string kecuali featured.
+    |
+    | Total:
+    |
+    | 22 parameters
+    |
+    |--------------------------------------------------------------------------
+    */
+    $stmt->bind_param(
+
+        "ssssssssssssssssisssss",
+
+        $title,
+        $slug,
+
+        $category,
+        $category_name,
+
+        $start_date,
+        $end_date,
+
+        $start_time,
+        $end_time,
+
+        $timezone,
+
+        $location,
+        $address,
+
+        $cover_image,
+
+        $description,
+
+        $content,
+        $schedule,
+
+        $map_url,
+
+        $featured,
+        $featured_start,
+        $featured_until,
+
+        $meta_title,
+        $meta_description,
+
+        $status
+
+    );
+
+
+    if (!$stmt->execute()) {
+
+        throw new Exception(
+            "Failed to create event: " .
+            $stmt->error
+        );
+
+    }
+
+
+    $newId =
+        $conn->insert_id;
+
+
+    $stmt->close();
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | COMMIT
+    |--------------------------------------------------------------------------
+    */
+
+    $conn->commit();
+
+
+    response(
+        true,
+        "Event successfully created.",
+        [
+            "id" => $newId,
+            "status" => $status,
+            "featured" => $featured,
+            "timezone" => $timezone
+        ]
+    );
+
+
+} catch (Throwable $error) {
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | ROLLBACK
+    |--------------------------------------------------------------------------
+    */
+
+    $conn->rollback();
+
+
+    response(
+        false,
+        "Failed to create event.",
+        [
+            "error" =>
+                $error->getMessage()
+        ]
+    );
+
 }
 
 
 /*
 |--------------------------------------------------------------------------
-| EXECUTE
+| CLOSE
 |--------------------------------------------------------------------------
 */
 
-if (!$stmt->execute()) {
-
-    echo json_encode([
-        "success" => false,
-        "message" => "Failed to create event.",
-        "error" => $stmt->error
-    ]);
-
-    exit;
-}
-
-
-/*
-|--------------------------------------------------------------------------
-| SUCCESS
-|--------------------------------------------------------------------------
-*/
-
-echo json_encode([
-
-    "success" => true,
-
-    "message" => "Event successfully created.",
-
-    "id" => $conn->insert_id
-
-]);
+$conn->close();

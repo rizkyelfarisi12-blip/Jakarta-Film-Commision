@@ -1,83 +1,176 @@
 <?php
+
 $current = basename($_SERVER['PHP_SELF']);
+
 ?>
 
 <aside class="sidebar">
 
     <div class="sidebar-logo">
 
-        <img src="assets/icon/logo-jfc-white.png" alt="JFC Logo">
+        <img
+            src="<?= $assetPath ?>assets/icon/logo-jfc-white.png"
+            alt="JFC Logo"
+        >
 
-        <h2>JFC Admin</h2>
+        <div class="sidebar-brand">
+
+            <strong>JFC Admin</strong>
+
+            <span>Jakarta Film Commission</span>
+
+        </div>
 
     </div>
 
+
     <nav class="sidebar-menu">
 
-        <a class="<?= $current=='dashboard.php'?'active':'' ?>" href="<?= $assetPath ?>dashboard.php">
-            Dashboard
+
+        <!-- =========================
+             MAIN
+        ========================== -->
+
+        <a
+            class="<?= $current == 'dashboard.php' ? 'active' : '' ?>"
+            href="<?= $assetPath ?>dashboard.php"
+        >
+            <i class="ri-dashboard-line"></i>
+            <span>Dashboard</span>
         </a>
+
+
+        <!-- =========================
+             CONTENT
+        ========================== -->
 
         <span class="menu-title">
-            CONTENT
+            Content
         </span>
 
-        <a class="<?= strpos($_SERVER['PHP_SELF'],'press-release')!==false?'active':'' ?>"
-           href="press-release/index.php">
-            Press Release
+
+        <a
+            class="<?= strpos($_SERVER['PHP_SELF'], 'press-release') !== false ? 'active' : '' ?>"
+            href="<?= $assetPath ?>press-release/index.php"
+        >
+            <i class="ri-article-line"></i>
+            <span>Press Release</span>
         </a>
 
-        <a href="<?= $assetPath ?>events/index.php">
-            Events
+
+        <a
+            class="<?= strpos($_SERVER['PHP_SELF'], '/events/') !== false ? 'active' : '' ?>"
+            href="<?= $assetPath ?>events/index.php"
+        >
+            <i class="ri-calendar-event-line"></i>
+            <span>Events</span>
         </a>
 
-        <a href="<?= $assetPath ?>supported-film/index.php">
-            Supported Film
+
+        <a
+            class="<?= strpos($_SERVER['PHP_SELF'], 'supported-film') !== false ? 'active' : '' ?>"
+            href="<?= $assetPath ?>supported-film/index.php"
+        >
+            <i class="ri-movie-2-line"></i>
+            <span>Supported Film</span>
         </a>
+
+
+        <!-- =========================
+             MEMBERSHIP
+        ========================== -->
 
         <span class="menu-title">
-            MEMBERSHIP
+            Membership
         </span>
 
-        <a href="<?= $assetPath ?>individual/index.php">
-            Individual
+
+        <a
+            class="<?= strpos($_SERVER['PHP_SELF'], '/individual/') !== false ? 'active' : '' ?>"
+            href="<?= $assetPath ?>individual/index.php"
+        >
+            <i class="ri-user-line"></i>
+            <span>Individual</span>
         </a>
 
-        <a href="<?= $assetPath ?>company/index.php">
-            Company
+
+        <a
+            class="<?= strpos($_SERVER['PHP_SELF'], '/company/') !== false ? 'active' : '' ?>"
+            href="<?= $assetPath ?>company/index.php"
+        >
+            <i class="ri-building-line"></i>
+            <span>Company</span>
         </a>
+
+
+        <!-- =========================
+             SERVICES
+        ========================== -->
 
         <span class="menu-title">
-            SERVICES
+            Services
         </span>
 
-        <a href="<?= $assetPath ?>contact/index.php">
-            Contact
+
+        <a
+            class="<?= strpos($_SERVER['PHP_SELF'], '/contact/') !== false ? 'active' : '' ?>"
+            href="<?= $assetPath ?>contact/index.php"
+        >
+            <i class="ri-mail-line"></i>
+            <span>Contact</span>
         </a>
 
-        <a href="<?= $assetPath ?>permit/index.php">
-            Permit
+
+        <a
+            class="<?= strpos($_SERVER['PHP_SELF'], '/permit/') !== false ? 'active' : '' ?>"
+            href="<?= $assetPath ?>permit/index.php"
+        >
+            <i class="ri-file-list-3-line"></i>
+            <span>Permit</span>
         </a>
+
+
+        <!-- =========================
+             SETTINGS
+        ========================== -->
 
         <span class="menu-title">
-            SETTINGS
+            Settings
         </span>
 
-        <a href="../users/index.php">
-            Users
+
+        <a
+            class="<?= strpos($_SERVER['PHP_SELF'], '/users/') !== false ? 'active' : '' ?>"
+            href="<?= $assetPath ?>users/index.php"
+        >
+            <i class="ri-user-settings-line"></i>
+            <span>Users</span>
         </a>
 
-        <a href="../website/index.php">
-            Website
+
+        <a
+            class="<?= strpos($_SERVER['PHP_SELF'], '/website/') !== false ? 'active' : '' ?>"
+            href="<?= $assetPath ?>website/index.php"
+        >
+            <i class="ri-global-line"></i>
+            <span>Website</span>
         </a>
+
+
+        <!-- =========================
+             ACCOUNT
+        ========================== -->
 
         <span class="menu-title">
-            ACCOUNT
+            Account
         </span>
 
-        <a href="../logout.php">
-            Logout
+
+        <a href="<?= $assetPath ?>logout.php">
+            <i class="ri-logout-box-r-line"></i>
+            <span>Logout</span>
         </a>
+
 
     </nav>
 
