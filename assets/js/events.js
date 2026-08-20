@@ -2,7 +2,6 @@
    JAKARTA FILM COMMISSION
    EVENTS PAGE
 ========================================================== */
-
 let allEvents = [];
 
 let currentCategory = "All";
@@ -61,11 +60,9 @@ function formatDate(dateString){
 
 }
 
-
 /* ==========================================================
    EVENT DATE RANGE
 ========================================================== */
-
 function formatEventDate(event){
 
     if(!event.start_date){
@@ -91,11 +88,9 @@ function formatEventDate(event){
 
 }
 
-
 /* ==========================================================
    CATEGORY CLASS
 ========================================================== */
-
 function getCategoryClass(category){
 
     if(!category){
@@ -130,11 +125,21 @@ function getCategoryClass(category){
 
 }
 
+/* ==========================================================
+   NORMALIZE CATEGORY
+========================================================== */
+function normalizeCategory(category){
+
+    return String(category || "")
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, "-");
+
+}
 
 /* ==========================================================
    TEXT LIMIT
 ========================================================== */
-
 function truncateText(text, maxLength){
 
     if(!text){
@@ -160,11 +165,9 @@ function truncateText(text, maxLength){
 
 }
 
-
 /* ==========================================================
    ESCAPE HTML
 ========================================================== */
-
 function escapeHtml(value){
 
     if(value === null || value === undefined){
@@ -180,11 +183,9 @@ function escapeHtml(value){
 
 }
 
-
 /* ==========================================================
    LOAD EVENTS
 ========================================================== */
-
 async function loadEvents(){
 
     try{
@@ -253,22 +254,52 @@ async function loadEvents(){
 
 }
 
-
 /* ==========================================================
    RENDER EVENTS
 ========================================================== */
-
 function renderEvents(){
 
     const filteredEvents =
-        currentCategory === "All"
+    currentCategory === "All"
 
-        ? allEvents
+    ? allEvents
 
-        : allEvents.filter(event =>
-            String(event.category || "").trim()
-            === currentCategory
-        );
+    : allEvents.filter(event => {
+
+        const category =
+            normalizeCategory(
+                event.category
+            );
+
+        const selectedCategory =
+            normalizeCategory(
+                currentCategory
+            );
+
+        /*
+        |--------------------------------------------------------------------------
+        | OTHERS
+        |--------------------------------------------------------------------------
+        */
+
+        if(selectedCategory === "others"){
+
+            return (
+                category === "others" ||
+                category === "other"
+            );
+
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | STANDARD CATEGORY
+        |--------------------------------------------------------------------------
+        */
+
+        return category === selectedCategory;
+
+    });
 
 
     const visibleEvents =
@@ -284,7 +315,6 @@ function renderEvents(){
     /* ======================================================
        EMPTY
     ====================================================== */
-
     if(!visibleEvents.length){
 
         eventsGrid.innerHTML = `
@@ -310,11 +340,9 @@ function renderEvents(){
 
     }
 
-
     /* ======================================================
        RENDER CARDS
     ====================================================== */
-
     visibleEvents.forEach(event => {
 
         const card =
@@ -360,6 +388,7 @@ function renderEvents(){
 
         const category =
             truncateText(
+                event.category_name ||
                 event.category ||
                 "Others",
                 25
@@ -373,11 +402,9 @@ function renderEvents(){
         /* ==================================================
            CARD HTML
         ================================================== */
-
         card.innerHTML = `
 
             <!-- IMAGE -->
-
             <div class="event-card-image">
 
                 <img
@@ -386,32 +413,21 @@ function renderEvents(){
                     loading="lazy"
                 >
 
-
                 <!-- CATEGORY BADGE -->
-
                 <span class="event-card-category">
-
                     ${escapeHtml(category)}
-
                 </span>
 
             </div>
 
-
             <!-- CONTENT -->
-
             <div class="event-card-content">
 
-
                 <!-- DATE -->
-
                 <div class="event-card-date">
 
                     <span class="event-date-icon">
-                        <img
-                            src="assets/icon/date.png"
-                            alt="Date"
-                        >
+                        <img src="assets/icon/date.png" alt="Date">
                     </span>
 
                     <span>
@@ -420,25 +436,16 @@ function renderEvents(){
 
                 </div>
 
-
                 <!-- TITLE -->
-
                 <h3 class="event-card-title">
-
                     ${escapeHtml(title)}
-
                 </h3>
 
-
                 <!-- LOCATION -->
-
                 <div class="event-card-location">
 
                     <span class="location-icon">
-                        <img
-                            src="assets/icon/pin.png"
-                            alt="Location"
-                        >
+                        <img src="assets/icon/pin.png" alt="Location">
                     </span>
 
                     <span>
@@ -449,16 +456,11 @@ function renderEvents(){
 
 
                 <!-- DESCRIPTION -->
-
                 <p class="event-card-description">
-
                     ${escapeHtml(description)}
-
                 </p>
 
-
                 <!-- FOOTER -->
-
                 <div class="event-card-footer">
 
                     <a
@@ -482,24 +484,19 @@ function renderEvents(){
 
         `;
 
-
         eventsGrid.appendChild(card);
 
     });
 
-
     /* ======================================================
        LOAD MORE
     ====================================================== */
-
     if(
         visibleCount <
         filteredEvents.length
     ){
-
         loadMoreBtn.style.display =
             "inline-flex";
-
     }
     else{
 
@@ -510,11 +507,9 @@ function renderEvents(){
 
 }
 
-
 /* ==========================================================
    FILTER
 ========================================================== */
-
 document
     .querySelectorAll(".filter-btn")
     .forEach(button => {
@@ -533,20 +528,15 @@ document
 
                     });
 
-
                 this.classList.add(
                     "active"
                 );
 
-
                 currentCategory =
                     this.dataset.category;
 
-
                 /* RESET TO FIRST 6 */
-
                 visibleCount = 6;
-
 
                 renderEvents();
 
@@ -555,11 +545,9 @@ document
 
     });
 
-
 /* ==========================================================
    LOAD MORE
 ========================================================== */
-
 if(loadMoreBtn){
 
     loadMoreBtn.addEventListener(
@@ -567,7 +555,6 @@ if(loadMoreBtn){
         function(){
 
             /* ADD 6 MORE */
-
             visibleCount += 6;
 
             renderEvents();
@@ -576,7 +563,6 @@ if(loadMoreBtn){
     );
 
 }
-
 
 /* ==========================================================
    INITIALIZE
