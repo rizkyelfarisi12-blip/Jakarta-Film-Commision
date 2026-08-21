@@ -11,81 +11,135 @@ require_once __DIR__ . "/../db.php";
 |--------------------------------------------------------------------------
 */
 
-function response($success, $message = "", $data = [])
-{
+function response(
+    $success,
+    $message,
+    $data = []
+) {
+
     echo json_encode(
         [
             "success" => $success,
             "message" => $message,
-            "data"    => $data
+            "data" => $data
         ],
         JSON_UNESCAPED_UNICODE
     );
 
     exit;
+
 }
 
 
 /*
 |--------------------------------------------------------------------------
-| GET EVENTS
+| GET LATEST EVENTS
 |--------------------------------------------------------------------------
 |
-| Untuk menjaga kompatibilitas dengan events.js lama,
-| endpoint ini tetap mengembalikan array event.
+| Digunakan oleh Dashboard Admin.
+|
+| Berbeda dengan get-events.php:
+|
+| get-events.php
+|   -> hanya published
+|   -> untuk website publik
+|
+| get-latest-events.php
+|   -> semua status
+|   -> Dashboard Admin
+|   -> hanya 3 event terbaru
 |
 |--------------------------------------------------------------------------
 */
 
+
 $sql = "
 
     SELECT
-        *
+
+        id,
+
+        title,
+        slug,
+
+        category,
+        category_name,
+
+        start_date,
+        end_date,
+
+        start_time,
+        end_time,
+
+        timezone,
+
+        location,
+        address,
+
+        cover_image,
+
+        description,
+
+        featured,
+        featured_start,
+        featured_until,
+
+        status,
+
+        created_at,
+        updated_at
 
     FROM events
 
-    WHERE status = 'published'
-
     ORDER BY
+
+        CASE
+            WHEN start_date IS NULL THEN 1
+            ELSE 0
+        END,
+
         start_date DESC,
+
         created_at DESC
+
+    LIMIT 3
 
 ";
 
 
-$result = mysqli_query(
-    $conn,
-    $sql
-);
+$result =
+    $conn->query($sql);
 
+
+/*
+|--------------------------------------------------------------------------
+| QUERY ERROR
+|--------------------------------------------------------------------------
+*/
 
 if (!$result) {
 
-    /*
-    |----------------------------------------------------------------------
-    | ERROR
-    |----------------------------------------------------------------------
-    */
-
-    echo json_encode(
-        [
-            "success" => false,
-            "message" => "Failed to load events."
-        ],
-        JSON_UNESCAPED_UNICODE
+    response(
+        false,
+        "Failed to load latest events.",
+        []
     );
-
-    exit;
 
 }
 
 
-$events = [];
+/*
+|--------------------------------------------------------------------------
+| DATA
+|--------------------------------------------------------------------------
+*/
+
+$data = [];
 
 
 while (
     $row =
-    mysqli_fetch_assoc($result)
+    $result->fetch_assoc()
 ) {
 
 
@@ -95,32 +149,25 @@ while (
     |--------------------------------------------------------------------------
     */
 
-    $category =
-        trim(
-            $row["category"] ?? ""
-        );
-
-
-    $categoryName =
-        trim(
-            $row["category_name"] ?? ""
-        );
-
-
     if (
-        $category === "Others" &&
-        $categoryName !== ""
+        $row["category"] === "Others" &&
+        !empty(
+            trim(
+                $row["category_name"] ?? ""
+            )
+        )
     ) {
 
         $row["category_display"] =
-            $categoryName;
+            trim(
+                $row["category_name"]
+            );
 
     } else {
 
         $row["category_display"] =
-            $category !== ""
-                ? $category
-                : "Others";
+            $row["category"] ??
+            "Others";
 
     }
 
@@ -132,55 +179,44 @@ while (
     */
 
     $row["category_filter"] =
-        $category !== ""
-            ? $category
-            : "Others";
+        $row["category"] ??
+        "Others";
 
 
     /*
     |--------------------------------------------------------------------------
-    | FEATURED NORMALIZATION
+    | FEATURED
     |--------------------------------------------------------------------------
     */
 
     $row["featured"] =
-        (int)($row["featured"] ?? 0);
+        (int)(
+            $row["featured"] ?? 0
+        );
 
 
     /*
     |--------------------------------------------------------------------------
-    | ID NORMALIZATION
+    | RETURN DATA
     |--------------------------------------------------------------------------
     */
 
-    $row["id"] =
-        (int)$row["id"];
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | ADD TO ARRAY
-    |--------------------------------------------------------------------------
-    */
-
-    $events[] = $row;
+    $data[] =
+        $row;
 
 }
 
 
 /*
 |--------------------------------------------------------------------------
-| OUTPUT
-|--------------------------------------------------------------------------
-|
-| Tetap array agar events.js lama tidak rusak.
-|
+| RESPONSE
 |--------------------------------------------------------------------------
 */
 
-echo json_encode(
-    $events,
-    JSON_UNESCAPED_UNICODE
+response(
+    true,
+    "Latest events loaded successfully.",
+    $data
 );
 
 

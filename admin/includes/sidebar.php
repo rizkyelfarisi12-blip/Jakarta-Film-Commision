@@ -9,7 +9,7 @@ $current = basename($_SERVER['PHP_SELF']);
     <div class="sidebar-logo">
 
         <img
-            src="<?= $assetPath ?>assets/icon/logo-jfc-white.png"
+            src="<?= $assetPath ?>assets/icon/JakartaFilmCommissionLogo-9.png"
             alt="JFC Logo"
         >
 

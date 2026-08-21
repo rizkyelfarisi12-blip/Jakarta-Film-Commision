@@ -358,7 +358,6 @@
 
         }
 
-
         /* =========================================================
            FORMAT DATE
         ========================================================= */
@@ -439,8 +438,16 @@
                    CATEGORY
                 ============================================ */
                 const category =
-                    currentEvent.category_name ||
                     currentEvent.category ||
+                    "Others";
+
+                const categoryDisplay =
+                    currentEvent.category_display ||
+                    (
+                        category === "Others"
+                        ? currentEvent.category_name
+                        : category
+                    ) ||
                     "Others";
 
                 const categoryClass =
@@ -454,7 +461,7 @@
                     );
 
                 eventCategory.textContent =
-                    category;
+                    categoryDisplay;
 
                 eventCategory.classList.add(
                     categoryClass
@@ -613,6 +620,14 @@
                     description;
 
             }
+
+            /* ============================================
+            EVENT STRUCTURED DATA
+            ============================================ */
+            generateEventSchema(
+                currentEvent,
+                canonical
+            );
 
             eventCover.alt =
                 currentEvent.title ||
@@ -876,7 +891,6 @@
 
                 }
 
-
             } catch (error) {
 
                 console.error(
@@ -902,15 +916,37 @@
 
         }
 
-        function generateEventSchema(event, canonicalUrl) {
+        function generateEventSchema(
+            event,
+            canonicalUrl
+        ) {
+
+            if (!event) {
+                return;
+            }
+
+            // CATEGORY DISPLAY
+            const category =
+                event.category_display ||
+                (
+                    event.category === "Others"
+                        ? event.category_name
+                        : event.category
+                ) ||
+                "Others";
+
+            // SCHEMA
             const schema = {
 
-                "@context": "https://schema.org",
+                "@context":
+                    "https://schema.org",
 
-                "@type": "Event",
+                "@type":
+                    "Event",
 
                 "name":
-                    event.title || "Untitled Event",
+                    event.title ||
+                    "Untitled Event",
 
                 "description":
                     event.meta_description ||
@@ -948,7 +984,8 @@
 
                 "location": {
 
-                    "@type": "Place",
+                    "@type":
+                        "Place",
 
                     "name":
                         event.location ||
@@ -956,10 +993,12 @@
 
                     "address": {
 
-                        "@type": "PostalAddress",
+                        "@type":
+                            "PostalAddress",
 
                         "streetAddress":
-                            event.address || "",
+                            event.address ||
+                            "",
 
                         "addressLocality":
                             "Jakarta",
@@ -973,15 +1012,54 @@
 
                 "organizer": {
 
-                    "@type": "Organization",
+                    "@type":
+                        "Organization",
 
                     "name":
                         "Jakarta Film Commission"
+
+                },
+
+                // CATEGORY
+                "about": {
+
+                    "@type":
+                        "Thing",
+
+                    "name":
+                        category
 
                 }
 
             };
 
+            // REMOVE UNDEFINED
+            Object.keys(schema)
+                .forEach(
+                    key => {
+
+                        if (
+                            schema[key] ===
+                            undefined
+                        ) {
+                            delete schema[key];
+                        }
+
+                    }
+                );
+
+
+            // REMOVE OLD EVENT SCHEMA            
+            const oldSchema =
+                document.getElementById(
+                    "eventStructuredData"
+                );
+
+            if (oldSchema) {
+                oldSchema.remove();
+            }
+
+            // CREATE SCHEMA
             const script =
                 document.createElement(
                     "script"
@@ -989,6 +1067,9 @@
 
             script.type =
                 "application/ld+json";
+
+            script.id =
+                "eventStructuredData";
 
             script.textContent =
                 JSON.stringify(
@@ -1035,12 +1116,10 @@
 
             //  NO START DATE
             if (!startDate) {
-
                 return "TBA";
-
             }
+
             // DATE FORMAT
-            
             const options = {
 
                 day: "2-digit",
@@ -1101,10 +1180,10 @@
            START
         ========================================================= */
         loadEvent();
-        generateEventSchema(
-            currentEvent,
-            canonical
-        );
+        // generateEventSchema(
+        //     currentEvent,
+        //     canonical
+        // );
 
     </script>
 

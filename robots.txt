@@ -1,5 +1,4 @@
 User-agent: *
-
 Allow: /
 
-Sitemap: https://jakartafilmcommission.id/sitemap.xml
+Sitemap: https://jfc.co.id/sitemap.php

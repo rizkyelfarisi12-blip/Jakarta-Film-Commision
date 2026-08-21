@@ -230,8 +230,13 @@
 
   <!-- Featured EVENTS -->
   <section class="featured-event">
-    <div id="featuredEventContainer"></div>
-  </section>
+
+    <div
+        class="container"
+        id="featuredEventContainer">
+    </div>
+
+</section>
   
   <!-- FILMS -->
   <section class="section" style="background-color: #EF3932;">
@@ -325,399 +330,865 @@
   <script src="assets/data/press-release-data.js"></script>
  <script>
 
-  /* =========================
-    FILMS
-  ========================= */
-  const filmGrid = document.getElementById("filmGrid");
+/* =========================================================
+   INDEX PAGE
+   FILMS + PRESS RELEASE + FEATURED EVENT
+========================================================= */
 
-  fetch("assets/data/films.json")
-  .then(res => res.json())
-  .then(data => {
+document.addEventListener("DOMContentLoaded", function(){
 
-    const films = data.slice(0,6);
+    /* =====================================================
+       FILMS
+    ===================================================== */
 
-    films.forEach(film => {
+    const filmGrid =
+        document.getElementById("filmGrid");
 
-      filmGrid.innerHTML += `
-        <div class="film-card">
 
-            <div class="film-poster">
-                <img src="${film.image}" alt="${film.title}">
-            </div>
+    if(filmGrid){
 
-            <div class="film-content">
+        fetch("assets/data/films.json")
 
-                <h3 class="film-title">
-                    ${film.title} (${film.year})
-                </h3>
+            .then(function(response){
 
-                <div class="film-director">
-                    Dir. ${film.director}
+                if(!response.ok){
+                    throw new Error(
+                        "Failed to load films.json"
+                    );
+                }
+
+                return response.json();
+
+            })
+
+            .then(function(data){
+
+                filmGrid.innerHTML = "";
+
+                const films =
+                    Array.isArray(data)
+                        ? data.slice(0, 6)
+                        : [];
+
+
+                films.forEach(function(film){
+
+                    filmGrid.innerHTML += `
+
+                        <div class="film-card">
+
+                            <div class="film-poster">
+
+                                <img
+                                    src="${escapeHTML(film.image || "")}"
+                                    alt="${escapeHTML(film.title || "")}"
+                                >
+
+                            </div>
+
+
+                            <div class="film-content">
+
+                                <h3 class="film-title">
+
+                                    ${escapeHTML(
+                                        film.title || ""
+                                    )}
+
+                                    ${
+                                        film.year
+                                            ? ` (${escapeHTML(film.year)})`
+                                            : ""
+                                    }
+
+                                </h3>
+
+
+                                <div class="film-director">
+
+                                    Dir.
+                                    ${escapeHTML(
+                                        film.director || "-"
+                                    )}
+
+                                </div>
+
+
+                                <div class="film-company">
+
+                                    ${escapeHTML(
+                                        film.company || "-"
+                                    )}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                });
+
+            })
+
+            .catch(function(error){
+
+                console.error(
+                    "Films:",
+                    error
+                );
+
+                filmGrid.innerHTML = "";
+
+            });
+
+    }
+
+
+    /* =====================================================
+       PRESS RELEASE
+    ===================================================== */
+
+    const pressGrid =
+        document.getElementById("pressGrid");
+
+
+    if(
+        pressGrid &&
+        typeof pressData !== "undefined" &&
+        Array.isArray(pressData)
+    ){
+
+        pressGrid.innerHTML = "";
+
+
+        const latestPress =
+            [...pressData]
+                .sort(function(a, b){
+
+                    return new Date(b.date) -
+                           new Date(a.date);
+
+                })
+                .slice(0, 3);
+
+
+        latestPress.forEach(function(item){
+
+            const categoryClass =
+                typeof getCategoryClass === "function"
+                    ? getCategoryClass(
+                        item.category
+                    )
+                    : "";
+
+
+            const slug =
+                typeof generateSlug === "function"
+                    ? generateSlug(item.title)
+                    : "";
+
+
+            const description =
+                typeof limitText === "function"
+                    ? limitText(
+                        item.description,
+                        90
+                    )
+                    : (
+                        item.description || ""
+                    );
+
+
+            pressGrid.innerHTML += `
+
+                <a
+                    href="press-release.html?slug=${encodeURIComponent(slug)}"
+                    class="press-card ${categoryClass}"
+                >
+
+                    <div class="press-image">
+
+                        <img
+                            src="${escapeHTML(
+                                item.image || ""
+                            )}"
+                            alt="${escapeHTML(
+                                item.title || ""
+                            )}"
+                        >
+
+                    </div>
+
+
+                    <div class="press-content">
+
+                        <div class="press-top">
+
+                            <div class="press-category">
+
+                                ${escapeHTML(
+                                    item.category || ""
+                                )}
+
+                            </div>
+
+
+                            <div class="press-date">
+
+                                ${escapeHTML(
+                                    item.date || ""
+                                )}
+
+                            </div>
+
+                        </div>
+
+
+                        <h3>
+
+                            ${escapeHTML(
+                                item.title || ""
+                            )}
+
+                        </h3>
+
+
+                        <p>
+
+                            ${escapeHTML(
+                                description
+                            )}
+
+                        </p>
+
+                    </div>
+
+                </a>
+
+            `;
+
+        });
+
+    }
+    else if(pressGrid){
+
+        console.warn(
+            "pressData tidak ditemukan."
+        );
+
+    }
+
+
+    /* =====================================================
+       HTML ESCAPE
+    ===================================================== */
+
+    function escapeHTML(value){
+
+        if(
+            value === null ||
+            value === undefined
+        ){
+
+            return "";
+
+        }
+
+
+        return String(value)
+
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    /* =====================================================
+       EVENT CATEGORY LABEL
+    ===================================================== */
+
+    function getEventCategoryLabel(event){
+
+        if(!event){
+
+            return "Others";
+
+        }
+
+
+        const category =
+            String(
+                event.category || ""
+            ).trim();
+
+
+        const categoryName =
+            String(
+                event.category_name || ""
+            ).trim();
+
+
+        if(
+            category.toLowerCase() === "others" &&
+            categoryName
+        ){
+
+            return categoryName;
+
+        }
+
+
+        return category || "Others";
+
+    }
+
+
+    /* =====================================================
+       EVENT CATEGORY COLOR
+    ===================================================== */
+
+    function getEventCategoryColor(category){
+
+        const normalized =
+            String(
+                category || "Others"
+            )
+            .toLowerCase()
+            .trim()
+            .replace(/\s+/g, "-")
+            .replace(/[^a-z0-9-]/g, "");
+
+
+        switch(normalized){
+
+            case "nonton-di":
+
+                return "#FF6A14";
+
+
+            case "nonton-bareng":
+
+                return "#DA291C";
+
+
+            case "jakarta-film-lab":
+
+                return "#526E3E";
+
+
+            default:
+
+                return "#97B300";
+
+        }
+
+    }
+
+
+    /* =====================================================
+       EVENT DATE
+    ===================================================== */
+
+    function formatEventDate(
+        startDate,
+        endDate
+    ){
+
+        if(!startDate){
+
+            return "-";
+
+        }
+
+
+        const start =
+            new Date(
+                startDate + "T00:00:00"
+            );
+
+
+        if(
+            isNaN(
+                start.getTime()
+            )
+        ){
+
+            return "-";
+
+        }
+
+
+        const options = {
+
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+
+        };
+
+
+        const startText =
+            start.toLocaleDateString(
+                "en-US",
+                options
+            );
+
+
+        if(
+            !endDate ||
+            endDate === startDate
+        ){
+
+            return startText;
+
+        }
+
+
+        const end =
+            new Date(
+                endDate + "T00:00:00"
+            );
+
+
+        if(
+            isNaN(
+                end.getTime()
+            )
+        ){
+
+            return startText;
+
+        }
+
+
+        const endText =
+            end.toLocaleDateString(
+                "en-US",
+                options
+            );
+
+
+        return `${startText} – ${endText}`;
+
+    }
+
+    function limitEventDescription(text, maxLength = 150){
+
+        if(!text){
+            return "";
+        }
+
+        text = String(text).trim();
+
+        if(text.length <= maxLength){
+            return text;
+        }
+
+        let shortened =
+            text.substring(0, maxLength);
+
+        const lastSpace =
+            shortened.lastIndexOf(" ");
+
+        if(lastSpace > 0){
+            shortened =
+                shortened.substring(0, lastSpace);
+        }
+
+        return shortened + "...";
+    }
+
+
+    /* =====================================================
+       FEATURED EVENT
+    ===================================================== */
+
+    function renderFeaturedEvent(event){
+
+        if(!event){
+
+            return;
+
+        }
+
+
+        const container =
+            document.getElementById(
+                "featuredEventContainer"
+            );
+
+
+        if(!container){
+
+            return;
+
+        }
+
+
+        /* -------------------------------------------------
+           CATEGORY
+        ------------------------------------------------- */
+
+        const categoryLabel =
+            getEventCategoryLabel(event);
+
+
+        const categoryColor =
+            getEventCategoryColor(
+                event.category
+            );
+
+
+        /* -------------------------------------------------
+           IMAGE
+        ------------------------------------------------- */
+
+        let image =
+            String(
+                event.cover_image || ""
+            ).trim();
+
+
+        image =
+            image.replace(/^\/+/, "");
+
+
+        /* -------------------------------------------------
+           DATE
+        ------------------------------------------------- */
+
+        const dateText =
+            formatEventDate(
+                event.start_date,
+                event.end_date
+            );
+
+
+        /* -------------------------------------------------
+           TEXT
+        ------------------------------------------------- */
+
+        const title =
+            event.title ||
+            "Untitled Event";
+
+
+        const description =
+            limitEventDescription(
+                event.description ||
+                "Discover the latest programs, screenings, networking sessions, and activities from Jakarta's film community.",
+                150
+            );
+
+        const location =
+            event.location ||
+            "Location TBA";
+
+
+        const slug =
+            event.slug || "";
+
+
+        /* -------------------------------------------------
+           RENDER
+        ------------------------------------------------- */
+
+        container.innerHTML = `
+
+            <div
+                class="featured-event-card"
+                style="
+                    --featured-category-color:
+                    ${categoryColor};
+                "
+            >
+
+                <!-- ================================
+                     LEFT IMAGE
+                ================================= -->
+
+                <div class="featured-event-image">
+
+                    <img
+                        src="${escapeHTML(image)}"
+                        alt="${escapeHTML(title)}"
+                    >
+
+
+                    <!-- CATEGORY BADGE -->
+
+                    <span
+                        class="featured-event-category"
+                    >
+
+                        ${escapeHTML(
+                            categoryLabel
+                        )}
+
+                    </span>
+
                 </div>
 
-                <div class="film-company">
-                    ${film.company}
+
+                <!-- ================================
+                     RIGHT CONTENT
+                ================================= -->
+
+                <div class="featured-event-info">
+
+                    <span
+                        class="featured-event-label"
+                    >
+
+                        Featured Event
+
+                    </span>
+
+
+                    <h2
+                        class="featured-event-title"
+                    >
+
+                        ${escapeHTML(title)}
+
+                    </h2>
+
+
+                    <p
+                        class="featured-event-description"
+                    >
+
+                        ${escapeHTML(
+                            description
+                        )}
+
+                    </p>
+
+
+                    <div
+                        class="featured-event-meta"
+                    >
+
+                        <div
+                            class="featured-event-meta-item"
+                        >
+
+                            <strong>
+                                DATE
+                            </strong>
+
+                            <span>
+                                ${escapeHTML(
+                                    dateText
+                                )}
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            class="featured-event-meta-item"
+                        >
+
+                            <strong>
+                                LOCATION
+                            </strong>
+
+                            <span>
+                                ${escapeHTML(
+                                    location
+                                )}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <a
+                        href="
+                            event-detail.html?slug=${encodeURIComponent(slug)}
+                        "
+                        class="featured-event-btn"
+                    >
+
+                        View Details
+
+                    </a>
+
                 </div>
 
             </div>
 
-        </div>
         `;
-    });
-  });
 
-  /* =========================
-    PRESS RELEASE
-  ========================= */
-  const data = pressData;
-  const pressGrid =
-  document.getElementById("pressGrid");
-
-  // ambil data dari press-release-data.js
-  const latestPress = [...pressData]
-  .sort((a,b)=> new Date(b.date) - new Date(a.date))
-  .slice(0,3);
-
-  // RENDER
-  latestPress.forEach(item => {
-    pressGrid.innerHTML += `
-      <a href="press-release.html?slug=${generateSlug(item.title)}"
-        class="press-card ${getCategoryClass(item.category)}">
-
-        <div class="press-image">
-          <img src="${item.image}" alt="${item.title}">
-        </div>
-
-        <div class="press-content">
-          <div class="press-top">
-            <div class="press-category">
-              ${item.category}
-            </div>
-            <div class="press-date">
-              ${item.date}
-            </div>
-          </div>
-          <h3>
-            ${item.title}
-          </h3>
-          <p>
-            ${limitText(item.description, 90)}
-          </p>
-        </div>
-
-      </a>
-    `;
-  });
-
-  // render featured event
-  function renderFeaturedEvent(event){
-
-      if(!event) return;
-
-
-      /*
-      |--------------------------------------------------------------------------
-      | IMAGE
-      |--------------------------------------------------------------------------
-      */
-
-      let image = event.cover_image || "";
-
-      if(image){
-
-          image = image.replace(/^\/+/, "");
-
-      }
-
-
-      /*
-      |--------------------------------------------------------------------------
-      | DATE
-      |--------------------------------------------------------------------------
-      */
-
-      let dateText = "";
-
-      if(event.start_date){
-
-          const startDate =
-              new Date(event.start_date + "T00:00:00");
-
-          const startFormatted =
-              startDate.toLocaleDateString("en-GB", {
-                  day: "2-digit",
-                  month: "short",
-                  year: "numeric"
-              });
-
-
-          if(event.end_date){
-
-              const endDate =
-                  new Date(event.end_date + "T00:00:00");
-
-              const endFormatted =
-                  endDate.toLocaleDateString("en-GB", {
-                      day: "2-digit",
-                      month: "short",
-                      year: "numeric"
-                  });
-
-
-              dateText =
-                  `${startFormatted} - ${endFormatted}`;
-
-          }else{
-
-              dateText =
-                  startFormatted;
-
-          }
-
-      }
-
-
-      /*
-      |--------------------------------------------------------------------------
-      | CONTENT
-      |--------------------------------------------------------------------------
-      */
-
-      document.getElementById(
-          "featuredEventContainer"
-      ).innerHTML = `
-
-          <div class="featured-event-bg">
-
-              <img
-                  src="${image}"
-                  alt="${event.title || "Featured Event"}">
-
-              <div class="featured-event-overlay"></div>
-
-          </div>
-
-
-          <div class="container">
-
-              <div class="featured-event-content">
-
-                  <span>
-                      ${event.status === "published"
-                          ? "Featured Event"
-                          : "Upcoming Event"
-                      }
-                  </span>
-
-
-                  <h2>
-                      ${event.title || ""}
-                  </h2>
-
-
-                  <p>
-                      ${event.description || ""}
-                  </p>
-
-
-                  <div class="event-meta">
-
-
-                      <div>
-
-                          <strong>
-                              Date
-                          </strong>
-
-                          <p>
-                              ${dateText}
-                          </p>
-
-                      </div>
-
-
-                      <div>
-
-                          <strong>
-                              Location
-                          </strong>
-
-                          <p>
-                              ${event.location || "-"}
-                          </p>
-
-                      </div>
-
-
-                  </div>
-
-
-                  <a
-                      href="event-detail.html?slug=${encodeURIComponent(event.slug)}"
-                      class="featured-event-btn">
-
-                      View Event
-
-                  </a>
-
-
-              </div>
-
-          </div>
-
-      `;
-
-  }
-
-  function formatEventDate(startDate, endDate){
-
-      if(!startDate){
-          return "-";
-      }
-
-      const start =
-          new Date(startDate + "T00:00:00");
-
-      if(!endDate){
-
-          return start.toLocaleDateString(
-              "en-US",
-              {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric"
-              }
-          );
-
-      }
-
-      const end =
-          new Date(endDate + "T00:00:00");
-
-
-      /*
-      Jika tanggal sama,
-      tampilkan satu tanggal saja.
-      */
-
-      if(startDate === endDate){
-
-          return start.toLocaleDateString(
-              "en-US",
-              {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric"
-              }
-          );
-
-      }
-
-
-      /*
-      Event beberapa hari
-      */
-
-      const startText =
-          start.toLocaleDateString(
-              "en-US",
-              {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric"
-              }
-          );
-
-
-      const endText =
-          end.toLocaleDateString(
-              "en-US",
-              {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric"
-              }
-          );
-
-
-      return `${startText} – ${endText}`;
-
-  }
-
-  // Coming soon event
-  function renderComingSoon(){
-
-      document.getElementById(
-          "featuredEventContainer"
-      ).innerHTML = `
-
-          <div class="featured-event-bg">
-
-              <img
-                  src="assets/images/event-coming-soon.jpg"
-                  alt="Events Coming Soon">
-
-              <div class="featured-event-overlay"></div>
-
-          </div>
-
-
-          <div class="container">
-
-              <div class="featured-event-content">
-
-                  <span>
-                      Upcoming Event
-                  </span>
-
-
-                  <h2>
-                      New Events Coming Soon
-                  </h2>
-
-
-                  <p>
-                      We are preparing our next programs,
-                      screenings, networking sessions,
-                      and industry activities.
-                      Stay connected to be the first to know
-                      when registration opens.
-                  </p>
-
-
-                  <a
-                      href="events.html"
-                      class="featured-event-btn">
-
-                      Explore Events
-
-                  </a>
-
-              </div>
-
-          </div>
-
-      `;
-
-  }
-
-  fetch("api/events/get-featured-event.php")
-  .then(res => {
-    if(!res.ok){
-        throw new Error("Server Error");
     }
-    return res.json();
-  })
-  .then(data => {
-    if(data.status === "success" && data.event){
-        renderFeaturedEvent(data.event);
-    }else{
+
+
+    /* =====================================================
+       COMING SOON
+    ===================================================== */
+
+    function renderComingSoon(){
+
+        const container =
+            document.getElementById(
+                "featuredEventContainer"
+            );
+
+
+        if(!container){
+
+            return;
+
+        }
+
+
+        container.innerHTML = `
+
+            <div
+                class="featured-event-card featured-event-coming"
+                style="
+                    --featured-category-color:
+                    #97B300;
+                "
+            >
+
+                <div class="featured-event-image">
+
+                    <img src="gallery/images/event-coming-soon.jpg" alt="Events Coming Soon">
+
+                    <span class="featured-event-category">
+
+                        Upcoming
+
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="featured-event-info"
+                >
+
+                    <span
+                        class="featured-event-label"
+                    >
+
+                        Upcoming Event
+
+                    </span>
+
+
+                    <h2
+                        class="featured-event-title"
+                    >
+
+                        New Events Coming Soon
+
+                    </h2>
+
+
+                    <p
+                        class="featured-event-description"
+                    >
+
+                        We are preparing our next programs,
+                        screenings, networking sessions,
+                        and industry activities.
+                        Stay connected to be the first to know
+                        when registration opens.
+
+                    </p>
+
+
+                    <a
+                        href="events.html"
+                        class="featured-event-btn"
+                    >
+
+                        Explore Events
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+
+    /* =====================================================
+       LOAD FEATURED EVENT
+    ===================================================== */
+
+    fetch(
+        "api/events/get-featured-event.php"
+    )
+
+    .then(function(response){
+
+        if(!response.ok){
+
+            throw new Error(
+                "Server Error: " +
+                response.status
+            );
+
+        }
+
+
+        return response.json();
+
+    })
+
+    .then(function(data){
+
+        console.log(
+            "Featured Event API:",
+            data
+        );
+
+
+        if(
+            data &&
+            data.status === "success" &&
+            data.event
+        ){
+
+            renderFeaturedEvent(
+                data.event
+            );
+
+        }
+        else{
+
+            renderComingSoon();
+
+        }
+
+    })
+
+    .catch(function(error){
+
+        console.error(
+            "Featured Event:",
+            error
+        );
+
+
         renderComingSoon();
-    }
-  })
-  .catch(err => {
-    console.error("Featured Event:", err);
-    renderComingSoon();
-  });
+
+    });
+
+});
+
 </script>
 </html>

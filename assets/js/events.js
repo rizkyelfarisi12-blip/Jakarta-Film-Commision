@@ -2,34 +2,39 @@
    JAKARTA FILM COMMISSION
    EVENTS PAGE
 ========================================================== */
+
 let allEvents = [];
 
 let currentCategory = "All";
 
 let visibleCount = 6;
 
+
 const eventsGrid =
-    document.getElementById("eventsGrid");
+    document.getElementById(
+        "eventsGrid"
+    );
 
 const loadMoreBtn =
-    document.getElementById("loadMoreBtn");
+    document.getElementById(
+        "loadMoreBtn"
+    );
 
 
 /* ==========================================================
    FORMAT DATE
-   Menghindari masalah timezone untuk YYYY-MM-DD
 ========================================================== */
 
-function formatDate(dateString){
+function formatDate(dateString) {
 
-    if(!dateString){
+    if (!dateString) {
         return "";
     }
 
     const parts =
         String(dateString).split("-");
 
-    if(parts.length !== 3){
+    if (parts.length !== 3) {
         return dateString;
     }
 
@@ -60,25 +65,31 @@ function formatDate(dateString){
 
 }
 
+
 /* ==========================================================
    EVENT DATE RANGE
 ========================================================== */
-function formatEventDate(event){
 
-    if(!event.start_date){
+function formatEventDate(event) {
+
+    if (!event.start_date) {
         return "";
     }
 
     const start =
-        formatDate(event.start_date);
+        formatDate(
+            event.start_date
+        );
 
-    if(
+    if (
         event.end_date &&
         event.end_date !== event.start_date
-    ){
+    ) {
 
         const end =
-            formatDate(event.end_date);
+            formatDate(
+                event.end_date
+            );
 
         return `${start} - ${end}`;
 
@@ -88,12 +99,14 @@ function formatEventDate(event){
 
 }
 
+
 /* ==========================================================
    CATEGORY CLASS
 ========================================================== */
-function getCategoryClass(category){
 
-    if(!category){
+function getCategoryClass(category) {
+
+    if (!category) {
         return "category-others";
     }
 
@@ -102,9 +115,13 @@ function getCategoryClass(category){
             .toLowerCase()
             .trim()
             .replace(/\s+/g, "-")
-            .replace(/[^a-z0-9-]/g, "");
+            .replace(
+                /[^a-z0-9-]/g,
+                ""
+            );
 
-    switch(normalized){
+
+    switch (normalized) {
 
         case "nonton-di":
             return "category-nonton-di";
@@ -115,9 +132,6 @@ function getCategoryClass(category){
         case "jakarta-film-lab":
             return "category-jakarta-film-lab";
 
-        case "others":
-            return "category-others";
-
         default:
             return "category-others";
 
@@ -125,24 +139,17 @@ function getCategoryClass(category){
 
 }
 
-/* ==========================================================
-   NORMALIZE CATEGORY
-========================================================== */
-function normalizeCategory(category){
-
-    return String(category || "")
-        .toLowerCase()
-        .trim()
-        .replace(/\s+/g, "-");
-
-}
 
 /* ==========================================================
    TEXT LIMIT
 ========================================================== */
-function truncateText(text, maxLength){
 
-    if(!text){
+function truncateText(
+    text,
+    maxLength
+) {
+
+    if (!text) {
         return "";
     }
 
@@ -151,51 +158,178 @@ function truncateText(text, maxLength){
             .replace(/\s+/g, " ")
             .trim();
 
-    if(text.length <= maxLength){
+    if (
+        text.length <= maxLength
+    ) {
+
         return text;
+
     }
 
     return (
         text
-            .substring(0, maxLength)
+            .substring(
+                0,
+                maxLength
+            )
             .trim()
-            .replace(/\s+\S*$/, "")
+            .replace(
+                /\s+\S*$/,
+                ""
+            )
         + "..."
     );
 
 }
 
+
 /* ==========================================================
    ESCAPE HTML
 ========================================================== */
-function escapeHtml(value){
 
-    if(value === null || value === undefined){
+function escapeHtml(value) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+
         return "";
+
     }
 
     return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
+
+
+/* ==========================================================
+   GET CATEGORY DISPLAY
+========================================================== */
+
+function getCategoryDisplay(event) {
+
+    /*
+    |--------------------------------------------------------------------------
+    | API baru
+    |--------------------------------------------------------------------------
+    */
+
+    if (
+        event.category_display &&
+        String(
+            event.category_display
+        ).trim()
+    ) {
+
+        return String(
+            event.category_display
+        ).trim();
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | FALLBACK
+    |--------------------------------------------------------------------------
+    |
+    | Untuk data lama / API lama.
+    |--------------------------------------------------------------------------
+    */
+
+    if (
+        String(event.category || "")
+            .trim() === "Others" &&
+        event.category_name
+    ) {
+
+        return String(
+            event.category_name
+        ).trim();
+
+    }
+
+
+    return (
+        event.category ||
+        "Others"
+    );
+
+}
+
+
+/* ==========================================================
+   GET CATEGORY FILTER
+========================================================== */
+
+function getCategoryFilter(event) {
+
+    /*
+    |--------------------------------------------------------------------------
+    | API baru
+    |--------------------------------------------------------------------------
+    */
+
+    if (
+        event.category_filter
+    ) {
+
+        return String(
+            event.category_filter
+        ).trim();
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | FALLBACK
+    |--------------------------------------------------------------------------
+    */
+
+    return String(
+        event.category || "Others"
+    ).trim();
+
+}
+
 
 /* ==========================================================
    LOAD EVENTS
 ========================================================== */
-async function loadEvents(){
 
-    try{
+async function loadEvents() {
+
+    try {
 
         const response =
             await fetch(
                 "api/events/get-events.php"
             );
 
-        if(!response.ok){
+
+        if (!response.ok) {
 
             throw new Error(
                 "Failed to load events"
@@ -203,15 +337,20 @@ async function loadEvents(){
 
         }
 
+
         const data =
             await response.json();
+
 
         console.log(
             "EVENTS:",
             data
         );
 
-        if(!Array.isArray(data)){
+
+        if (
+            !Array.isArray(data)
+        ) {
 
             throw new Error(
                 "Invalid events data"
@@ -219,17 +358,20 @@ async function loadEvents(){
 
         }
 
+
         allEvents = data;
+
 
         renderEvents();
 
     }
-    catch(error){
+    catch (error) {
 
         console.error(
             "Events API:",
             error
         );
+
 
         eventsGrid.innerHTML = `
 
@@ -247,6 +389,7 @@ async function loadEvents(){
 
         `;
 
+
         loadMoreBtn.style.display =
             "none";
 
@@ -254,53 +397,39 @@ async function loadEvents(){
 
 }
 
+
 /* ==========================================================
    RENDER EVENTS
 ========================================================== */
-function renderEvents(){
+
+function renderEvents() {
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | FILTER
+    |--------------------------------------------------------------------------
+    */
 
     const filteredEvents =
-    currentCategory === "All"
 
-    ? allEvents
+        currentCategory === "All"
 
-    : allEvents.filter(event => {
+        ? allEvents
 
-        const category =
-            normalizeCategory(
-                event.category
-            );
+        : allEvents.filter(
+            event =>
+                getCategoryFilter(
+                    event
+                ) === currentCategory
+        );
 
-        const selectedCategory =
-            normalizeCategory(
-                currentCategory
-            );
 
-        /*
-        |--------------------------------------------------------------------------
-        | OTHERS
-        |--------------------------------------------------------------------------
-        */
-
-        if(selectedCategory === "others"){
-
-            return (
-                category === "others" ||
-                category === "other"
-            );
-
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | STANDARD CATEGORY
-        |--------------------------------------------------------------------------
-        */
-
-        return category === selectedCategory;
-
-    });
-
+    /*
+    |--------------------------------------------------------------------------
+    | VISIBLE
+    |--------------------------------------------------------------------------
+    */
 
     const visibleEvents =
         filteredEvents.slice(
@@ -309,13 +438,19 @@ function renderEvents(){
         );
 
 
-    eventsGrid.innerHTML = "";
+    eventsGrid.innerHTML =
+        "";
 
 
-    /* ======================================================
-       EMPTY
-    ====================================================== */
-    if(!visibleEvents.length){
+    /*
+    |--------------------------------------------------------------------------
+    | EMPTY
+    |--------------------------------------------------------------------------
+    */
+
+    if (
+        !visibleEvents.length
+    ) {
 
         eventsGrid.innerHTML = `
 
@@ -333,6 +468,7 @@ function renderEvents(){
 
         `;
 
+
         loadMoreBtn.style.display =
             "none";
 
@@ -340,165 +476,226 @@ function renderEvents(){
 
     }
 
-    /* ======================================================
-       RENDER CARDS
-    ====================================================== */
-    visibleEvents.forEach(event => {
 
-        const card =
-            document.createElement("article");
+    /*
+    |--------------------------------------------------------------------------
+    | RENDER
+    |--------------------------------------------------------------------------
+    */
 
-
-        /* CATEGORY CLASS */
-
-        const categoryClass =
-            getCategoryClass(
-                event.category
-            );
+    visibleEvents.forEach(
+        event => {
 
 
-        card.className =
-            `event-card ${categoryClass}`;
+            const card =
+                document.createElement(
+                    "article"
+                );
 
 
-        /* TEXT */
+            /*
+            |--------------------------------------------------------------
+            | CATEGORY TYPE
+            |--------------------------------------------------------------
+            */
 
-        const title =
-            truncateText(
-                event.title ||
-                "Untitled Event",
-                65
-            );
-
-
-        const location =
-            truncateText(
-                event.location ||
-                "Location not specified",
-                35
-            );
+            const categoryFilter =
+                getCategoryFilter(
+                    event
+                );
 
 
-        const description =
-            truncateText(
-                event.description || "",
-                125
-            );
+            const categoryDisplay =
+                getCategoryDisplay(
+                    event
+                );
 
 
-        const category =
-            truncateText(
-                event.category_name ||
-                event.category ||
-                "Others",
-                25
-            );
+            const categoryClass =
+                getCategoryClass(
+                    categoryFilter
+                );
 
 
-        const date =
-            formatEventDate(event);
+            card.className =
+                `event-card ${categoryClass}`;
 
 
-        /* ==================================================
-           CARD HTML
-        ================================================== */
-        card.innerHTML = `
+            /*
+            |--------------------------------------------------------------
+            | TEXT
+            |--------------------------------------------------------------
+            */
 
-            <!-- IMAGE -->
-            <div class="event-card-image">
-
-                <img
-                    src="${escapeHtml(event.cover_image || "")}"
-                    alt="${escapeHtml(event.title || "Event")}"
-                    loading="lazy"
-                >
-
-                <!-- CATEGORY BADGE -->
-                <span class="event-card-category">
-                    ${escapeHtml(category)}
-                </span>
-
-            </div>
-
-            <!-- CONTENT -->
-            <div class="event-card-content">
-
-                <!-- DATE -->
-                <div class="event-card-date">
-
-                    <span class="event-date-icon">
-                        <img src="assets/icon/date.png" alt="Date">
-                    </span>
-
-                    <span>
-                        ${escapeHtml(date)}
-                    </span>
-
-                </div>
-
-                <!-- TITLE -->
-                <h3 class="event-card-title">
-                    ${escapeHtml(title)}
-                </h3>
-
-                <!-- LOCATION -->
-                <div class="event-card-location">
-
-                    <span class="location-icon">
-                        <img src="assets/icon/pin.png" alt="Location">
-                    </span>
-
-                    <span>
-                        ${escapeHtml(location)}
-                    </span>
-
-                </div>
+            const title =
+                truncateText(
+                    event.title ||
+                    "Untitled Event",
+                    65
+                );
 
 
-                <!-- DESCRIPTION -->
-                <p class="event-card-description">
-                    ${escapeHtml(description)}
-                </p>
+            const location =
+                truncateText(
+                    event.location ||
+                    "Location not specified",
+                    35
+                );
 
-                <!-- FOOTER -->
-                <div class="event-card-footer">
 
-                    <a
-                        href="event-detail.html?slug=${encodeURIComponent(event.slug || "")}"
-                        class="event-card-button"
+            const description =
+                truncateText(
+                    event.description ||
+                    "",
+                    125
+                );
+
+
+            const category =
+                truncateText(
+                    categoryDisplay,
+                    25
+                );
+
+
+            const date =
+                formatEventDate(
+                    event
+                );
+
+
+            /*
+            |--------------------------------------------------------------
+            | CARD
+            |--------------------------------------------------------------
+            */
+
+            card.innerHTML = `
+
+                <div class="event-card-image">
+
+                    <img
+                        src="${escapeHtml(
+                            event.cover_image || ""
+                        )}"
+                        alt="${escapeHtml(
+                            event.title ||
+                            "Event"
+                        )}"
+                        loading="lazy"
                     >
 
-                        <span>
-                            View Event
-                        </span>
-
-                        <strong>
-                            →
-                        </strong>
-
-                    </a>
+                    <span class="event-card-category">
+                        ${escapeHtml(category)}
+                    </span>
 
                 </div>
 
-            </div>
 
-        `;
+                <div class="event-card-content">
 
-        eventsGrid.appendChild(card);
 
-    });
+                    <div class="event-card-date">
 
-    /* ======================================================
-       LOAD MORE
-    ====================================================== */
-    if(
+                        <span class="event-date-icon">
+
+                            <img
+                                src="assets/icon/date.png"
+                                alt="Date"
+                            >
+
+                        </span>
+
+                        <span>
+                            ${escapeHtml(date)}
+                        </span>
+
+                    </div>
+
+
+                    <h3 class="event-card-title">
+
+                        ${escapeHtml(title)}
+
+                    </h3>
+
+
+                    <div class="event-card-location">
+
+                        <span class="location-icon">
+
+                            <img
+                                src="assets/icon/pin.png"
+                                alt="Location"
+                            >
+
+                        </span>
+
+                        <span>
+                            ${escapeHtml(location)}
+                        </span>
+
+                    </div>
+
+
+                    <p class="event-card-description">
+
+                        ${escapeHtml(description)}
+
+                    </p>
+
+
+                    <div class="event-card-footer">
+
+                        <a
+                            href="event-detail.html?slug=${encodeURIComponent(
+                                event.slug || ""
+                            )}"
+                            class="event-card-button"
+                        >
+
+                            <span>
+                                View Event
+                            </span>
+
+                            <strong>
+                                →
+                            </strong>
+
+                        </a>
+
+                    </div>
+
+
+                </div>
+
+            `;
+
+
+            eventsGrid.appendChild(
+                card
+            );
+
+        }
+    );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | LOAD MORE
+    |--------------------------------------------------------------------------
+    */
+
+    if (
         visibleCount <
         filteredEvents.length
-    ){
+    ) {
+
         loadMoreBtn.style.display =
             "inline-flex";
+
     }
-    else{
+    else {
 
         loadMoreBtn.style.display =
             "none";
@@ -507,54 +704,67 @@ function renderEvents(){
 
 }
 
+
 /* ==========================================================
-   FILTER
+   FILTER BUTTON
 ========================================================== */
+
 document
     .querySelectorAll(".filter-btn")
-    .forEach(button => {
+    .forEach(
+        button => {
 
-        button.addEventListener(
-            "click",
-            function(){
+            button.addEventListener(
+                "click",
+                function () {
 
-                document
-                    .querySelectorAll(".filter-btn")
-                    .forEach(btn => {
 
-                        btn.classList.remove(
-                            "active"
+                    document
+                        .querySelectorAll(
+                            ".filter-btn"
+                        )
+                        .forEach(
+                            btn => {
+
+                                btn.classList.remove(
+                                    "active"
+                                );
+
+                            }
                         );
 
-                    });
 
-                this.classList.add(
-                    "active"
-                );
+                    this.classList.add(
+                        "active"
+                    );
 
-                currentCategory =
-                    this.dataset.category;
 
-                /* RESET TO FIRST 6 */
-                visibleCount = 6;
+                    currentCategory =
+                        this.dataset.category;
 
-                renderEvents();
 
-            }
-        );
+                    visibleCount = 6;
 
-    });
+
+                    renderEvents();
+
+                }
+            );
+
+        }
+    );
+
 
 /* ==========================================================
    LOAD MORE
 ========================================================== */
-if(loadMoreBtn){
+
+if (loadMoreBtn) {
 
     loadMoreBtn.addEventListener(
         "click",
-        function(){
+        function () {
 
-            /* ADD 6 MORE */
             visibleCount += 6;
 
             renderEvents();
@@ -563,6 +773,7 @@ if(loadMoreBtn){
     );
 
 }
+
 
 /* ==========================================================
    INITIALIZE
