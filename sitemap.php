@@ -1,12 +1,46 @@
 <?php
 
+/*
+|--------------------------------------------------------------------------
+| JAKARTA FILM COMMISSION
+| AUTO XML SITEMAP
+|--------------------------------------------------------------------------
+|
+| Sitemap dibuat secara dinamis dari database.
+|
+| Tidak perlu generate XML manual.
+|
+|--------------------------------------------------------------------------
+*/
+
+
 require_once __DIR__ . "/api/db.php";
 
 
-header("Content-Type: application/xml; charset=UTF-8");
+/*
+|--------------------------------------------------------------------------
+| CONFIGURATION
+|--------------------------------------------------------------------------
+|
+| GANTI DOMAIN INI DENGAN DOMAIN WEBSITE ANDA.
+|
+*/
+
+$baseUrl =
+    "https://www.jfc.co.id";
 
 
-$baseUrl = "https://jfc.co.id";
+/*
+|--------------------------------------------------------------------------
+| REMOVE TRAILING SLASH
+|--------------------------------------------------------------------------
+*/
+
+$baseUrl =
+    rtrim(
+        $baseUrl,
+        "/"
+    );
 
 
 /*
@@ -15,26 +49,26 @@ $baseUrl = "https://jfc.co.id";
 |--------------------------------------------------------------------------
 */
 
-echo '<?xml version="1.0" encoding="UTF-8"?>';
-
-echo '<urlset
-    xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
->';
+header(
+    "Content-Type: application/xml; charset=UTF-8"
+);
 
 
 /*
 |--------------------------------------------------------------------------
-| HELPER
+| XML ESCAPE
 |--------------------------------------------------------------------------
 */
 
-function xml($value)
+function xmlEscape($value)
 {
+
     return htmlspecialchars(
-        $value,
+        (string) $value,
         ENT_XML1 | ENT_QUOTES,
         "UTF-8"
     );
+
 }
 
 
@@ -44,163 +78,322 @@ function xml($value)
 |--------------------------------------------------------------------------
 */
 
-$staticPages = [
+$urls = [];
 
-    [
-        "url" => "/",
-        "lastmod" => null
-    ],
 
-    [
-        "url" => "/events.html",
-        "lastmod" => null
-    ],
+/*
+|--------------------------------------------------------------------------
+| HOMEPAGE
+|--------------------------------------------------------------------------
+*/
 
-    [
-        "url" => "/films-list.html",
-        "lastmod" => null
-    ],
+$urls[] = [
 
-    [
-        "url" => "/press-release-list.html",
-        "lastmod" => null
-    ],
+    "loc" =>
+        $baseUrl . "/",
 
-    [
-        "url" => "/programs.html",
-        "lastmod" => null
-    ]
+    "changefreq" =>
+        "weekly",
+
+    "priority" =>
+        "1.0"
 
 ];
 
 
-foreach ($staticPages as $page) {
+/*
+|--------------------------------------------------------------------------
+| EVENTS PAGE
+|--------------------------------------------------------------------------
+*/
 
-    echo "<url>";
+$urls[] = [
 
-    echo "<loc>"
-        . xml(
-            $baseUrl .
-            $page["url"]
-        )
-        . "</loc>";
+    "loc" =>
+        $baseUrl . "/events.html",
 
-    echo "</url>";
+    "changefreq" =>
+        "daily",
 
-}
+    "priority" =>
+        "0.9"
+
+];
 
 
 /*
 |--------------------------------------------------------------------------
-| EVENTS
+| GET PUBLISHED EVENTS
 |--------------------------------------------------------------------------
 */
 
-$eventQuery = mysqli_query(
-    $conn,
-    "
+$sql = "
 
     SELECT
+        id,
         slug,
-        updated_at,
+        start_date,
         created_at
 
     FROM events
 
-    WHERE status = 'published'
+    WHERE
+        status = 'published'
 
-    AND slug IS NOT NULL
+        AND slug IS NOT NULL
 
-    AND slug != ''
+        AND slug != ''
 
     ORDER BY
-        updated_at DESC,
+        start_date ASC,
         created_at DESC
 
-    "
-);
+";
 
 
-if ($eventQuery) {
-
-    while (
-        $event =
-        mysqli_fetch_assoc(
-            $eventQuery
-        )
-    ) {
-
-        /*
-        |------------------------------------------------------------------
-        | EVENT URL
-        |------------------------------------------------------------------
-        */
-
-        $url =
-            $baseUrl .
-            "/event-detail.html?slug=" .
-            rawurlencode(
-                $event["slug"]
-            );
+$result =
+    mysqli_query(
+        $conn,
+        $sql
+    );
 
 
-        /*
-        |------------------------------------------------------------------
-        | LAST MODIFIED
-        |------------------------------------------------------------------
-        */
+/*
+|--------------------------------------------------------------------------
+| DATABASE ERROR
+|--------------------------------------------------------------------------
+*/
 
-        $lastmod =
-            $event["updated_at"] ??
-            $event["created_at"] ??
-            null;
+if (!$result) {
 
+    http_response_code(500);
 
-        echo "<url>";
+    echo '<?xml version="1.0" encoding="UTF-8"?>';
 
-        echo "<loc>"
-            . xml($url)
-            . "</loc>";
+    echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 
+    echo '</urlset>';
 
-        if ($lastmod) {
-
-            $timestamp =
-                strtotime($lastmod);
-
-            if ($timestamp) {
-
-                echo "<lastmod>"
-                    . date(
-                        "c",
-                        $timestamp
-                    )
-                    . "</lastmod>";
-
-            }
-
-        }
-
-        echo "</url>";
-
-    }
+    exit;
 
 }
 
 
 /*
 |--------------------------------------------------------------------------
-| PRESS RELEASE
-|--------------------------------------------------------------------------
-|
-| BAGIAN INI KITA SESUAIKAN SETELAH
-| struktur database press release Anda
-| dikirim.
-|
+| EVENT URLS
 |--------------------------------------------------------------------------
 */
 
+while (
+    $event =
+    mysqli_fetch_assoc($result)
+) {
+
+    $slug =
+        trim(
+            $event["slug"] ?? ""
+        );
+
+
+    if ($slug === "") {
+
+        continue;
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | EVENT DETAIL URL
+    |--------------------------------------------------------------------------
+    |
+    | Mengikuti URL yang sekarang digunakan oleh events.js:
+    |
+    | event-detail.html?slug=...
+    |
+    */
+
+    $eventUrl =
+        $baseUrl .
+        "/event-detail.html?slug=" .
+        rawurlencode($slug);
+
+
+    $item = [
+
+        "loc" =>
+            $eventUrl,
+
+        "changefreq" =>
+            "weekly",
+
+        "priority" =>
+            "0.8"
+
+    ];
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | LAST MODIFICATION
+    |--------------------------------------------------------------------------
+    |
+    | Untuk sementara menggunakan created_at jika tersedia.
+    |
+    */
+
+    if (
+        !empty(
+            $event["created_at"]
+        )
+    ) {
+
+        $timestamp =
+            strtotime(
+                $event["created_at"]
+            );
+
+
+        if ($timestamp !== false) {
+
+            $item["lastmod"] =
+                date(
+                    "Y-m-d",
+                    $timestamp
+                );
+
+        }
+
+    }
+
+
+    $urls[] =
+        $item;
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| XML OUTPUT
+|--------------------------------------------------------------------------
+*/
+
+echo '<?xml version="1.0" encoding="UTF-8"?>';
+
+echo "\n";
+
+echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+
+echo "\n";
+
+
+foreach (
+    $urls
+    as $url
+) {
+
+    echo "    <url>\n";
+
+
+    /*
+    |----------------------------------------------------------------------
+    | LOCATION
+    |----------------------------------------------------------------------
+    */
+
+    echo "        <loc>";
+
+    echo xmlEscape(
+        $url["loc"]
+    );
+
+    echo "</loc>\n";
+
+
+    /*
+    |----------------------------------------------------------------------
+    | LAST MOD
+    |----------------------------------------------------------------------
+    */
+
+    if (
+        !empty(
+            $url["lastmod"]
+        )
+    ) {
+
+        echo "        <lastmod>";
+
+        echo xmlEscape(
+            $url["lastmod"]
+        );
+
+        echo "</lastmod>\n";
+
+    }
+
+
+    /*
+    |----------------------------------------------------------------------
+    | CHANGE FREQUENCY
+    |----------------------------------------------------------------------
+    */
+
+    if (
+        !empty(
+            $url["changefreq"]
+        )
+    ) {
+
+        echo "        <changefreq>";
+
+        echo xmlEscape(
+            $url["changefreq"]
+        );
+
+        echo "</changefreq>\n";
+
+    }
+
+
+    /*
+    |----------------------------------------------------------------------
+    | PRIORITY
+    |----------------------------------------------------------------------
+    */
+
+    if (
+        isset(
+            $url["priority"]
+        )
+    ) {
+
+        echo "        <priority>";
+
+        echo xmlEscape(
+            $url["priority"]
+        );
+
+        echo "</priority>\n";
+
+    }
+
+
+    echo "    </url>\n";
+
+}
+
 
 echo "</urlset>";
+
+
+
+/*
+|--------------------------------------------------------------------------
+| CLOSE DATABASE
+|--------------------------------------------------------------------------
+*/
 
 $conn->close();

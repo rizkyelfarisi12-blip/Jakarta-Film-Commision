@@ -7,7 +7,7 @@ require_once __DIR__ . "/../db.php";
 
 /*
 |--------------------------------------------------------------------------
-| HELPER RESPONSE
+| RESPONSE HELPER
 |--------------------------------------------------------------------------
 */
 
@@ -30,28 +30,23 @@ function response($success, $message, $extra = [])
 
 /*
 |--------------------------------------------------------------------------
-| STEP 1
-| Ambil JSON request
+| READ JSON REQUEST
 |--------------------------------------------------------------------------
 */
 
-$rawData = file_get_contents("php://input");
+$rawInput = file_get_contents("php://input");
 
-$data = json_decode($rawData, true);
+$data = json_decode(
+    $rawInput,
+    true
+);
 
 
-/*
-|--------------------------------------------------------------------------
-| STEP 2
-| Validasi JSON
-|--------------------------------------------------------------------------
-*/
-
-if(!is_array($data)){
+if (!is_array($data)) {
 
     response(
         false,
-        "Request tidak valid."
+        "Invalid JSON request."
     );
 
 }
@@ -59,97 +54,111 @@ if(!is_array($data)){
 
 /*
 |--------------------------------------------------------------------------
-| STEP 3
-| Validasi ID
+| GET ID
 |--------------------------------------------------------------------------
 */
 
-$id = $data["id"] ?? null;
+$id = isset($data["id"])
+    ? (int) $data["id"]
+    : 0;
 
 
-if(!$id || !is_numeric($id)){
+if ($id <= 0) {
 
     response(
         false,
-        "ID event tidak valid."
+        "Valid press release ID is required."
     );
 
 }
 
 
-$id = (int) $id;
-
-
 /*
 |--------------------------------------------------------------------------
-| STEP 4
-| Cek apakah event ada
+| CHECK PRESS RELEASE
 |--------------------------------------------------------------------------
 */
 
-$stmt = $conn->prepare("
-    SELECT id
-    FROM events
+$check = $conn->prepare("
+    SELECT
+        id,
+        title,
+        cover_image
+    FROM press_releases
     WHERE id = ?
     LIMIT 1
 ");
 
 
-if(!$stmt){
+if (!$check) {
 
     response(
         false,
-        "Gagal menyiapkan query."
+        "Failed to prepare press release validation.",
+        [
+            "error" => $conn->error
+        ]
     );
 
 }
 
 
-$stmt->bind_param(
+$check->bind_param(
     "i",
     $id
 );
 
 
-$stmt->execute();
+if (!$check->execute()) {
 
-
-$result = $stmt->get_result();
-
-
-if($result->num_rows === 0){
-
-    $stmt->close();
+    $check->close();
 
     response(
         false,
-        "Event tidak ditemukan."
+        "Failed to check press release."
     );
 
 }
 
 
-$stmt->close();
+$result = $check->get_result();
+
+$pressRelease = $result->fetch_assoc();
+
+$check->close();
+
+
+if (!$pressRelease) {
+
+    response(
+        false,
+        "Press release not found."
+    );
+
+}
 
 
 /*
 |--------------------------------------------------------------------------
-| STEP 5
-| Hapus event
+| DELETE
 |--------------------------------------------------------------------------
 */
 
 $stmt = $conn->prepare("
-    DELETE FROM events
+    DELETE FROM press_releases
     WHERE id = ?
+    LIMIT 1
 ");
 
 
-if(!$stmt){
+if (!$stmt) {
 
     response(
         false,
-        "Gagal menyiapkan proses delete."
+        "Failed to prepare delete statement.",
+        [
+            "error" => $conn->error
+        ]
     );
 
 }
@@ -161,35 +170,25 @@ $stmt->bind_param(
 );
 
 
-if(!$stmt->execute()){
+if (!$stmt->execute()) {
+
+    $error = $stmt->error;
 
     $stmt->close();
 
     response(
         false,
-        "Gagal menghapus event."
+        "Failed to delete press release.",
+        [
+            "error" => $error
+        ]
     );
 
 }
 
 
-/*
-|--------------------------------------------------------------------------
-| STEP 6
-| Pastikan benar-benar terhapus
-|--------------------------------------------------------------------------
-*/
-
-if($stmt->affected_rows < 1){
-
-    $stmt->close();
-
-    response(
-        false,
-        "Event gagal dihapus."
-    );
-
-}
+$affectedRows =
+    $stmt->affected_rows;
 
 
 $stmt->close();
@@ -197,15 +196,33 @@ $stmt->close();
 
 /*
 |--------------------------------------------------------------------------
-| STEP 7
-| Success
+| VERIFY DELETE
+|--------------------------------------------------------------------------
+*/
+
+if ($affectedRows !== 1) {
+
+    response(
+        false,
+        "Press release could not be deleted."
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| SUCCESS
 |--------------------------------------------------------------------------
 */
 
 response(
     true,
-    "Event berhasil dihapus.",
+    "Press release successfully deleted.",
     [
         "id" => $id
     ]
 );
+
+
+$conn->close();
