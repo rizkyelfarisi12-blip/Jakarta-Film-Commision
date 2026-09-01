@@ -1,6 +1,7 @@
 let allEvents = [];
 
 let currentStatusFilter = "";
+let currentCategoryFilter = "";
 
 
 /* =========================================================
@@ -93,6 +94,8 @@ async function loadEvents(){
                 : [];
 
 
+        renderStats(allEvents);
+
         renderTable(allEvents);
 
 
@@ -123,7 +126,62 @@ async function loadEvents(){
 
         `;
 
+        renderStats([]);
+
     }
+
+}
+
+
+/* =========================================================
+   RENDER STATS
+
+   Statistik selalu dihitung dari SELURUH data (allEvents),
+   bukan dari hasil filter/search, sama seperti halaman
+   Press Release.
+========================================================= */
+
+function renderStats(data){
+
+    const list =
+        Array.isArray(data) ? data : [];
+
+
+    const total =
+        list.length;
+
+
+    const published =
+        list.filter(event =>
+            String(event.status || "")
+                .toLowerCase()
+                .trim() === "published"
+        ).length;
+
+
+    const draft =
+        list.filter(event =>
+            String(event.status || "draft")
+                .toLowerCase()
+                .trim() === "draft"
+        ).length;
+
+
+    const totalEl =
+        document.getElementById("statTotalEvents");
+
+    const publishedEl =
+        document.getElementById("statPublishedEvents");
+
+    const draftEl =
+        document.getElementById("statDraftEvents");
+
+
+    if(totalEl) totalEl.textContent = total;
+
+    if(publishedEl) publishedEl.textContent = published;
+
+    if(draftEl) draftEl.textContent = draft;
 
 }
 
@@ -148,8 +206,20 @@ function filterEvents(){
             .value;
 
 
+    const categoryEl =
+        document.getElementById("categoryFilter");
+
+    const category =
+        categoryEl
+            ? categoryEl.value
+            : "";
+
+
     currentStatusFilter =
         status;
+
+    currentCategoryFilter =
+        category;
 
 
     const filtered =
@@ -163,7 +233,7 @@ function filterEvents(){
                 .toLowerCase();
 
 
-            const category =
+            const eventCategory =
                 String(
                     event.category || ""
                 )
@@ -179,7 +249,7 @@ function filterEvents(){
 
             const matchesKeyword =
                 title.includes(keyword) ||
-                category.includes(keyword) ||
+                eventCategory.includes(keyword) ||
                 location.includes(keyword);
 
 
@@ -190,9 +260,17 @@ function filterEvents(){
                 ).toLowerCase() === status;
 
 
+            const matchesCategory =
+                !category ||
+                String(
+                    event.category || ""
+                ).toLowerCase() === category.toLowerCase();
+
+
             return (
                 matchesKeyword &&
-                matchesStatus
+                matchesStatus &&
+                matchesCategory
             );
 
         });

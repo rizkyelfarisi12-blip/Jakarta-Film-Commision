@@ -129,6 +129,17 @@ function setupArticleButtons() {
   if (p) p.addEventListener("click", () => addParagraphBlock());
   if (i) i.addEventListener("click", () => addImageBlock());
 }
+/* =========================================================
+   PASTE SANITIZER
+   (memaksa paste sebagai plain text agar style asing
+   dari Word/Google Docs/halaman lain tidak ikut masuk)
+========================================================= */
+function handleRichTextPaste(e) {
+  e.preventDefault();
+  const clipboardData = e.clipboardData || window.clipboardData;
+  const text = clipboardData ? clipboardData.getData("text/plain") : "";
+  document.execCommand("insertText", false, text);
+}
 function addParagraphBlock(value = "") {
   articleBlocks.push({
     id: createBlockId(),
@@ -183,6 +194,7 @@ function createParagraphElement(b, index) {
   const ed = w.querySelector(".article-richtext-input");
   ed.innerHTML = b.content || "";
   ed.addEventListener("input", () => (b.content = ed.innerHTML));
+  ed.addEventListener("paste", handleRichTextPaste);
   ["focus", "click"].forEach((ev) =>
     ed.addEventListener(ev, () => {
       currentRichTextEditor = ed;
@@ -764,7 +776,7 @@ function populateForm(item) {
     setValue("category", item.category);
     setValue("category_name", "");
   }
-  setValue("start_date", item.published_date || item.start_date || "");
+  setValue("date", item.published_date || item.start_date || "");
   setValue("location", item.location || "Jakarta");
   setValue("description", item.description || item.excerpt || "");
   setValue("status", item.status || "draft");

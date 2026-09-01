@@ -40,9 +40,9 @@ function response(
 */
 
 /*
- * upload-press-image.php berada di:
+ * upload-image.php berada di:
  *
- * /api/press-release/
+ * /api/events/
  *
  * Maka root website adalah:
  *
@@ -76,7 +76,7 @@ $uploadRoot =
     DIRECTORY_SEPARATOR .
     "uploads" .
     DIRECTORY_SEPARATOR .
-    "press-release";
+    "events";
 
 
 $coverDirectory =
@@ -492,8 +492,8 @@ if (
 
 $prefix =
     $type === "cover"
-        ? "press-cover"
-        : "press-article";
+        ? "event-cover"
+        : "event-article";
 
 
 try {
@@ -584,13 +584,13 @@ if (
 ) {
 
     $relativePath =
-        "uploads/press-release/cover/" .
+        "uploads/events/cover/" .
         $fileName;
 
 } else {
 
     $relativePath =
-        "uploads/press-release/article/" .
+        "uploads/events/article/" .
         $fileName;
 
 }
@@ -697,6 +697,11 @@ $imageUrl =
 |--------------------------------------------------------------------------
 | SUCCESS RESPONSE
 |--------------------------------------------------------------------------
+|
+| NOTE: response ini SENGAJA flat (bukan nested di dalam
+| "data"), karena event-form.js membaca "result.path"
+| langsung, bukan "result.data.path".
+|--------------------------------------------------------------------------
 */
 
 response(
@@ -707,36 +712,32 @@ response(
 
     [
 
-        "data" => [
+        "type" =>
+            $type,
 
-            "type" =>
-                $type,
+        "path" =>
+            $relativePath,
 
-            "path" =>
-                $relativePath,
+        "url" =>
+            $imageUrl,
 
-            "url" =>
-                $imageUrl,
+        "filename" =>
+            $fileName,
 
-            "filename" =>
-                $fileName,
+        "mime_type" =>
+            $mimeType,
 
-            "mime_type" =>
-                $mimeType,
+        "extension" =>
+            $extension,
 
-            "extension" =>
-                $extension,
+        "size" =>
+            $fileSize,
 
-            "size" =>
-                $fileSize,
+        "width" =>
+            $width,
 
-            "width" =>
-                $width,
-
-            "height" =>
-                $height
-
-        ]
+        "height" =>
+            $height
 
     ]
 

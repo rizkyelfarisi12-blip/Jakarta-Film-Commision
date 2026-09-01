@@ -7,283 +7,609 @@ include "../includes/header.php";
 
 ?>
 
-<div class="container">
-    <div class="admin-form-page">
+<div class="admin-layout">
 
-        <div class="page-header">
+    <?php include "../includes/sidebar.php"; ?>
 
-            <div>
 
-                <a href="index.php" class="back-link">
-                    ← Back to Events
-                </a>
+    <main class="main-content">
 
-                <h1 id="pageTitle">
-                    Create Event
-                </h1>
+        <div class="admin-form-page">
 
-            </div>
 
-            <div class="page-actions">
+            <!-- =====================================================
+                 PAGE HEADER
+            ====================================================== -->
 
-                <button class="btn btn-secondary" onclick="window.location='index.php'">
-                    Cancel
-                </button>
+            <header class="page-header">
 
-                <button class="btn btn-primary" id="saveBtn" onclick="saveEvent()">
-                    Save Event
-                </button>
+                <div>
 
-            </div>
+                    <a
+                        href="index.php"
+                        class="back-link"
+                    >
+                        <i class="ri-arrow-left-line"></i>
+                        Back to Events
+                    </a>
 
-        </div>
 
-        <div class="form-layout">
+                    <h1 id="pageTitle">
+                        Create Event
+                    </h1>
 
-            <!-- LEFT -->
-            <div class="form-main">
+                </div>
+
+
+                <div class="page-actions">
+
+                    <a
+                        href="index.php"
+                        class="btn btn-secondary"
+                    >
+                        Cancel
+                    </a>
+
+
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        id="saveBtn"
+                        onclick="saveEvent()"
+                    >
+
+                        <i class="ri-save-line"></i>
+
+                        Save Event
+
+                    </button>
+
+                </div>
+
+            </header>
+
+
+            <!-- =====================================================
+                 FORM
+            ====================================================== -->
+
+            <form id="eventForm">
+
+                <!-- EVENT ID -->
 
                 <input type="hidden" id="eventId">
 
-                <!-- Event Information -->
-                <div class="admin-card">
 
-                    <h2>Event Information</h2>
+                <div class="form-layout">
 
-                    <div class="form-grid">
 
-                        <div class="form-group">
-                            <label>Title *</label>
-                            <input id="title" type="text">
-                        </div>
+                    <!-- =================================================
+                         MAIN CONTENT
+                    ================================================== -->
 
-                        <div class="form-group">
+                    <div class="form-main">
 
-                            <label>Slug</label>
 
-                            <input id="slug" readonly>
+                        <!-- =============================================
+                             EVENT INFORMATION
+                        ============================================== -->
 
-                        </div>
+                        <section class="admin-card">
 
-                        <div class="form-group">
+                            <h2>
+                                Event Information
+                            </h2>
 
-                            <label>Category</label>
 
-                            <select id="category">
+                            <div class="form-grid">
 
-                                <option value="">Select Category</option>
 
-                                <option value="Nonton Di">
-                                    Nonton Di
-                                </option>
+                                <!-- TITLE -->
 
-                                <option value="Nonton Bareng">
-                                    Nonton Bareng
-                                </option>
+                                <div class="form-group">
 
-                                <option value="Jakarta Film Lab">
-                                    Jakarta Film Lab
-                                </option>
+                                    <label for="title">
+                                        Title *
+                                    </label>
 
-                                <option value="Others">
-                                    Others
-                                </option>
+                                    <input
+                                        id="title"
+                                        type="text"
+                                        placeholder="Enter event title"
+                                        autocomplete="off"
+                                    >
 
-                            </select>
+                                </div>
 
-                        </div>
 
-                        <div class="form-group" id="customCategoryGroup" style="display:none;">
+                                <!-- SLUG -->
 
-                            <label>Custom Category</label>
+                                <div class="form-group">
 
-                            <input type="text" id="category_name" placeholder="Example: Workshop">
+                                    <label for="slug">
+                                        Slug
+                                    </label>
 
-                            <small>
-                                Enter the specific category name for this event.
-                            </small>
+                                    <input
+                                        id="slug"
+                                        readonly
+                                    >
 
-                        </div>
+                                    <small>
+                                        Automatically generated from the title.
+                                    </small>
 
-                        <div class="form-group">
-                            <label>Start Date</label>
-                            <input id="start_date" type="date">
-                        </div>
+                                </div>
 
-                        <div class="form-group">
-                            <label>End Date</label>
-                            <input id="end_date" type="date">
-                        </div>
 
-                        <div class="form-group">
-                            <label>Start Time</label>
-                            <input id="start_time" type="time">
-                        </div>
+                                <!-- CATEGORY -->
 
-                        <div class="form-group">
-                            <label>End Time</label>
-                            <input id="end_time" type="time">
-                        </div>
+                                <div class="form-group">
 
-                        <div class="form-group">
-                            <label>Location</label>
-                            <input id="location">
-                        </div>
+                                    <label for="category">
+                                        Category
+                                    </label>
 
-                        <div class="form-group">
-                            <label>Address</label>
-                            <input id="address">
-                        </div>
+                                    <select id="category">
+
+                                        <option value="">
+                                            Select Category
+                                        </option>
+
+                                        <option value="Nonton Di">
+                                            Nonton Di
+                                        </option>
+
+                                        <option value="Nonton Bareng">
+                                            Nonton Bareng
+                                        </option>
+
+                                        <option value="Jakarta Film Lab">
+                                            Jakarta Film Lab
+                                        </option>
+
+                                        <option value="Others">
+                                            Others
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <!-- CUSTOM CATEGORY -->
+
+                                <div
+                                    class="form-group"
+                                    id="customCategoryGroup"
+                                    style="display:none;"
+                                >
+
+                                    <label for="category_name">
+                                        Custom Category
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="category_name"
+                                        placeholder="Example: Workshop"
+                                    >
+
+                                    <small>
+                                        Enter the specific category name for this event.
+                                    </small>
+
+                                </div>
+
+
+                                <!-- START DATE -->
+
+                                <div class="form-group">
+                                    <label for="start_date">Start Date</label>
+                                    <input id="start_date" type="date">
+                                </div>
+
+
+                                <!-- END DATE -->
+
+                                <div class="form-group">
+                                    <label for="end_date">End Date</label>
+                                    <input id="end_date" type="date">
+                                </div>
+
+
+                                <!-- START TIME -->
+
+                                <div class="form-group">
+                                    <label for="start_time">Start Time</label>
+                                    <input id="start_time" type="time">
+                                </div>
+
+
+                                <!-- END TIME -->
+
+                                <div class="form-group">
+                                    <label for="end_time">End Time</label>
+                                    <input id="end_time" type="time">
+                                </div>
+
+
+                                <!-- LOCATION -->
+
+                                <div class="form-group">
+                                    <label for="location">Location</label>
+                                    <input id="location" placeholder="Enter location">
+                                </div>
+
+
+                                <!-- ADDRESS -->
+
+                                <div class="form-group">
+                                    <label for="address">Address</label>
+                                    <input id="address" placeholder="Enter address">
+                                </div>
+
+
+                            </div>
+
+                        </section>
+
+
+                        <!-- =============================================
+                             DESCRIPTION
+                        ============================================== -->
+
+                        <section class="admin-card">
+
+                            <h2>
+                                Description
+                            </h2>
+
+                            <div class="form-group">
+
+                                <textarea
+                                    id="description"
+                                    rows="5"
+                                    placeholder="Write a short event description..."
+                                ></textarea>
+
+                            </div>
+
+                        </section>
+
+
+                        <!-- =============================================
+                             ARTICLE CONTENT
+                        ============================================== -->
+
+                        <section class="admin-card">
+
+                            <div class="card-header">
+
+                                <div>
+
+                                    <h2>
+                                        Article Content
+                                    </h2>
+
+                                    <p class="dashboard-section-description">
+                                        Build the main content of the event using paragraphs and images.
+                                    </p>
+
+                                </div>
+
+
+                                <div class="article-add-buttons">
+
+                                    <button
+                                        type="button"
+                                        class="btn btn-secondary"
+                                        onclick="addParagraph()"
+                                    >
+
+                                        <i class="ri-text"></i>
+
+                                        Paragraph
+
+                                    </button>
+
+
+                                    <button
+                                        type="button"
+                                        class="btn btn-secondary"
+                                        onclick="addArticleImage()"
+                                    >
+
+                                        <i class="ri-image-line"></i>
+
+                                        Image
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+
+                            <div id="paragraphContainer"></div>
+
+                        </section>
+
+
+                        <!-- =============================================
+                             SCHEDULE
+                        ============================================== -->
+
+                        <section class="admin-card">
+
+                            <div class="card-header">
+
+                                <h2>
+                                    Schedule Timeline
+                                </h2>
+
+                                <button
+                                    type="button"
+                                    class="btn btn-secondary"
+                                    onclick="addScheduleRow()"
+                                >
+
+                                    <i class="ri-add-line"></i>
+
+                                    Activity
+
+                                </button>
+
+                            </div>
+
+
+                            <div id="scheduleContainer"></div>
+
+                        </section>
+
 
                     </div>
 
+
+                    <!-- =================================================
+                         SIDEBAR
+                    ================================================== -->
+
+                    <aside class="form-sidebar">
+
+
+                        <!-- =============================================
+                             PUBLISH
+                        ============================================== -->
+
+                        <section class="admin-card">
+
+                            <h3>
+                                Publish
+                            </h3>
+
+
+                            <div class="form-group">
+
+                                <label for="status">
+                                    Status
+                                </label>
+
+                                <select id="status">
+
+                                    <option value="draft">
+                                        Draft
+                                    </option>
+
+                                    <option value="published">
+                                        Published
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div
+                                class="form-group"
+                                style="margin-top:18px;"
+                            >
+
+                                <label for="featured">
+                                    Featured Event
+                                </label>
+
+                                <label class="switch">
+
+                                    <input
+                                        type="checkbox"
+                                        id="featured"
+                                    >
+
+                                    <span class="slider"></span>
+
+                                </label>
+
+                            </div>
+
+
+                            <div
+                                id="featuredDateFields"
+                                style="display:none;"
+                            >
+
+                                <div
+                                    class="form-group"
+                                    style="margin-top:18px;"
+                                >
+                                    <label for="featured_start">Featured Start</label>
+                                    <input type="date" id="featured_start">
+                                </div>
+
+                                <div
+                                    class="form-group"
+                                    style="margin-top:18px;"
+                                >
+                                    <label for="featured_until">Featured Until</label>
+                                    <input type="date" id="featured_until">
+                                </div>
+
+                            </div>
+
+                        </section>
+
+
+                        <!-- =============================================
+                             COVER IMAGE
+                        ============================================== -->
+
+                        <section class="admin-card">
+
+                            <h3>
+                                Cover Image
+                            </h3>
+
+
+                            <div class="upload-box">
+
+                                <label
+                                    for="imageFile"
+                                    class="upload-area"
+                                >
+
+                                    <img
+                                        src="<?= $assetPath ?>assets/icon/image-upload.png"
+                                        class="upload-icon"
+                                        alt="Upload"
+                                        onerror="this.style.display='none';"
+                                    >
+
+
+                                    <h4>
+                                        Upload Cover Image
+                                    </h4>
+
+
+                                    <p>
+                                        JPG, PNG or WEBP
+                                    </p>
+
+
+                                    <p>
+                                        Recommended 16:9
+                                    </p>
+
+                                </label>
+
+
+                                <input
+                                    type="file"
+                                    id="imageFile"
+                                    accept="image/jpeg,image/png,image/webp"
+                                    hidden
+                                >
+
+
+                                <input
+                                    type="hidden"
+                                    id="image"
+                                >
+
+
+                                <img
+                                    id="imagePreview"
+                                    src=""
+                                    alt="Cover Preview"
+                                >
+
+                            </div>
+
+                        </section>
+
+
+                        <!-- =============================================
+                             GOOGLE MAPS
+                        ============================================== -->
+
+                        <section class="admin-card">
+
+                            <h3>
+                                Google Maps
+                            </h3>
+
+                            <div class="form-group">
+
+                                <label for="map_url">
+                                    Map URL
+                                </label>
+
+                                <input
+                                    id="map_url"
+                                    placeholder="https://maps.google.com/..."
+                                >
+
+                            </div>
+
+                        </section>
+
+
+                        <!-- =============================================
+                             SEO
+                        ============================================== -->
+
+                        <section class="admin-card">
+
+                            <h3>
+                                SEO Settings
+                            </h3>
+
+
+                            <div class="form-group">
+
+                                <label for="meta_title">
+                                    Meta Title
+                                </label>
+
+                                <input
+                                    id="meta_title"
+                                    placeholder="SEO title"
+                                >
+
+                            </div>
+
+
+                            <div
+                                class="form-group"
+                                style="margin-top:20px;"
+                            >
+
+                                <label for="meta_description">
+                                    Meta Description
+                                </label>
+
+                                <textarea
+                                    id="meta_description"
+                                    rows="4"
+                                    placeholder="SEO description"
+                                ></textarea>
+
+                            </div>
+
+                        </section>
+
+
+                    </aside>
+
                 </div>
 
-                <!-- Description -->
-                <div class="admin-card">
-                    <h2>Description</h2>
-                    <textarea id="description" rows="5"></textarea>
-                </div>
-
-                <!-- Content -->
-                <div class="admin-card">
-                    <div class="card-header">
-                        <h2>Article Content</h2>
-
-                        <div class="article-add-buttons">
-
-                            <button type="button" class="btn btn-primary" onclick="addParagraph()">
-                                + Add Paragraph
-                            </button>
-
-                            <button type="button" class="btn btn-secondary" onclick="addArticleImage()">
-                                + Add Image
-                            </button>
-
-                        </div>
-
-                    </div>
-                    <div id="paragraphContainer"></div>
-                </div>
-
-                <!-- Schedule -->
-                <div class="admin-card">
-                    <div class="card-header">
-                        <h2>Schedule Timeline</h2>
-                        <button class="btn btn-primary" type="button" onclick="addScheduleRow()">
-                            + Add Activity
-                        </button>
-                    </div>
-                    <div id="scheduleContainer"></div>
-                </div>
-
-            </div>
-
-            <!-- RIGHT -->
-            <aside class="form-sidebar">
-
-                <div class="admin-card">
-
-                    <h2>Cover Image</h2>
-
-                    <div class="upload-box">
-
-                        <input type="file" id="imageFile" hidden>
-
-                        <div class="upload-area" onclick="document.getElementById('imageFile').click()">
-
-                            <img src="../assets/icon/image-upload.png" class="upload-icon" alt="Upload Image">
-
-                            <h4>Upload Cover Image</h4>
-
-                            <p>Click to browse</p>
-
-                        </div>
-
-
-                        <input type="hidden" id="image">
-
-                        <img id="imagePreview">
-
-                        <div class="form-group" style="margin-top:20px">
-
-                            <label>Featured Event</label>
-
-                            <label class="switch">
-                                <input type="checkbox" id="featured">
-
-                                <span class="slider"></span>
-                            </label>
-
-                        </div>
-
-                        <div class="form-group">
-
-                            <label>Featured Start</label>
-
-                            <input type="date" id="featured_start">
-
-                        </div>
-
-                        <div class="form-group">
-
-                            <label>Featured Until</label>
-
-                            <input type="date" id="featured_until">
-
-                        </div>
-
-                        <div class="form-group">
-
-                            <label>Status</label>
-
-                            <select id="status">
-
-                                <option value="draft">Draft</option>
-                                <option value="published">Published</option>
-                                <!-- <option value="archived">Archived</option> -->
-
-                            </select>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="admin-card">
-                    <h2>Google Maps</h2>
-                    <input id="map_url">
-                </div>
-
-                <div class="admin-card">
-
-                    <h2>SEO</h2>
-
-                    <div class="form-group">
-
-                        <label>Meta Title</label>
-
-                        <input id="meta_title">
-
-                    </div>
-
-                    <div class="form-group">
-
-                        <label>Meta Description</label>
-
-                        <textarea id="meta_description" rows="4"></textarea>
-
-                    </div>
-
-                </div>
-
-            </aside>
+            </form>
 
         </div>
 
-    </div>
+    </main>
+
 </div>
+
 
 <!-- =========================================================
      JAVASCRIPT

@@ -82,17 +82,74 @@
 
     <section class="event-detail-section">
         <div class="container">
+
+            <!-- =========================
+            BREADCRUMB
+            ========================= -->
+            <nav class="event-breadcrumb">
+
+                <a href="index.html">
+                    Home
+                </a>
+
+                <span>/</span>
+
+                <a href="events.html">
+                    Events
+                </a>
+
+                <span>/</span>
+
+                <span id="eventBreadcrumbTitle">
+                    —
+                </span>
+
+            </nav>
+
+
+            <!-- =========================
+            EVENT META
+            ========================= -->
+            <div class="event-detail-meta">
+
+                <span
+                    class="event-meta-category"
+                    id="eventMetaCategory">
+                </span>
+
+                <span class="event-meta-dot"></span>
+
+                <span id="eventMetaDate">
+                    —
+                </span>
+
+            </div>
+
+
             <div class="event-layout">
 
                 <!-- MAIN CONTENT -->
                 <main class="event-main">
 
+                    <!-- FEATURED IMAGE -->
+                    <div class="event-detail-featured-image">
+                        <img
+                            id="eventFeaturedImage"
+                            src=""
+                            alt=""
+                        >
+                    </div>
+
+
                     <!-- OVERVIEW -->
                     <div class="event-block">
+
                         <h2>
                             Event Overview
                         </h2>
+
                         <div id="eventContent"></div>
+
                     </div>
 
                     <!-- SCHEDULE -->
@@ -203,6 +260,26 @@
                 "eventCover"
             );
 
+        const eventFeaturedImage =
+            document.getElementById(
+                "eventFeaturedImage"
+            );
+
+        const eventBreadcrumbTitle =
+            document.getElementById(
+                "eventBreadcrumbTitle"
+            );
+
+        const eventMetaCategory =
+            document.getElementById(
+                "eventMetaCategory"
+            );
+
+        const eventMetaDate =
+            document.getElementById(
+                "eventMetaDate"
+            );
+
         const eventContent =
             document.getElementById(
                 "eventContent"
@@ -283,6 +360,117 @@
                     <p>No event slug was provided.</p>
                 </div>
             `;
+        }
+
+        /* =========================================================
+           ESCAPE HTML
+        ========================================================= */
+        function escapeHtml(value) {
+
+            if (value === null || value === undefined) {
+                return "";
+            }
+
+            return String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+
+        }
+
+        /* =========================================================
+           RICH TEXT SANITIZER
+
+           Paragraph content dari admin form disimpan sebagai HTML
+           (hasil rich-text editor). Fungsi ini membersihkan HTML
+           tersebut sebelum ditampilkan:
+
+           - Hanya tag <b> <strong> <i> <em> <u> <a> <br> yang
+             dipertahankan.
+           - Semua atribut dibuang, kecuali href/target/rel pada
+             <a> (dan hanya jika href berupa http/https).
+           - Ini juga membersihkan konten lama yang mungkin masih
+             menyimpan inline style berantakan dari hasil paste
+             Word/Google Docs sebelum paste-sanitizer dipasang di
+             admin.
+        ========================================================= */
+        const RICHTEXT_ALLOWED_TAGS = new Set([
+            "B", "STRONG", "I", "EM", "U", "A", "BR"
+        ]);
+
+        function sanitizeRichText(html) {
+
+            const wrapper =
+                document.createElement("div");
+
+            wrapper.innerHTML =
+                html || "";
+
+            function walk(node) {
+
+                Array.from(node.childNodes).forEach(child => {
+
+                    if (child.nodeType === Node.ELEMENT_NODE) {
+
+                        walk(child);
+
+                        if (!RICHTEXT_ALLOWED_TAGS.has(child.tagName)) {
+
+                            while (child.firstChild) {
+                                node.insertBefore(child.firstChild, child);
+                            }
+
+                            node.removeChild(child);
+                            return;
+
+                        }
+
+                        if (child.tagName === "A") {
+
+                            const href =
+                                child.getAttribute("href") || "";
+
+                            Array.from(child.attributes).forEach(attr =>
+                                child.removeAttribute(attr.name)
+                            );
+
+                            if (/^https?:\/\//i.test(href)) {
+                                child.setAttribute("href", href);
+                                child.setAttribute("target", "_blank");
+                                child.setAttribute("rel", "noopener noreferrer");
+                            } else {
+                                while (child.firstChild) {
+                                    node.insertBefore(child.firstChild, child);
+                                }
+                                node.removeChild(child);
+                            }
+
+                        } else {
+
+                            Array.from(child.attributes).forEach(attr =>
+                                child.removeAttribute(attr.name)
+                            );
+
+                        }
+
+                    } else if (
+                        child.nodeType !== Node.TEXT_NODE
+                    ) {
+
+                        node.removeChild(child);
+
+                    }
+
+                });
+
+            }
+
+            walk(wrapper);
+
+            return wrapper.innerHTML;
+
         }
 
         /* =========================================================
@@ -497,6 +685,42 @@
                 document.title =
                     pageTitle;
 
+                /* ============================================
+                BREADCRUMB
+                ============================================ */
+
+                if (eventBreadcrumbTitle) {
+
+                    eventBreadcrumbTitle.textContent =
+                        title;
+
+                }
+
+
+                /* ============================================
+                META CATEGORY
+                ============================================ */
+
+                if (eventMetaCategory) {
+
+                    eventMetaCategory.textContent =
+                        categoryDisplay;
+
+                }
+
+
+                /* ============================================
+                CATEGORY COLOR
+                ============================================ */
+
+                if (eventMetaCategory) {
+
+                    eventMetaCategory.classList.add(
+                        categoryClass
+                    );
+
+                }
+
                 const description =
                     String(
                         currentEvent.meta_description ||
@@ -532,19 +756,32 @@
 
                 }
 
-                /* ============================================
-                   DATE
-                ============================================ */
                 const dateText =
                     formatEventDate(
                         currentEvent.start_date,
                         currentEvent.end_date
                     );
 
-            eventDate.innerHTML = `
-                <span class="event-date-icon"><img src="assets/icon/date.png" alt="Location"></span>
-                ${dateText}
-            `;
+                eventDate.innerHTML = `
+                    <span class="event-date-icon">
+                        <img
+                            src="assets/icon/date.png"
+                            alt="Date"
+                        >
+                    </span>
+
+                    ${escapeHtml(dateText)}
+                `;
+
+
+                /* CONTENT META DATE */
+
+                if (eventMetaDate) {
+
+                    eventMetaDate.textContent =
+                        dateText;
+
+                }
 
             sidebarDate.textContent =
                 dateText;
@@ -574,7 +811,7 @@
 
             eventLocation.innerHTML = `
                 <span class="location-icon"><img src="assets/icon/pin.png" alt="Location"></span>
-                ${location}
+                ${escapeHtml(location)}
             `;
 
             sidebarLocation.textContent =
@@ -587,10 +824,35 @@
             /* ============================================
                 COVER IMAGE
             ============================================ */
-            if (currentEvent.cover_image) {
+
+            eventCover.onerror = function () {
+                this.closest(".event-detail-bg")?.classList.add("event-cover-broken");
+                this.style.display = "none";
+            };
+
+            if (
+                currentEvent.cover_image &&
+                currentEvent.cover_image !== "undefined"
+            ) {
 
                 eventCover.src =
                     currentEvent.cover_image;
+
+
+                /* FEATURED IMAGE */
+
+                if (eventFeaturedImage) {
+
+                    eventFeaturedImage.src =
+                        currentEvent.cover_image;
+
+                    eventFeaturedImage.alt =
+                        title;
+
+                }
+
+
+                /* OG IMAGE */
 
                 const imageUrl =
                     new URL(
@@ -702,8 +964,15 @@
                     const p =
                         document.createElement("p");
 
-                    p.textContent =
-                        block.text || "";
+                    /*
+                    | block.text berisi HTML (hasil rich-text
+                    | editor di admin), jadi harus dirender
+                    | dengan innerHTML setelah disanitasi -
+                    | bukan textContent (yang akan menampilkan
+                    | tag HTML sebagai teks mentah).
+                    */
+                    p.innerHTML =
+                        sanitizeRichText(block.text || "");
 
                     eventContent.appendChild(p);
 
@@ -735,6 +1004,12 @@
 
                     img.loading =
                         "lazy";
+
+                    img.onerror =
+                        function () {
+                            this.closest("figure")?.classList.add("event-article-image-broken");
+                            this.style.display = "none";
+                        };
 
                     figure.appendChild(img);
 
@@ -829,17 +1104,17 @@
                         scheduleItem.innerHTML = `
 
                             <div class="schedule-time">
-                                ${item.time || "TBA"}
+                                ${escapeHtml(item.time || "TBA")}
                             </div>
 
                             <div class="schedule-content">
 
                                 <h3>
-                                    ${item.title || "Coming Soon"}
+                                    ${escapeHtml(item.title || "Coming Soon")}
                                 </h3>
 
                                 <p>
-                                    ${item.description || ""}
+                                    ${escapeHtml(item.description || "")}
                                 </p>
 
                             </div>
@@ -957,7 +1232,7 @@
                     canonicalUrl,
 
                 "image":
-                    event.cover_image
+                    (event.cover_image && event.cover_image !== "undefined")
                         ? [
                             new URL(
                                 event.cover_image,

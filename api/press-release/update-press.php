@@ -270,6 +270,14 @@ $categoryName =
     );
 
 
+$location =
+    getInput(
+        $data,
+        "location",
+        "Jakarta"
+    );
+
+
 $publishedDate =
     getInput(
         $data,
@@ -297,6 +305,21 @@ $metaDescription =
         $data,
         "meta_description"
     );
+
+
+/*
+|--------------------------------------------------------------------------
+| LOCATION DEFAULT
+|--------------------------------------------------------------------------
+*/
+
+if (
+    $location === ""
+) {
+
+    $location = "Jakarta";
+
+}
 
 
 /*
@@ -460,9 +483,9 @@ if (
 
 $allowedCategories = [
 
-    "News",
-    "Event",
-    "Announcement",
+    "Official Release",
+    "Program Update",
+    "Industry News",
     "Others"
 
 ];
@@ -524,6 +547,28 @@ if (
 
 /*
 |--------------------------------------------------------------------------
+| VALIDATE LOCATION
+|--------------------------------------------------------------------------
+*/
+
+if (
+    mb_strlen(
+        $location
+    ) > 255
+) {
+
+    http_response_code(422);
+
+    response(
+        false,
+        "Location must not exceed 255 characters."
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
 | VALIDATE COVER IMAGE
 |--------------------------------------------------------------------------
 */
@@ -561,6 +606,55 @@ $coverImage =
 
 /*
 |--------------------------------------------------------------------------
+| REMOVE ROOT URL IF SENT
+|--------------------------------------------------------------------------
+|
+| Accept:
+|
+| /jfc/uploads/press-release/file.webp
+|
+| or:
+|
+| uploads/press-release/file.webp
+|
+|--------------------------------------------------------------------------
+*/
+
+$rootPrefix =
+    "/jfc/";
+
+
+if (
+    strpos(
+        $coverImage,
+        $rootPrefix
+    ) === 0
+) {
+
+    $coverImage =
+        substr(
+            $coverImage,
+            strlen($rootPrefix)
+        );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| REMOVE LEADING SLASH
+|--------------------------------------------------------------------------
+*/
+
+$coverImage =
+    ltrim(
+        $coverImage,
+        "/"
+    );
+
+
+/*
+|--------------------------------------------------------------------------
 | VALIDATE COVER IMAGE PATH
 |--------------------------------------------------------------------------
 */
@@ -584,6 +678,29 @@ if (
         $coverImage,
         "uploads/press-release/"
     ) !== 0
+) {
+
+    http_response_code(422);
+
+    response(
+        false,
+        "Invalid cover image path."
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| PREVENT PATH TRAVERSAL
+|--------------------------------------------------------------------------
+*/
+
+if (
+    strpos(
+        $coverImage,
+        ".."
+    ) !== false
 ) {
 
     http_response_code(422);
@@ -1014,6 +1131,8 @@ $sql = "
 
         category_name = ?,
 
+        location = ?,
+
         published_date = ?,
 
         status = ?,
@@ -1036,7 +1155,7 @@ $stmt =
 
 
 $stmt->bind_param(
-    "sssssssssssi",
+    "ssssssssssssi",
     $title,
     $slug,
     $description,
@@ -1044,6 +1163,7 @@ $stmt->bind_param(
     $coverImage,
     $category,
     $categoryName,
+    $location,
     $publishedDate,
     $status,
     $metaTitle,
@@ -1113,6 +1233,9 @@ response(
 
                 "category_name" =>
                     $categoryName,
+
+                "location" =>
+                    $location,
 
                 "published_date" =>
                     $publishedDate !== ""

@@ -673,6 +673,12 @@ PRESS RELEASE LIST
     border-color:#DA291C;
 }
 
+
+.filter-others{
+    color:#526E3E;
+    border-color:#526E3E;
+}
+
 .filter-all:hover{
     background:#526E3E;
     color:#fff;
@@ -693,6 +699,11 @@ PRESS RELEASE LIST
     color:#fff;
 }
 
+.filter-others:hover{
+    background:#526E3E;
+    color:#fff;
+}
+
 .filter-all.active{
     background:#526E3E;
     color:#fff;
@@ -710,6 +721,11 @@ PRESS RELEASE LIST
 
 .filter-industry.active{
     background:#DA291C;
+    color:#fff;
+}
+
+.filter-others.active{
+    background:#526E3E;
     color:#fff;
 }
 
@@ -746,6 +762,9 @@ PRESS RELEASE LIST
 .press-list-card{
   display:flex;
   align-items:stretch;
+  /* max-width: 90%; */
+  min-height: 250px;
+  max-height: 250px;
   background:#fff;
   border-radius:18px;
   overflow:hidden;
@@ -841,6 +860,16 @@ PRESS RELEASE LIST
     /* border-left:8px solid #FF6A14; */
     background-color: #FF6A14;
 }
+
+.press-list-card.others {
+    background: #526E3E;
+    /* border-left: 5px solid #526E3E; */
+}
+
+/* .press-list-card.others .press-list-category {
+    background: #526E3E;
+    color: #fff;
+} */
 
 /* .press-list-card.industry .press-list-category{
     color:#DA291C;
@@ -1266,6 +1295,11 @@ PRESS RELEASE HERO
     border-left:5px solid #FF6A14;
 }
 
+.sidebar-card-press.others{
+    background:#2e670615;
+    border-left:5px solid #526E3E;
+}
+
 .sidebar-card-press.industry .sidebar-category{
     background:#DA291C;
     color:white;
@@ -1278,6 +1312,11 @@ PRESS RELEASE HERO
 
 .sidebar-card-press.program .sidebar-category{
     background:#FF6A14;
+    color:white;
+}
+
+.sidebar-card-press.others .sidebar-category{
+    background:#526E3E;
     color:white;
 }
 
@@ -1420,6 +1459,95 @@ press-release SECTION
   line-height:1.9;
   border-left:2px solid rgba(255,90,31,.5);
   max-width:920px;
+}
+
+/* =========================
+RICH TEXT LINKS
+========================= */
+
+.press-release-content a {
+    color: #ff5a1f;
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 3px;
+
+    transition:
+        color .25s ease,
+        text-decoration-thickness .25s ease;
+}
+
+.press-release-content a:hover {
+    color: #d94712;
+    text-decoration-thickness: 2px;
+}
+
+/* =========================
+ARTICLE CONTENT IMAGE
+========================= */
+
+.press-release-content img {
+    display: block;
+
+    width: auto;
+    max-width: 90%;
+    max-height: 800px;
+
+    height: auto;
+
+    object-fit: contain;
+
+    margin: 25px auto;
+
+    border-radius: 14px;
+}
+
+@media(max-width:768px){
+
+    .press-release-content img {
+        max-width: 90%;
+        max-height: 300px;
+    }
+
+}
+
+
+/* =========================
+LINK WITH EXTERNAL INDICATOR
+========================= */
+
+.press-release-content a[target="_blank"]::after {
+    content: " ↗";
+
+    font-size: .8em;
+    font-weight: 700;
+
+    text-decoration: none;
+    display: inline-block;
+
+    transition: transform .25s ease;
+}
+
+.press-release-content a[target="_blank"]:hover::after {
+    transform: translate(2px, -2px);
+}
+
+
+/* =========================
+RICH TEXT INLINE ELEMENTS
+========================= */
+
+.press-release-content strong {
+    font-weight: 700;
+}
+
+.press-release-content em {
+    font-style: italic;
+}
+
+.press-release-content u {
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
 }
 
 /* =========================
@@ -3996,6 +4124,90 @@ EVENT SECTION
 
 }
 
+/* =========================
+RICH TEXT LINKS
+========================= */
+
+#eventContent a {
+    color: #ff5a1f;
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 3px;
+
+    transition:
+        color .25s ease,
+        text-decoration-thickness .25s ease;
+}
+
+#eventContent a:hover {
+    color: #d94712;
+    text-decoration-thickness: 2px;
+}
+
+/* =========================
+ARTICLE IMAGE SIZE
+========================= */
+
+#eventContent .event-article-image {
+    max-width: 640px;
+    margin: 24px auto;
+}
+
+#eventContent .event-article-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 12px;
+}
+
+#eventContent .event-article-image figcaption {
+    margin-top: 8px;
+    font-size: 13px;
+    color: #777;
+    text-align: center;
+}
+
+
+/* =========================
+LINK WITH EXTERNAL INDICATOR
+========================= */
+
+#eventContent a[target="_blank"]::after {
+    content: " ↗";
+
+    font-size: .8em;
+    font-weight: 700;
+
+    text-decoration: none;
+    display: inline-block;
+
+    transition: transform .25s ease;
+}
+
+#eventContent a[target="_blank"]:hover::after {
+    transform: translate(2px, -2px);
+}
+
+
+/* =========================
+RICH TEXT INLINE ELEMENTS
+========================= */
+
+#eventContent strong,
+#eventContent b {
+    font-weight: 700;
+}
+
+#eventContent em,
+#eventContent i {
+    font-style: italic;
+}
+
+#eventContent u {
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+}
 
 /* =========================================================
    FOOTER
@@ -6742,6 +6954,155 @@ SUPPORTED FILMS
     }
   }
 
+  /* =========================================================
+   EVENT DETAIL BREADCRUMB
+========================================================= */
+
+.event-breadcrumb{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    align-items:center;
+
+    margin-bottom:22px;
+
+    font-size:14px;
+}
+
+.event-breadcrumb a{
+    color:#888;
+    text-decoration:none;
+    transition:.3s;
+}
+
+.event-breadcrumb a:hover{
+    color:#ff5a1f;
+}
+
+.event-breadcrumb span{
+    color:#999;
+}
+
+.event-breadcrumb #eventBreadcrumbTitle{
+    color:#111;
+    
+    font-weight:600;
+    max-width:500px;
+
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+
+/* =========================================================
+   EVENT DETAIL META
+========================================================= */
+
+.event-detail-meta{
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    font-size:14px;
+    color:#777;
+
+    margin-bottom:35px;
+}
+
+.event-meta-category{
+    font-weight:800;
+    color:var(--event-category-color, #97B300);
+}
+
+.event-meta-dot{
+    
+    width:5px;
+    height:5px;
+
+    background:#bbb;
+
+    border-radius:50%;
+}
+
+
+/* =========================================================
+   EVENT FEATURED IMAGE
+========================================================= */
+
+.event-detail-featured-image{
+    width:100%;
+
+    height:420px;
+
+    overflow:hidden;
+
+    border-radius:18px;
+
+    margin-bottom:55px;
+
+    background:#e9e3d5;
+}
+
+.event-detail-featured-image img{
+    width:100%;
+    height:100%;
+
+    display:block;
+
+    object-fit:cover;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:992px){
+
+    .event-detail-featured-image{
+        height:340px;
+    }
+
+}
+
+
+@media(max-width:768px){
+
+    .event-breadcrumb{
+        gap:10px;
+
+        font-size:15px;
+
+        margin-bottom:24px;
+    }
+
+    .event-breadcrumb #eventBreadcrumbTitle{
+        max-width:220px;
+    }
+
+    .event-detail-meta{
+        gap:12px;
+
+        font-size:15px;
+
+        margin-bottom:35px;
+    }
+
+    .event-meta-dot{
+        width:6px;
+        height:6px;
+    }
+
+    .event-detail-featured-image{
+        height:240px;
+
+        border-radius:14px;
+
+        margin-bottom:40px;
+    }
+
+}
 
   /* featured event */
 .coming-badge{

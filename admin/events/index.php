@@ -27,6 +27,30 @@ include "../includes/header.php";
     </header>
 
 
+    <!-- =====================================================
+         STATS
+    ====================================================== -->
+
+    <section class="dashboard-stats">
+
+        <div class="stat-card">
+            <span class="stat-label">Total Events</span>
+            <strong class="stat-value" id="statTotalEvents">0</strong>
+        </div>
+
+        <div class="stat-card">
+            <span>Published</span>
+            <strong class="stat-value" id="statPublishedEvents">0</strong>
+        </div>
+
+        <div class="stat-card">
+            <span>Draft</span>
+            <strong class="stat-value" id="statDraftEvents">0</strong>
+        </div>
+
+    </section>
+
+
     <section class="dashboard-card">
 
         <div class="card-header">
@@ -49,6 +73,19 @@ include "../includes/header.php";
                     <option value="published">Published</option>
                     <option value="draft">Draft</option>
                     <!-- <option value="archived">Archived</option> -->
+
+                </select>
+
+                <select
+                    id="categoryFilter"
+                    class="table-filter"
+                    onchange="filterEvents()">
+
+                    <option value="">All Category</option>
+                    <option value="Nonton Di">Nonton Di</option>
+                    <option value="Nonton Bareng">Nonton Bareng</option>
+                    <option value="Jakarta Film Lab">Jakarta Film Lab</option>
+                    <option value="Others">Others</option>
 
                 </select>
 

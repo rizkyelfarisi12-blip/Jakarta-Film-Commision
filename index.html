@@ -239,7 +239,7 @@
 </section>
   
   <!-- FILMS -->
-  <section class="section" style="background-color: #EF3932;">
+  <!-- <section class="section" style="background-color: #EF3932;">
     <div class="container">
 
       <div class="section-header">
@@ -261,7 +261,7 @@
       <div class="film-grid" id="filmGrid"></div>
 
     </div>
-  </section>
+  </section> -->
 
   <!-- PRESS RELEASE -->
   <section class="section" style="background-color: #F8F0DF;">
@@ -445,140 +445,658 @@ document.addEventListener("DOMContentLoaded", function(){
 
     }
 
+/* =====================================================
+   PRESS RELEASE
+   DATABASE VERSION
+===================================================== */
 
-    /* =====================================================
-       PRESS RELEASE
-    ===================================================== */
+const pressGrid =
+    document.getElementById("pressGrid");
 
-    const pressGrid =
-        document.getElementById("pressGrid");
+
+/*
+|--------------------------------------------------------------------------
+| API
+|--------------------------------------------------------------------------
+*/
+
+const PRESS_API =
+    "api/press-release/get-press.php";
+
+
+/*
+|--------------------------------------------------------------------------
+| IMAGE URL
+|--------------------------------------------------------------------------
+*/
+
+function getPressImage(path){
+
+    if(!path){
+
+        return "gallery/cover/camera-take-person.webp";
+
+    }
+
+
+    path =
+        String(path)
+            .replace(/\\/g, "/")
+            .trim();
+
+
+    /*
+    |----------------------------------------------------------------------
+    | ABSOLUTE URL
+    |----------------------------------------------------------------------
+    */
+
+    if(
+        path.startsWith("http://") ||
+        path.startsWith("https://") ||
+        path.startsWith("data:")
+    ){
+
+        return path;
+
+    }
+
+
+    /*
+    |----------------------------------------------------------------------
+    | REMOVE LEADING SLASH
+    |----------------------------------------------------------------------
+    */
+
+    path =
+        path.replace(/^\/+/, "");
+
+
+    /*
+    |----------------------------------------------------------------------
+    | REMOVE /jfc/
+    |----------------------------------------------------------------------
+    */
+
+    if(
+        path.startsWith("jfc/")
+    ){
+
+        path =
+            path.substring(4);
+
+    }
+
+
+    return path;
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| FORMAT DATE
+|--------------------------------------------------------------------------
+*/
+
+function formatPressDate(date){
+
+    if(!date){
+
+        return "";
+
+    }
+
+
+    const dateObject =
+        new Date(
+            date + "T00:00:00"
+        );
 
 
     if(
-        pressGrid &&
-        typeof pressData !== "undefined" &&
-        Array.isArray(pressData)
+        isNaN(
+            dateObject.getTime()
+        )
     ){
+
+        return date;
+
+    }
+
+
+    return dateObject.toLocaleDateString(
+        "id-ID",
+        {
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+        }
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| CATEGORY CLASS
+|--------------------------------------------------------------------------
+*/
+
+function getPressCategoryClass(category){
+
+    const value =
+        String(category || "")
+            .trim()
+            .toLowerCase();
+
+
+    switch(value){
+
+        case "industry news":
+            return "industry";
+
+
+        case "official release":
+            return "official-release";
+
+
+        case "program update":
+            return "program";
+
+
+        case "others":
+            return "others";
+
+
+        default:
+            return "";
+
+    }
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| LIMIT TEXT
+|--------------------------------------------------------------------------
+*/
+
+function limitPressText(
+    text,
+    maxLength
+){
+
+    text =
+        String(text || "");
+
+
+    if(
+        text.length <= maxLength
+    ){
+
+        return text;
+
+    }
+
+
+    return (
+        text
+            .substring(
+                0,
+                maxLength
+            )
+            .trim() +
+        "..."
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| ESCAPE HTML
+|--------------------------------------------------------------------------
+*/
+
+function escapePressHTML(value){
+
+    return String(value ?? "")
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| LOAD PRESS RELEASE
+|--------------------------------------------------------------------------
+*/
+
+async function loadIndexPressReleases(){
+
+    /*
+    |----------------------------------------------------------------------
+    | CHECK CONTAINER
+    |----------------------------------------------------------------------
+    */
+
+    if(!pressGrid){
+
+        return;
+
+    }
+
+
+    /*
+    |----------------------------------------------------------------------
+    | LOADING
+    |----------------------------------------------------------------------
+    */
+
+    pressGrid.innerHTML = `
+
+        <div class="press-loading">
+            Loading Press Releases...
+        </div>
+
+    `;
+
+
+    try{
+
+        /*
+        |------------------------------------------------------------------
+        | FETCH DATABASE
+        |------------------------------------------------------------------
+        */
+
+        const response =
+            await fetch(
+                PRESS_API +
+                "?status=published",
+                {
+                    method: "GET",
+
+                    headers: {
+                        "Accept":
+                            "application/json"
+                    },
+
+                    cache: "no-store"
+                }
+            );
+
+
+        /*
+        |------------------------------------------------------------------
+        | HTTP ERROR
+        |------------------------------------------------------------------
+        */
+
+        if(
+            !response.ok
+        ){
+
+            throw new Error(
+                "HTTP " +
+                response.status
+            );
+
+        }
+
+
+        /*
+        |------------------------------------------------------------------
+        | JSON
+        |------------------------------------------------------------------
+        */
+
+        const result =
+            await response.json();
+
+
+        /*
+        |------------------------------------------------------------------
+        | API ERROR
+        |------------------------------------------------------------------
+        */
+
+        if(
+            !result.success
+        ){
+
+            throw new Error(
+                result.message ||
+                "Failed to load press releases."
+            );
+
+        }
+
+
+        /*
+        |------------------------------------------------------------------
+        | ITEMS
+        |------------------------------------------------------------------
+        */
+
+        let pressItems =
+            Array.isArray(
+                result.data?.items
+            )
+                ? result.data.items
+                : [];
+
+
+        /*
+        |------------------------------------------------------------------
+        | ONLY PUBLISHED
+        |------------------------------------------------------------------
+        */
+
+        pressItems =
+            pressItems.filter(
+                item =>
+                    item &&
+                    item.status === "published"
+            );
+
+
+        /*
+        |------------------------------------------------------------------
+        | SORT NEWEST
+        |------------------------------------------------------------------
+        */
+
+        pressItems.sort(
+            function(a,b){
+
+                const dateA =
+                    new Date(
+                        (
+                            a.published_date ||
+                            ""
+                        ) +
+                        "T00:00:00"
+                    );
+
+
+                const dateB =
+                    new Date(
+                        (
+                            b.published_date ||
+                            ""
+                        ) +
+                        "T00:00:00"
+                    );
+
+
+                return dateB - dateA;
+
+            }
+        );
+
+
+        /*
+        |------------------------------------------------------------------
+        | TAKE 3
+        |------------------------------------------------------------------
+        */
+
+        const latestPress =
+            pressItems.slice(
+                0,
+                3
+            );
+
+
+        /*
+        |------------------------------------------------------------------
+        | EMPTY
+        |------------------------------------------------------------------
+        */
+
+        if(
+            latestPress.length === 0
+        ){
+
+            pressGrid.innerHTML = `
+
+                <div class="press-empty">
+
+                    <p>
+                        No press releases available.
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        /*
+        |------------------------------------------------------------------
+        | CLEAR
+        |------------------------------------------------------------------
+        */
 
         pressGrid.innerHTML = "";
 
 
-        const latestPress =
-            [...pressData]
-                .sort(function(a, b){
+        /*
+        |------------------------------------------------------------------
+        | RENDER
+        |------------------------------------------------------------------
+        */
 
-                    return new Date(b.date) -
-                           new Date(a.date);
+        latestPress.forEach(
+            function(item){
 
-                })
-                .slice(0, 3);
+                const category =
+                    item.category_display ||
+                    item.category ||
+                    "Others";
 
 
-        latestPress.forEach(function(item){
-
-            const categoryClass =
-                typeof getCategoryClass === "function"
-                    ? getCategoryClass(
+                const categoryClass =
+                    getPressCategoryClass(
                         item.category
-                    )
-                    : "";
-
-
-            const slug =
-                typeof generateSlug === "function"
-                    ? generateSlug(item.title)
-                    : "";
-
-
-            const description =
-                typeof limitText === "function"
-                    ? limitText(
-                        item.description,
-                        90
-                    )
-                    : (
-                        item.description || ""
                     );
 
 
-            pressGrid.innerHTML += `
-
-                <a
-                    href="press-release.html?slug=${encodeURIComponent(slug)}"
-                    class="press-card ${categoryClass}"
-                >
-
-                    <div class="press-image">
-
-                        <img
-                            src="${escapeHTML(
-                                item.image || ""
-                            )}"
-                            alt="${escapeHTML(
-                                item.title || ""
-                            )}"
-                        >
-
-                    </div>
+                const slug =
+                    item.slug || "";
 
 
-                    <div class="press-content">
-
-                        <div class="press-top">
-
-                            <div class="press-category">
-
-                                ${escapeHTML(
-                                    item.category || ""
-                                )}
-
-                            </div>
+                const description =
+                    limitPressText(
+                        item.description || "",
+                        90
+                    );
 
 
-                            <div class="press-date">
+                const image =
+                    getPressImage(
+                        item.cover_image
+                    );
 
-                                ${escapeHTML(
-                                    item.date || ""
-                                )}
 
-                            </div>
+                /*
+                |----------------------------------------------------------
+                | CARD
+                |----------------------------------------------------------
+                */
+
+                pressGrid.innerHTML += `
+
+                    <a
+
+                        href="press-release.html?slug=${encodeURIComponent(
+                            slug
+                        )}"
+
+                        class="press-card ${categoryClass}"
+
+                    >
+
+                        <div class="press-image">
+
+                            <img
+
+                                src="${escapePressHTML(
+                                    image
+                                )}"
+
+                                alt="${escapePressHTML(
+                                    item.title || ""
+                                )}"
+
+                                loading="lazy"
+
+                            >
 
                         </div>
 
 
-                        <h3>
-
-                            ${escapeHTML(
-                                item.title || ""
-                            )}
-
-                        </h3>
+                        <div class="press-content">
 
 
-                        <p>
+                            <div class="press-top">
 
-                            ${escapeHTML(
-                                description
-                            )}
 
-                        </p>
+                                <div class="press-category">
 
-                    </div>
+                                    ${escapePressHTML(
+                                        category
+                                    )}
 
-                </a>
+                                </div>
 
-            `;
 
-        });
+                                <div class="press-date">
+
+                                    ${escapePressHTML(
+                                        formatPressDate(
+                                            item.published_date
+                                        )
+                                    )}
+
+                                </div>
+
+
+                            </div>
+
+
+                            <h3>
+
+                                ${escapePressHTML(
+                                    item.title || ""
+                                )}
+
+                            </h3>
+
+
+                            <p>
+
+                                ${escapePressHTML(
+                                    description
+                                )}
+
+                            </p>
+
+
+                        </div>
+
+
+                    </a>
+
+                `;
+
+            }
+        );
+
 
     }
-    else if(pressGrid){
+    catch(error){
 
-        console.warn(
-            "pressData tidak ditemukan."
+        console.error(
+            "Press Release Error:",
+            error
+        );
+
+
+        /*
+        |------------------------------------------------------------------
+        | ERROR UI
+        |------------------------------------------------------------------
+        */
+
+        pressGrid.innerHTML = `
+
+            <div class="press-error">
+
+                <p>
+                    Unable to load press releases.
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| INITIALIZE
+|--------------------------------------------------------------------------
+*/
+
+if(pressGrid){
+
+    if(
+        document.readyState ===
+        "loading"
+    ){
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            loadIndexPressReleases
         );
 
     }
+    else{
+
+        loadIndexPressReleases();
+
+    }
+
+}
 
 
     /* =====================================================

@@ -1,250 +1,1209 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Jakarta Film Commission</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>
+    Press Release | Jakarta Film Commission
+  </title>
 
   <link rel="icon" type="image/png" href="assets/icon/JakartaFilmCommissionLogo-9.ico">
-  
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
 
- <!-- internal resources -->
- <link rel="stylesheet" href="assets/css/custom.css">
+  <!-- INTERNAL RESOURCES -->
+  <link rel="stylesheet" href="assets/css/custom.css">
 
 </head>
 
+
 <body>
-  <!-- LOADER -->
+
+  <!-- Loader -->
   <div id="loader-container"></div>
-  
+
   <!-- Hamburger Menu -->
   <div class="menu-overlay" id="menuOverlay"></div>
 
-  <!-- WHATSAPP -->
-  <!-- <div id="whatsapp-container"></div> -->
-  
-  <!-- NAVBAR -->
+  <!-- Navbar -->
   <div id="navbar"></div>
 
-  <!-- =========================
-  PRESS RELEASE HERO
-  ========================= -->
-  <section class="press-release-hero">
+  <!-- Press Hero -->
+  <section class="press-release-hero" id="pressHero">
 
-    <!-- BG -->
+    <!-- BACKGROUND -->
     <div class="press-release-bg">
-      <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=1800&auto=format&fit=crop" alt="">
-      <div class="press-release-overlay"></div>
+      <img id="heroPressImage" src="gallery/cover/camera-take-person.webp" alt="">
     </div>
 
+    <!-- OVERLAY -->
+    <div class="press-release-overlay"></div>
+
+    <!-- CONTENT -->
     <div class="container">
       <div class="press-release-hero-content">
+
         <span class="press-release-label" id="pressCategory"></span>
-        <h1 id="heroPressTitle"></h1>
+
+        <h1 id="heroPressTitle">
+          Loading...
+        </h1>
+
       </div>
     </div>
 
   </section>
 
   <!-- =========================
-  press-release CONTENT
+  PRESS RELEASE CONTENT
   ========================= -->
-  <section class="press-release-section">
+  <section class="press-release-section" id="pressSection">
+
     <div class="container">
 
-      <!-- Breadcrumb -->
+      <!-- =========================
+      BREADCRUMB
+      ========================= -->
       <nav class="press-breadcrumb">
-        <a href="index.html">Home</a>
-        <span>/</span>
-        <a href="press-release-list.html">Press Releases</a>
-        <span>/</span>
-        <span id="breadcrumbTitle"></span>
+
+        <a href="index.html">
+          Home
+        </a>
+
+        <span>
+          /
+        </span>
+
+        <a href="press-release-list.html">
+          Press Releases
+        </a>
+
+        <span>
+          /
+        </span>
+
+        <span id="breadcrumbTitle">
+          Loading...
+        </span>
+
       </nav>
 
+      <!-- =========================
+      META
+      ========================= -->
       <div class="press-meta">
+
         <span class="meta-category" id="pressCategoryMeta"></span>
         <span class="meta-dot"></span>
         <span id="pressDate"></span>
         <span class="meta-dot"></span>
         <span id="pressReadTime"></span>
+
       </div>
 
+      <!-- =========================
+      MAIN LAYOUT
+      ========================= -->
       <div class="press-layout">
-        <!-- LEFT -->
-        <div class="press-main">
 
+        <!-- =========================
+        LEFT CONTENT
+        ========================= -->
+        <main class="press-main">
+
+          <!-- FEATURED IMAGE -->
           <div class="press-featured-image">
-              <img id="pressImage" src="" alt="">
+            <img id="pressImage" src="" alt="">
           </div>
 
+          <!-- TITLE -->
           <div class="press-release-heading">
-              <div class="press-release-line"></div>
-              <h2 id="pressTitle"></h2>
-          </div>
-          <div
-              id="pressContent"
-              class="press-release-content">
-          </div>
-          
-        </div>
 
-        <!-- RIGHT -->
-        <aside class="press-sidebar">
-          <div class="sidebar-latest">
-            <h3 class="sidebar-title">
-                Latest Press
-            </h3>
-            <div id="latestPressSidebar"></div>
-            <a
-                href="press-release-list.html"
-                class="sidebar-more">
-                See All Press Releases →
-            </a>
+            <div class="press-release-line"></div>
+            <h2 id="pressTitle"></h2>
+
           </div>
+
+          <!-- CONTENT -->
+          <div id="pressContent" class="press-release-content"></div>
+
+        </main>
+
+        <!-- =========================
+        RIGHT SIDEBAR
+        ========================= -->
+        <aside class="press-sidebar">
+
+          <div class="sidebar-latest">
+
+            <h3 class="sidebar-title">
+              Latest Press
+            </h3>
+
+            <!-- LATEST PRESS -->
+            <div id="latestPressSidebar">
+
+              <div class="press-sidebar-loading">
+                Loading...
+              </div>
+
+            </div>
+
+            <!-- SEE ALL -->
+            <a href="press-release-list.html" class="sidebar-more">
+              See All Press Releases →
+            </a>
+
+          </div>
+
         </aside>
 
       </div>
 
     </div>
-</section>
-  
-  <!-- FOOTER -->
+
+  </section>
+
+  <!-- Footer -->
   <div id="footer"></div>
 
-</body>
-
-<!-- JAVASCRIPT -->
+  <!-- JS -->
   <script src="assets/js/components.js"></script>
   <script src="assets/js/custom.js"></script>
   <script src="assets/js/press-release.js"></script>
 
-<!-- DATA -->
-<script src="assets/data/press-release-data.js"></script>
-
   <script>
-    function loadPressDetail(){
 
-      // ambil slug URL
-      const params = new URLSearchParams(window.location.search);
-      const slug = params.get("slug");
+    /*
+    |--------------------------------------------------------------------------
+    | API
+    |--------------------------------------------------------------------------
+    */
+    const PRESS_LIST_API =
+      "api/press-release/get-press.php";
 
-      // cari data dari pressData.js
-      const press = pressData.find(item =>
-        generateSlug(item.title) === slug
-      );
+    const PRESS_DETAIL_API =
+      "api/press-release/get-press-detail.php";
 
-      // kalau tidak ketemu
-      if(!press){
+    /*
+    |--------------------------------------------------------------------------
+    | IMAGE BASE PATH
+    |--------------------------------------------------------------------------
+    */
+    const IMAGE_BASE_PATH = "";
 
-        document.getElementById("heroPressTitle").textContent =
-          "Press Release Not Found";
+    /*
+    |--------------------------------------------------------------------------
+    | GET IMAGE URL
+    |--------------------------------------------------------------------------
+    */
+    function getPressImage(path) {
 
-        document.getElementById("pressTitle").textContent =
-          "Press Release Not Found";
+      if (!path) {
 
-        return;
+        return "gallery/cover/camera-take-person.webp";
+
       }
 
-      // HERO TITLE
-      document.getElementById("heroPressTitle").textContent =
-        press.title;
+      path =
+        String(path)
+          .replace(/\\/g, "/")
+          .trim();
 
-      // TITLE
-      document.getElementById("pressTitle").textContent =
-        press.title;
+      /*
+      |----------------------------------------------------------------------
+      | Absolute URL
+      |----------------------------------------------------------------------
+      */
+      if (
+        path.startsWith("http://") ||
+        path.startsWith("https://") ||
+        path.startsWith("data:")
+      ) {
 
-      // TIME
-      document.getElementById("pressReadTime").textContent =
-        calculateReadTime(press.content);
+        return path;
 
-      document.getElementById("breadcrumbTitle").textContent =
-        limitText(press.title,40);
+      }
 
-      // CATEGORY
-      document.getElementById("pressCategory").textContent =
-        press.category;
+      /*
+      |----------------------------------------------------------------------
+      | Remove leading slash
+      |----------------------------------------------------------------------
+      */
+      path =
+        path.replace(/^\/+/, "");
 
-      // DATE
-      document.getElementById("pressDate").textContent =
-        formatDate(press.date);
+      /*
+      |----------------------------------------------------------------------
+      | Remove /jfc/
+      |----------------------------------------------------------------------
+      */
+      if (
+        path.startsWith("jfc/")
+      ) {
 
-      // IMAGE
-      document.getElementById("pressImage").src =
-        press.image;
+        path =
+          path.substring(4);
 
-      // CONTENT
-      const content =
-        document.getElementById("pressContent");
+      }
 
-      content.innerHTML = "";
+      /*
+      |----------------------------------------------------------------------
+      | Return
+      |----------------------------------------------------------------------
+      */
+      return IMAGE_BASE_PATH + path;
 
-      press.content.forEach(paragraph => {
+    }
 
-        content.innerHTML += `
-          <p>${paragraph}</p>
-        `;
+    /*
+    |--------------------------------------------------------------------------
+    | FORMAT DATE
+    |--------------------------------------------------------------------------
+    */
+    function formatPressDate(date) {
+
+      if (!date) {
+
+        return "";
+
+      }
+
+      const dateObject =
+        new Date(date + "T00:00:00");
+
+      if (
+        isNaN(
+          dateObject.getTime()
+        )
+      ) {
+
+        return date;
+
+      }
+
+      return dateObject.toLocaleDateString(
+        "id-ID",
+        {
+          day: "numeric",
+          month: "long",
+          year: "numeric"
+        }
+      );
+
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | CATEGORY CLASS
+    |--------------------------------------------------------------------------
+    */
+    function getPressCategoryClass(category) {
+
+      const value =
+        String(category || "")
+          .trim()
+          .toLowerCase();
+
+      switch (value) {
+
+        case "industry news":
+          return "industry";
+
+        case "official release":
+          return "official-release";
+
+        case "program update":
+          return "program";
+
+        case "others":
+          return "others";
+
+        default:
+          return "";
+
+      }
+
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | READ TIME
+    |--------------------------------------------------------------------------
+    */
+    function calculatePressReadTime(contentData) {
+
+      if (
+        !Array.isArray(contentData)
+      ) {
+        return "1 min read";
+      }
+
+      let text = "";
+
+      contentData.forEach(block => {
+
+        if (
+          !block ||
+          typeof block !== "object"
+        ) {
+          return;
+        }
+
+        if (
+          block.type === "paragraph"
+        ) {
+
+          text +=
+            " " +
+            (
+              block.content || ""
+            )
+              .replace(/<[^>]*>/g, " ");
+
+        }
 
       });
 
-      // browser title
-      document.title =
-        press.title + " | Jakarta Film Commission";
+      const words =
+        text
+          .trim()
+          .split(/\s+/)
+          .filter(Boolean)
+          .length;
+
+      const minutes =
+        Math.max(
+          1,
+          Math.ceil(words / 200)
+        );
+
+      return minutes + " min read";
+
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | GET SLUG
+    |--------------------------------------------------------------------------
+    */
+    function getCurrentSlug() {
+
+      const params =
+        new URLSearchParams(
+          window.location.search
+        );
+
+      return (
+        params.get("slug") || ""
+      ).trim();
+
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | SHOW ERROR
+    |--------------------------------------------------------------------------
+    */
+    function showPressError(message) {
+
+      document.getElementById(
+        "heroPressTitle"
+      ).textContent =
+        "Press Release Not Found";
+
+      document.getElementById(
+        "pressTitle"
+      ).textContent =
+        "Press Release Not Found";
+
+      document.getElementById(
+        "pressCategory"
+      ).textContent =
+        "Press Release";
+
+      document.getElementById(
+        "pressCategoryMeta"
+      ).textContent =
+        "";
+
+      document.getElementById(
+        "pressContent"
+      ).innerHTML = `
+
+        <p>
+          ${message}
+        </p>
+
+        <p>
+          <a href="press-release-list.html">
+            ← Back to Press Releases
+          </a>
+        </p>
+
+      `;
+
+      document.getElementById(
+        "latestPressSidebar"
+      ).innerHTML = "";
+
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | RENDER CONTENT
+    |--------------------------------------------------------------------------
+    */
+    function renderPressContent(contentData) {
+
+      const container =
+        document.getElementById(
+          "pressContent"
+        );
+
+      container.innerHTML = "";
+
+      if (
+        !Array.isArray(contentData) ||
+        contentData.length === 0
+      ) {
+
+        container.innerHTML = `
+
+          <p>
+            No article content available.
+          </p>
+
+        `;
+        return;
+      }
+
+      contentData.forEach(
+        (block, index) => {
+
+          if (
+            !block ||
+            typeof block !== "object"
+          ) {
+            return;
+          }
+
+          /*
+          |--------------------------------------------------------------------
+          | PARAGRAPH
+          |--------------------------------------------------------------------
+          */
+          if (
+            block.type === "paragraph"
+          ) {
+
+            const paragraph =
+              document.createElement(
+                "p"
+              );
+
+            /*
+            |------------------------------------------------------------------
+            | Rich text
+            |------------------------------------------------------------------
+            |
+            | Content dari database memang dapat
+            | mengandung HTML seperti:
+            |
+            | <strong>
+            | <em>
+            | <u>
+            | <a>
+            |
+            | Karena sudah divalidasi oleh API,
+            | kita render sebagai HTML.
+            |
+            */
+            paragraph.innerHTML =
+              block.content || "";
+
+            container.appendChild(
+              paragraph
+            );
+            return;
+
+          }
+
+          /*
+          |--------------------------------------------------------------------
+          | IMAGE
+          |--------------------------------------------------------------------
+          */
+          if (
+            block.type === "image"
+          ) {
+
+            const src =
+              getPressImage(
+                block.src
+              );
+
+            if (!src) {
+              return;
+            }
+
+            const imageWrapper =
+              document.createElement(
+                "div"
+              );
+
+            imageWrapper.className =
+              "press-content-image";
+
+            const image =
+              document.createElement(
+                "img"
+              );
+
+            image.src =
+              src;
+
+            image.alt =
+              block.alt ||
+              "";
+
+            image.loading =
+              "lazy";
+
+            imageWrapper.appendChild(
+              image
+            );
+
+            container.appendChild(
+              imageWrapper
+            );
+            return;
+          }
+
+        }
+      );
+
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | RENDER LATEST PRESS
+    |--------------------------------------------------------------------------
+    */
+    function renderLatestPress(
+      items,
+      currentSlug
+    ) {
 
       const sidebar =
-      document.getElementById("latestPressSidebar");
+        document.getElementById(
+          "latestPressSidebar"
+        );
 
       sidebar.innerHTML = "";
 
-      const latestPress = [...pressData]
+      if (
+        !Array.isArray(items)
+      ) {
+        return;
+      }
 
-      .sort((a,b)=>new Date(b.date)-new Date(a.date))
+      /*
+      |----------------------------------------------------------------------
+      | Remove current article
+      |----------------------------------------------------------------------
+      */
+      const latest =
+        items
 
-      .filter(item=>generateSlug(item.title)!==slug)
+          .filter(item => {
 
-      .slice(0,3);
+            return (
+              item &&
+              item.slug !== currentSlug &&
+              item.status === "published"
+            );
 
-      latestPress.forEach(item=>{
+          })
 
-          sidebar.innerHTML += `
+          .sort(
+            (a, b) => {
 
-          <a href="press-release.html?slug=${generateSlug(item.title)}"
-            class="sidebar-card-press ${getCategoryClass(item.category)}">
+              const dateA =
+                new Date(
+                  (a.published_date || "") +
+                  "T00:00:00"
+                );
 
-              <img src="${item.image}" alt="${item.title}">
+              const dateB =
+                new Date(
+                  (b.published_date || "") +
+                  "T00:00:00"
+                );
 
-              <div class="sidebar-card-body">
+              return dateB - dateA;
 
-                  <span class="sidebar-category">
+            }
+          )
 
-                      ${item.category}
+          .slice(
+            0,
+            3
+          );
 
-                  </span>
+      /*
+      |----------------------------------------------------------------------
+      | EMPTY
+      |----------------------------------------------------------------------
+      */
+      if (
+        latest.length === 0
+      ) {
 
-                  <h4>
+        sidebar.innerHTML = `
 
-                      ${limitText(item.title,55)}
+          <p>
+            No other press releases available.
+          </p>
 
-                  </h4>
+        `;
 
-                  <small>
+        return;
 
-                      ${formatDate(item.date)}
+      }
 
-                  </small>
+      /*
+      |----------------------------------------------------------------------
+      | RENDER
+      |----------------------------------------------------------------------
+      */
+      latest.forEach(item => {
 
-              </div>
+        const category =
+          item.category_display ||
+          item.category ||
+          "Others";
 
-          </a>
 
-          `;
+        const categoryClass =
+          getPressCategoryClass(
+            item.category
+          );
+
+
+        const card =
+          document.createElement(
+            "a"
+          );
+
+
+        card.href =
+          "press-release.html?slug=" +
+          encodeURIComponent(
+            item.slug
+          );
+
+
+        card.className =
+          "sidebar-card-press " +
+          categoryClass;
+
+
+        card.innerHTML = `
+
+          <img
+            src="${getPressImage(item.cover_image)}"
+            alt="${escapeHtml(item.title || "")}"
+            loading="lazy"
+          >
+
+          <div class="sidebar-card-body">
+
+            <span class="sidebar-category">
+              ${escapeHtml(category)}
+            </span>
+
+            <h4>
+              ${escapeHtml(
+          limitPressText(
+            item.title || "",
+            55
+          )
+        )}
+            </h4>
+
+            <small>
+              ${formatPressDate(
+          item.published_date
+        )}
+            </small>
+
+          </div>
+
+        `;
+
+        sidebar.appendChild(
+          card
+        );
 
       });
 
     }
 
-    loadPressDetail();
+    /*
+    |--------------------------------------------------------------------------
+    | ESCAPE HTML
+    |--------------------------------------------------------------------------
+    */
+    function escapeHtml(value) {
+
+      return String(value ?? "")
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+        .replace(
+          /</g,
+          "&lt;"
+        )
+        .replace(
+          />/g,
+          "&gt;"
+        )
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+        .replace(
+          /'/g,
+          "&#039;"
+        );
+
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | LIMIT TEXT
+    |--------------------------------------------------------------------------
+    */
+    function limitPressText(
+      text,
+      maxLength
+    ) {
+
+      text =
+        String(text || "");
+
+      if (
+        text.length <= maxLength
+      ) {
+        return text;
+      }
+
+      return (
+        text.substring(
+          0,
+          maxLength
+        ).trim() +
+        "..."
+      );
+
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | LOAD DETAIL
+    |--------------------------------------------------------------------------
+    */
+    async function loadPressDetail() {
+
+      const slug =
+        getCurrentSlug();
+
+      /*
+      |----------------------------------------------------------------------
+      | SLUG REQUIRED
+      |----------------------------------------------------------------------
+      */
+      if (!slug) {
+
+        showPressError(
+          "The requested press release could not be found."
+        );
+
+        return;
+
+      }
+
+      try {
+
+        /*
+        |--------------------------------------------------------------------
+        | GET DETAIL
+        |--------------------------------------------------------------------
+        */
+        const response =
+          await fetch(
+            PRESS_DETAIL_API +
+            "?slug=" +
+            encodeURIComponent(
+              slug
+            ),
+            {
+              method: "GET",
+              headers: {
+                "Accept":
+                  "application/json"
+              },
+              cache: "no-store"
+            }
+          );
+
+        if (
+          !response.ok
+        ) {
+
+          throw new Error(
+            "HTTP " +
+            response.status
+          );
+
+        }
+
+        const result =
+          await response.json();
+
+        if (
+          !result.success ||
+          !result.data
+        ) {
+
+          throw new Error(
+            result.message ||
+            "Press release not found."
+          );
+
+        }
+
+        const press =
+          result.data;
+
+        /*
+        |--------------------------------------------------------------------
+        | ONLY PUBLISHED
+        |--------------------------------------------------------------------
+        */
+        if (
+          press.status !==
+          "published"
+        ) {
+
+          showPressError(
+            "This press release is not available."
+          );
+          return;
+        }
+
+        // Category
+        const category =
+          press.category_display ||
+          press.category ||
+          "Others";
+
+        const categoryClass =
+          getPressCategoryClass(
+            press.category
+          );
+    
+        // Hero Title
+        const heroTitle =
+          document.getElementById(
+            "heroPressTitle"
+          );
+
+        heroTitle.textContent =
+          press.title || "";
+
+        document.getElementById(
+          "pressCategory"
+        ).textContent =
+          category;
+
+        // Hero Image
+        const heroImage =
+          document.getElementById(
+            "heroPressImage"
+          );
+
+        heroImage.src =
+          getPressImage(
+            press.cover_image
+          );
+
+        heroImage.alt =
+          press.title || "";
+
+        // Featured Image
+        const featuredImage =
+          document.getElementById(
+            "pressImage"
+          );
+
+        featuredImage.src =
+          getPressImage(
+            press.cover_image
+          );
+
+        featuredImage.alt =
+          press.title || "";
+
+        // Title
+        document.getElementById(
+          "pressTitle"
+        ).textContent =
+          press.title || "";
+
+        // BreadCrumb
+        document.getElementById(
+          "breadcrumbTitle"
+        ).textContent =
+          limitPressText(
+            press.title || "",
+            40
+          );
+
+        // Meta Category
+        const categoryMeta =
+          document.getElementById(
+            "pressCategoryMeta"
+          );
+
+        categoryMeta.textContent =
+          category;
+
+        categoryMeta.className =
+          "meta-category " +
+          categoryClass;
+
+        // Date
+        document.getElementById(
+          "pressDate"
+        ).textContent =
+          formatPressDate(
+            press.published_date
+          );
+
+        // Content
+        let contentData =
+          press.content_data;
+
+        // Fallback
+        if (
+          !Array.isArray(
+            contentData
+          )
+        ) {
+
+          try {
+
+            contentData =
+              JSON.parse(
+                press.content || "[]"
+              );
+
+          } catch (
+          error
+          ) {
+
+            contentData = [];
+
+          }
+
+        }
+
+        // Read Time
+        document.getElementById(
+          "pressReadTime"
+        ).textContent =
+          calculatePressReadTime(
+            contentData
+          );
+
+        // Render Content
+        renderPressContent(
+          contentData
+        );
+        
+        // Document title
+        document.title =
+          (
+            press.meta_title ||
+            press.title ||
+            "Press Release"
+          ) +
+          " | Jakarta Film Commission";
+
+        /*
+        |--------------------------------------------------------------------
+        | META DESCRIPTION
+        |--------------------------------------------------------------------
+        */
+        if (
+          press.meta_description
+        ) {
+
+          let metaDescription =
+            document.querySelector(
+              'meta[name="description"]'
+            );
+
+          if (!metaDescription) {
+
+            metaDescription =
+              document.createElement(
+                "meta"
+              );
+
+            metaDescription.name =
+              "description";
+
+            document.head.appendChild(
+              metaDescription
+            );
+
+          }
+
+          metaDescription.content =
+            press.meta_description;
+
+        }
+
+        /*
+        |--------------------------------------------------------------------
+        | LOAD LATEST PRESS
+        |--------------------------------------------------------------------
+        */
+        await loadLatestPress(
+          slug
+        );
+
+      } catch (
+      error
+      ) {
+
+        console.error(
+          "Press detail error:",
+          error
+        );
+
+        showPressError(
+          "Unable to load this press release."
+        );
+
+      }
+
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | LOAD LATEST PRESS API
+    |--------------------------------------------------------------------------
+    */
+    async function loadLatestPress(
+      currentSlug
+    ) {
+
+      try {
+
+        const response =
+          await fetch(
+            PRESS_LIST_API +
+            "?status=published",
+            {
+              method: "GET",
+              headers: {
+                "Accept":
+                  "application/json"
+              },
+              cache: "no-store"
+            }
+          );
+
+        if (
+          !response.ok
+        ) {
+
+          throw new Error(
+            "HTTP " +
+            response.status
+          );
+
+        }
+
+        const result =
+          await response.json();
+
+
+        if (
+          !result.success
+        ) {
+
+          throw new Error(
+            result.message ||
+            "Failed to retrieve press releases."
+          );
+
+        }
+
+        renderLatestPress(
+          result.data?.items || [],
+          currentSlug
+        );
+
+      } catch (
+      error
+      ) {
+
+        console.error(
+          "Latest press error:",
+          error
+        );
+
+        document.getElementById(
+          "latestPressSidebar"
+        ).innerHTML = `
+
+          <p>
+            Unable to load latest press releases.
+          </p>
+
+        `;
+
+      }
+
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | INITIALIZE
+    |--------------------------------------------------------------------------
+    */
+    document.addEventListener(
+      "DOMContentLoaded",
+      () => {
+
+        loadPressDetail();
+
+      }
+    );
 
   </script>
+
+
+</body>
+
 </html>

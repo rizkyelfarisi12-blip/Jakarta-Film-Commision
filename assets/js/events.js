@@ -9,7 +9,6 @@ let currentCategory = "All";
 
 let visibleCount = 6;
 
-
 const eventsGrid =
     document.getElementById(
         "eventsGrid"
@@ -65,7 +64,6 @@ function formatDate(dateString) {
 
 }
 
-
 /* ==========================================================
    EVENT DATE RANGE
 ========================================================== */
@@ -90,7 +88,6 @@ function formatEventDate(event) {
             formatDate(
                 event.end_date
             );
-
         return `${start} - ${end}`;
 
     }
@@ -99,11 +96,9 @@ function formatEventDate(event) {
 
 }
 
-
 /* ==========================================================
    CATEGORY CLASS
 ========================================================== */
-
 function getCategoryClass(category) {
 
     if (!category) {
@@ -119,7 +114,6 @@ function getCategoryClass(category) {
                 /[^a-z0-9-]/g,
                 ""
             );
-
 
     switch (normalized) {
 
@@ -161,9 +155,7 @@ function truncateText(
     if (
         text.length <= maxLength
     ) {
-
         return text;
-
     }
 
     return (
@@ -279,17 +271,8 @@ function getCategoryDisplay(event) {
 }
 
 
-/* ==========================================================
-   GET CATEGORY FILTER
-========================================================== */
-
+// Get Category FIlter
 function getCategoryFilter(event) {
-
-    /*
-    |--------------------------------------------------------------------------
-    | API baru
-    |--------------------------------------------------------------------------
-    */
 
     if (
         event.category_filter
@@ -301,24 +284,14 @@ function getCategoryFilter(event) {
 
     }
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | FALLBACK
-    |--------------------------------------------------------------------------
-    */
-
+    // Fallback
     return String(
         event.category || "Others"
     ).trim();
 
 }
 
-
-/* ==========================================================
-   LOAD EVENTS
-========================================================== */
-
+// Load Event
 async function loadEvents() {
 
     try {
@@ -328,7 +301,6 @@ async function loadEvents() {
                 "api/events/get-events.php"
             );
 
-
         if (!response.ok) {
 
             throw new Error(
@@ -337,10 +309,8 @@ async function loadEvents() {
 
         }
 
-
         const data =
             await response.json();
-
 
         console.log(
             "EVENTS:",
@@ -358,9 +328,7 @@ async function loadEvents() {
 
         }
 
-
         allEvents = data;
-
 
         renderEvents();
 
@@ -371,7 +339,6 @@ async function loadEvents() {
             "Events API:",
             error
         );
-
 
         eventsGrid.innerHTML = `
 
@@ -389,7 +356,6 @@ async function loadEvents() {
 
         `;
 
-
         loadMoreBtn.style.display =
             "none";
 
@@ -397,20 +363,10 @@ async function loadEvents() {
 
 }
 
-
-/* ==========================================================
-   RENDER EVENTS
-========================================================== */
-
+// Render Event
 function renderEvents() {
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | FILTER
-    |--------------------------------------------------------------------------
-    */
-
+    // Filter Event
     const filteredEvents =
 
         currentCategory === "All"
@@ -424,13 +380,7 @@ function renderEvents() {
                 ) === currentCategory
         );
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | VISIBLE
-    |--------------------------------------------------------------------------
-    */
-
+    // Visible
     const visibleEvents =
         filteredEvents.slice(
             0,
@@ -566,24 +516,39 @@ function renderEvents() {
 
             /*
             |--------------------------------------------------------------
-            | CARD
+            | COVER IMAGE
+            |--------------------------------------------------------------
+            |
+            | "undefined" bisa muncul di data lama akibat bug
+            | response upload yang sudah diperbaiki. Jangan
+            | pernah render itu sebagai src gambar.
             |--------------------------------------------------------------
             */
 
+            const hasCover =
+                event.cover_image &&
+                event.cover_image !== "undefined";
+
+
+            /*
+            |--------------------------------------------------------------
+            | CARD
+            |--------------------------------------------------------------
+            */
             card.innerHTML = `
 
                 <div class="event-card-image">
 
-                    <img
-                        src="${escapeHtml(
-                            event.cover_image || ""
-                        )}"
-                        alt="${escapeHtml(
-                            event.title ||
-                            "Event"
-                        )}"
-                        loading="lazy"
-                    >
+                    ${
+                        hasCover
+                            ? `<img
+                                src="${escapeHtml(event.cover_image)}"
+                                alt="${escapeHtml(event.title || "Event")}"
+                                loading="lazy"
+                                onerror="this.closest('.event-card-image').classList.add('no-image'); this.remove();"
+                            >`
+                            : ""
+                    }
 
                     <span class="event-card-category">
                         ${escapeHtml(category)}
@@ -591,19 +556,12 @@ function renderEvents() {
 
                 </div>
 
-
                 <div class="event-card-content">
-
 
                     <div class="event-card-date">
 
                         <span class="event-date-icon">
-
-                            <img
-                                src="assets/icon/date.png"
-                                alt="Date"
-                            >
-
+                            <img src="assets/icon/date.png" alt="Date">
                         </span>
 
                         <span>
@@ -612,13 +570,9 @@ function renderEvents() {
 
                     </div>
 
-
                     <h3 class="event-card-title">
-
                         ${escapeHtml(title)}
-
                     </h3>
-
 
                     <div class="event-card-location">
 
@@ -626,8 +580,7 @@ function renderEvents() {
 
                             <img
                                 src="assets/icon/pin.png"
-                                alt="Location"
-                            >
+                                alt="Location">
 
                         </span>
 
@@ -637,13 +590,9 @@ function renderEvents() {
 
                     </div>
 
-
                     <p class="event-card-description">
-
                         ${escapeHtml(description)}
-
                     </p>
-
 
                     <div class="event-card-footer">
 
@@ -651,8 +600,7 @@ function renderEvents() {
                             href="event-detail.html?slug=${encodeURIComponent(
                                 event.slug || ""
                             )}"
-                            class="event-card-button"
-                        >
+                            class="event-card-button">
 
                             <span>
                                 View Event
@@ -665,7 +613,6 @@ function renderEvents() {
                         </a>
 
                     </div>
-
 
                 </div>
 
@@ -708,7 +655,6 @@ function renderEvents() {
 /* ==========================================================
    FILTER BUTTON
 ========================================================== */
-
 document
     .querySelectorAll(".filter-btn")
     .forEach(
@@ -717,7 +663,6 @@ document
             button.addEventListener(
                 "click",
                 function () {
-
 
                     document
                         .querySelectorAll(
@@ -733,18 +678,14 @@ document
                             }
                         );
 
-
                     this.classList.add(
                         "active"
                     );
 
-
                     currentCategory =
                         this.dataset.category;
 
-
                     visibleCount = 6;
-
 
                     renderEvents();
 
@@ -774,9 +715,7 @@ if (loadMoreBtn) {
 
 }
 
-
 /* ==========================================================
    INITIALIZE
 ========================================================== */
-
 loadEvents();

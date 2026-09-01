@@ -1,291 +1,1185 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Press Release | Jakarta Film Commission</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>
+    Press Release | Jakarta Film Commission
+  </title>
+
 
   <link rel="icon" type="image/png" href="assets/icon/JakartaFilmCommissionLogo-9.ico">
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
- <!-- internal resources -->
- <link rel="stylesheet" href="assets/css/custom.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+
+  <!-- INTERNAL RESOURCES -->
+
+  <link rel="stylesheet" href="assets/css/custom.css">
 
 </head>
 
+
 <body>
-  <!-- LOADER -->
+
+
+  <!-- =========================================================
+       LOADER
+  ========================================================== -->
+
   <div id="loader-container"></div>
-  
-  <!-- Hamburger Menu -->
+
+
+  <!-- =========================================================
+       HAMBURGER MENU
+  ========================================================== -->
+
   <div class="menu-overlay" id="menuOverlay"></div>
 
-  <!-- WHATSAPP -->
-  <!-- <div id="whatsapp-container"></div> -->
-  
-  <!-- NAVBAR -->
+
+  <!-- =========================================================
+       WHATSAPP
+  ========================================================== -->
+
+  <!--
+  <div id="whatsapp-container"></div>
+  -->
+
+
+  <!-- =========================================================
+       NAVBAR
+  ========================================================== -->
+
   <div id="navbar"></div>
 
-  <!-- HERO -->
+
+  <!-- =========================================================
+       HERO
+  ========================================================== -->
+
   <section class="press-release-hero">
 
+
     <div class="press-release-bg">
-        <img src="gallery/cover/camera-take-person.webp" alt="">
+
+      <img src="gallery/cover/camera-take-person.webp" alt="Press Release">
+
     </div>
+
 
     <div class="press-release-overlay"></div>
 
+
     <div class="container">
-        <div class="press-release-hero-content">
 
-          <span class="press-release-label">
-              Communications & Press
-          </span>
+      <div class="press-release-hero-content">
 
-          <h1>
-              Press Releases
-          </h1>
 
-        </div>
+        <span class="press-release-label">
+
+          Communications & Press
+
+        </span>
+
+
+        <h1>
+
+          Press Releases
+
+        </h1>
+
+
+      </div>
+
     </div>
+
 
   </section>
 
-  <!-- =========================
-  PRESS RELEASE LIST
-  ========================= -->
-  <section class="section" style="background-color: #F8F0DF;">
+
+  <!-- =========================================================
+       PRESS RELEASE LIST
+  ========================================================== -->
+
+  <section class="section" style="background-color:#F8F0DF;">
+
     <div class="container">
 
-      <!-- FILTER -->
+
+      <!-- =====================================================
+           FILTER
+      ====================================================== -->
+
       <div class="press-filter-wrapper">
+
 
         <div class="press-filters">
 
-            <button class="press-filter filter-all active" data-filter="all">
-                All Announcements
-            </button>
 
-            <button class="press-filter filter-official" data-filter="official">
-                Official Release
-            </button>
+          <!-- ALL -->
 
-            <button class="press-filter filter-program" data-filter="program">
-                Program Update
-            </button>
+          <button class="press-filter filter-all active" data-filter="all" type="button">
 
-            <button class="press-filter filter-industry" data-filter="industry">
-                Industry News
-            </button>
+            All Announcements
+
+          </button>
+
+
+          <!-- OFFICIAL -->
+
+          <button class="press-filter filter-official" data-filter="official-release" type="button">
+
+            Official Release
+
+          </button>
+
+
+          <!-- PROGRAM -->
+
+          <button class="press-filter filter-program" data-filter="program-update" type="button">
+
+            Program Update
+
+          </button>
+
+
+          <!-- INDUSTRY -->
+
+          <button class="press-filter filter-industry" data-filter="industry-news" type="button">
+
+            Industry News
+
+          </button>
+          
+          <!-- Others -->
+
+          <button class="press-filter filter-others" data-filter="others" type="button">
+
+            Others
+
+          </button>
+
 
         </div>
+
+
+        <!-- ===================================================
+             SORT
+        ==================================================== -->
 
         <div class="press-sort-dropdown">
-          <button class="press-sort-trigger" id="sortTrigger">
-              Sort: Newest
-              <span>+</span>
+
+
+          <button class="press-sort-trigger" id="sortTrigger" type="button">
+
+            Sort: Newest
+
+            <span>+</span>
+
           </button>
+
+
           <div class="press-sort-menu" id="sortMenu">
 
-              <button class="sort-option active" data-sort="newest">
-              Newest
-              </button>
 
-              <button class="sort-option" data-sort="oldest">
+            <button class="sort-option active" data-sort="newest" type="button">
+
+              Newest
+
+            </button>
+
+
+            <button class="sort-option" data-sort="oldest" type="button">
+
               Oldest
-              </button>
+
+            </button>
+
 
           </div>
+
+
         </div>
 
+
       </div>
 
-      <!-- LIST -->
-      <div class="press-list" id="pressContainer"></div>
 
-      <!-- LOAD MORE -->
-      <div class="film-button-wrap">
-        <button class="film-button" id="loadMoreBtn">
+      <!-- =====================================================
+           LIST
+      ====================================================== -->
+
+      <div class="press-list" id="pressContainer">
+
+        <!-- Loading state -->
+
+        <div class="press-loading" id="pressLoading">
+
+          Loading Press Releases...
+
+        </div>
+
+
+      </div>
+
+
+      <!-- =====================================================
+           LOAD MORE
+      ====================================================== -->
+
+      <div class="film-button-wrap" id="loadMoreWrapper">
+
+        <button class="film-button" id="loadMoreBtn" type="button">
+
           Load More Updates
+
         </button>
+
       </div>
+
 
     </div>
+
   </section>
 
-  <!-- FOOTER -->
-  <div id="footer"></div>
- 
-</body>
 
-<!-- JAVASCRIPT -->
-  <script src="assets/js/components.js"></script> 
+  <!-- =========================================================
+       FOOTER
+  ========================================================== -->
+
+  <div id="footer"></div>
+
+
+  <!-- =========================================================
+       JAVASCRIPT
+  ========================================================== -->
+
+  <script src="assets/js/components.js"></script>
+
   <script src="assets/js/custom.js"></script>
+
   <script src="assets/js/press-release.js"></script>
-  <script src="assets/data/press-release-data.js"></script>
+
+
+  <!-- =========================================================
+       PAGE SCRIPT
+  ========================================================== -->
 
   <script>
-    let visibleCount = 5;
-    let currentFilter = "all";
-    let currentSort = "newest";
 
-    function loadPressReleases(){
-      renderPress();
-    }
 
-    function renderPress(){
+    /* ========================================================
+       CONFIGURATION
+    ========================================================= */
 
-      const container =
-        document.getElementById("pressContainer");
+    const ITEMS_PER_PAGE = 5;
 
-      const loadBtn =
-        document.getElementById("loadMoreBtn");
 
-      container.innerHTML = "";
+    /* ========================================================
+       STATE
+    ======================================================== */
 
-      let filtered = [...pressData];
+    let visibleCount =
+      ITEMS_PER_PAGE;
 
-      // FILTER
-      if(currentFilter !== "all"){
-        filtered = filtered.filter(item =>
-          item.category.toLowerCase().includes(currentFilter)
+
+    let currentFilter =
+      "all";
+
+
+    let currentSort =
+      "newest";
+
+
+    let allPressReleases =
+      [];
+
+
+    /* ========================================================
+       DOM
+    ======================================================== */
+
+    const pressContainer =
+      document.getElementById(
+        "pressContainer"
+      );
+
+
+    const loadMoreBtn =
+      document.getElementById(
+        "loadMoreBtn"
+      );
+
+
+    const loadMoreWrapper =
+      document.getElementById(
+        "loadMoreWrapper"
+      );
+
+
+    const pressLoading =
+      document.getElementById(
+        "pressLoading"
+      );
+
+
+    const sortTrigger =
+      document.getElementById(
+        "sortTrigger"
+      );
+
+
+    const sortMenu =
+      document.getElementById(
+        "sortMenu"
+      );
+
+
+    /* ========================================================
+       LOAD DATA
+    ======================================================== */
+
+    async function loadPressReleasesFromDatabase() {
+
+      try {
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | SHOW LOADING
+        |--------------------------------------------------------------------------
+        */
+
+        showLoading();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | FETCH
+        |--------------------------------------------------------------------------
+        */
+
+        const data =
+          await fetchPressReleases(
+            {
+              status: "published"
+            }
+          );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | SAVE DATA
+        |--------------------------------------------------------------------------
+        */
+
+        allPressReleases =
+          Array.isArray(data)
+            ? data
+            : [];
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | RESET
+        |--------------------------------------------------------------------------
+        */
+
+        visibleCount =
+          ITEMS_PER_PAGE;
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | RENDER
+        |--------------------------------------------------------------------------
+        */
+
+        renderPress();
+
+
+      } catch (error) {
+
+
+        console.error(
+          "Press Release:",
+          error
         );
+
+
+        showError();
+
+
       }
 
-      // SORT
-      filtered.sort((a,b)=>{
+    }
 
-        const dateA = new Date(a.date);
-        const dateB = new Date(b.date);
 
-        return currentSort === "newest"
-          ? dateB - dateA
-          : dateA - dateB;
+    /* ========================================================
+       RENDER
+    ======================================================== */
 
-      });
+    function renderPress() {
 
-      // RENDER
-      filtered.slice(0, visibleCount).forEach(item => {
-        container.innerHTML += `
-        <article class="press-list-card ${getCategoryClass(item.category)}">
+
+      /*
+      |--------------------------------------------------------------------------
+      | CLEAR
+      |--------------------------------------------------------------------------
+      */
+
+      pressContainer.innerHTML =
+        "";
+
+
+      /*
+      |--------------------------------------------------------------------------
+      | FILTER
+      |--------------------------------------------------------------------------
+      */
+
+      let filtered =
+        [...allPressReleases];
+
+
+      if (
+        currentFilter !== "all"
+      ) {
+
+
+        filtered =
+          filtered.filter(
+            item => {
+
+
+              const category =
+                String(
+                  item.category_filter ||
+                  item.category ||
+                  ""
+                )
+                  .trim()
+                  .toLowerCase();
+
+
+              return (
+                normalizeCategory(
+                  category
+                ) ===
+                currentFilter
+              );
+
+            }
+          );
+
+      }
+
+
+      /*
+      |--------------------------------------------------------------------------
+      | SORT
+      |--------------------------------------------------------------------------
+      */
+
+      filtered.sort(
+        (a, b) => {
+
+
+          const dateA =
+            getPressTimestamp(
+              a
+            );
+
+
+          const dateB =
+            getPressTimestamp(
+              b
+            );
+
+
+          if (
+            currentSort ===
+            "newest"
+          ) {
+
+            return dateB - dateA;
+
+          }
+
+
+          return dateA - dateB;
+
+        }
+      );
+
+
+      /*
+      |--------------------------------------------------------------------------
+      | EMPTY
+      |--------------------------------------------------------------------------
+      */
+
+      if (
+        filtered.length === 0
+      ) {
+
+        showEmpty();
+
+        return;
+
+      }
+
+
+      /*
+      |--------------------------------------------------------------------------
+      | RENDER ITEMS
+      |--------------------------------------------------------------------------
+      */
+
+      const visibleItems =
+        filtered.slice(
+          0,
+          visibleCount
+        );
+
+
+      visibleItems.forEach(
+        item => {
+
+          pressContainer.innerHTML +=
+            createPressCard(
+              item
+            );
+
+        }
+      );
+
+
+      /*
+      |--------------------------------------------------------------------------
+      | LOAD MORE BUTTON
+      |--------------------------------------------------------------------------
+      */
+
+      if (
+        filtered.length >
+        visibleCount
+      ) {
+
+        loadMoreWrapper.style.display =
+          "flex";
+
+      } else {
+
+        loadMoreWrapper.style.display =
+          "none";
+
+      }
+
+    }
+
+
+    /* ========================================================
+       CREATE CARD
+    ======================================================== */
+
+    function createPressCard(
+      item
+    ) {
+
+
+      /*
+      |--------------------------------------------------------------------------
+      | CATEGORY
+      |--------------------------------------------------------------------------
+      */
+
+      const category =
+        item.category_display ||
+        item.category ||
+        "Others";
+
+
+      /*
+      |--------------------------------------------------------------------------
+      | CATEGORY CLASS
+      |--------------------------------------------------------------------------
+      */
+
+      const categoryClass =
+        getCategoryClass(
+          item.category
+        );
+
+
+      /*
+      |--------------------------------------------------------------------------
+      | IMAGE
+      |--------------------------------------------------------------------------
+      */
+
+      const image =
+        item.image ||
+        normalizeImagePath(
+          item.cover_image
+        );
+
+
+      /*
+      |--------------------------------------------------------------------------
+      | TITLE
+      |--------------------------------------------------------------------------
+      */
+
+      const title =
+        escapeHtml(
+          item.title ||
+          "Untitled Press Release"
+        );
+
+
+      /*
+      |--------------------------------------------------------------------------
+      | DESCRIPTION
+      |--------------------------------------------------------------------------
+      */
+
+      const description =
+        escapeHtml(
+          limitText(
+            item.description ||
+            "",
+            180
+          )
+        );
+
+
+      /*
+      |--------------------------------------------------------------------------
+      | DATE
+      |--------------------------------------------------------------------------
+      */
+
+      const date =
+        formatDate(
+          item.date
+        );
+
+
+      /*
+      |--------------------------------------------------------------------------
+      | SLUG
+      |--------------------------------------------------------------------------
+      */
+
+      const slug =
+        item.slug ||
+        generateSlug(
+          item.title ||
+          ""
+        );
+
+
+      /*
+      |--------------------------------------------------------------------------
+      | DETAIL URL
+      |--------------------------------------------------------------------------
+      */
+
+      const detailUrl =
+        "press-release.html?slug=" +
+        encodeURIComponent(
+          slug
+        );
+
+
+      /*
+      |--------------------------------------------------------------------------
+      | RETURN CARD
+      |--------------------------------------------------------------------------
+      */
+
+      return `
+
+        <article
+          class="press-list-card ${categoryClass}"
+        >
+
           <div class="press-list-image">
-              <img src="${item.image}" alt="${item.title}">
+
+            <img
+              src="${escapeAttribute(image)}"
+              alt="${escapeAttribute(
+        item.title ||
+        "Press Release"
+      )}"
+              loading="lazy"
+            >
+
           </div>
+
 
           <div class="press-list-content">
 
+
             <div class="press-list-top">
-                <span class="press-list-category">
-                    ${item.category}
-                </span>
-                <span class="press-list-date">
-                    ${formatDate(item.date)}
-                </span>
+
+
+              <span
+                class="press-list-category"
+              >
+
+                ${escapeHtml(category)}
+
+              </span>
+
+
+              <span
+                class="press-list-date"
+              >
+
+                ${date}
+
+              </span>
+
+
             </div>
 
-            <h2 class="press-list-title">
-                ${item.title}
+
+            <h2
+              class="press-list-title"
+            >
+
+              ${title}
+
             </h2>
 
-            <p class="press-list-desc">
-                ${limitText(item.description, 180)}
+
+            <p
+              class="press-list-desc"
+            >
+
+              ${description}
+
             </p>
 
+
             <a
-                href="press-release.html?slug=${generateSlug(item.title)}"
-                class="press-list-link">
-                Read Full Announcement →
+              href="${escapeAttribute(
+        detailUrl
+      )}"
+              class="press-list-link"
+            >
+
+              Read Full Announcement →
+
             </a>
 
-          </div>
-        </article>
-        `;
-    });
 
-      // HIDE LOAD MORE IF NOT NEEDED
-      if(filtered.length <= visibleCount){
-        loadBtn.style.display = "none";
-      }else{
-        loadBtn.style.display = "inline-flex";
+          </div>
+
+
+        </article>
+
+      `;
+
+    }
+
+
+    /* ========================================================
+       CATEGORY NORMALIZATION
+    ======================================================== */
+
+    function normalizeCategory(
+      category
+    ) {
+
+
+      const value =
+        String(
+          category ||
+          ""
+        )
+          .trim()
+          .toLowerCase();
+
+
+      switch (
+      value
+      ) {
+
+
+        case "official release":
+
+          return "official-release";
+
+
+        case "program update":
+
+          return "program-update";
+
+
+        case "industry news":
+
+          return "industry-news";
+
+
+        case "others":
+
+          return "others";
+
+
+        default:
+
+          return value
+            .replace(
+              /\s+/g,
+              "-"
+            );
+
       }
 
     }
 
-    document
-    .getElementById("loadMoreBtn")
-    .addEventListener("click", () => {
 
-      visibleCount += 5;
+    /* ========================================================
+       DATE TIMESTAMP
+    ======================================================== */
+    function getPressTimestamp(
+      item
+    ) {
 
-      renderPress();
+      const value =
+        item.published_date ||
+        item.date ||
+        item.created_at ||
+        "";
 
-    });
+      const timestamp =
+        new Date(
+          value
+        ).getTime();
 
-    loadPressReleases();
+      return Number.isNaN(
+        timestamp
+      )
+        ? 0
+        : timestamp;
 
-    /* FILTER BUTTON */
-    document.addEventListener("click", e => {
+    }
 
-      if(e.target.classList.contains("press-filter")){
+    /* ========================================================
+       LOAD MORE
+    ======================================================== */
+    loadMoreBtn.addEventListener(
+      "click",
+      () => {
 
-        document
-          .querySelectorAll(".press-filter")
-          .forEach(btn => btn.classList.remove("active"));
+        visibleCount +=
+          ITEMS_PER_PAGE;
 
-        e.target.classList.add("active");
-        currentFilter = e.target.dataset.filter;
-
-        visibleCount = 5;
         renderPress();
+
       }
-
-    });
-
-    /* SORT DROPDOWN */
-    const sortTrigger =
-      document.getElementById("sortTrigger");
-
-    const sortMenu =
-      document.getElementById("sortMenu");
+    );
 
 
-    /* OPEN DROPDOWN */
-    sortTrigger.addEventListener("click", () => {
-      sortMenu.classList.toggle("active");
-    });
+    /* ========================================================
+       FILTER
+    ======================================================== */
+    document.addEventListener(
+      "click",
+      event => {
 
-    /* SORT OPTION */
-    document.addEventListener("click", e => {
-      if(e.target.classList.contains("sort-option")){
+        const button =
+          event.target.closest(
+            ".press-filter"
+          );
+
+        if (
+          !button
+        ) {
+          return;
+        }
+
+        // Active
         document
-          .querySelectorAll(".sort-option")
-          .forEach(btn => btn.classList.remove("active"));
-        e.target.classList.add("active");
+          .querySelectorAll(
+            ".press-filter"
+          )
+          .forEach(
+            btn =>
+              btn.classList.remove(
+                "active"
+              )
+          );
 
-        currentSort = e.target.dataset.sort;
+        button.classList.add(
+          "active"
+        );
 
+        // Filter
+        currentFilter =
+          button.dataset.filter ||
+          "all";
+
+        // Reset
+        visibleCount =
+          ITEMS_PER_PAGE;
+
+        // Render
+        renderPress();
+
+      }
+    );
+
+    /* ========================================================
+       SORT DROPDOWN
+    ======================================================== */
+    sortTrigger.addEventListener(
+      "click",
+      event => {
+
+        event.stopPropagation();
+
+        sortMenu.classList.toggle(
+          "active"
+        );
+
+      }
+    );
+
+    /* ========================================================
+       SORT OPTION
+    ======================================================== */
+    document.addEventListener(
+      "click",
+      event => {
+
+        const option =
+          event.target.closest(
+            ".sort-option"
+          );
+
+        if (
+          !option
+        ) {
+
+          return;
+
+        }
+
+        // Active
+        document
+          .querySelectorAll(
+            ".sort-option"
+          )
+          .forEach(
+            btn =>
+              btn.classList.remove(
+                "active"
+              )
+          );
+
+        option.classList.add(
+          "active"
+        );
+
+        // Sort
+        currentSort =
+          option.dataset.sort ||
+          "newest";
+
+        // Trigger
         sortTrigger.innerHTML = `
-          Sort: ${e.target.textContent}
+
+          Sort:
+          ${escapeHtml(
+          option.textContent.trim()
+        )}
+
           <span>+</span>
+
         `;
 
-        sortMenu.classList.remove("active");
-        visibleCount = 5;
+        // Close
+        sortMenu.classList.remove(
+          "active"
+        );
+
+        // Reset
+        visibleCount =
+          ITEMS_PER_PAGE;
+
+        // Render
         renderPress();
-      }
-    });
-
-    /* CLOSE DROPDOWN */
-    document.addEventListener("click", e => {
-      if(!e.target.closest(".press-sort-dropdown")){
-
-        sortMenu.classList.remove("active");
 
       }
-    });
+    );
+
+    /* ========================================================
+       CLOSE SORT
+    ======================================================== */
+    document.addEventListener(
+      "click",
+      event => {
+
+        if (
+          !event.target.closest(
+            ".press-sort-dropdown"
+          )
+        ) {
+
+          sortMenu.classList.remove(
+            "active"
+          );
+
+        }
+
+      }
+    );
+
+    /* ========================================================
+       LOADING
+    ======================================================== */
+    function showLoading() {
+
+      pressContainer.innerHTML = `
+
+        <div
+          class="press-loading"
+          style="
+            width:100%;
+            padding:60px 20px;
+            text-align:center;
+          ">
+
+          Loading Press Releases...
+
+        </div>
+
+      `;
+
+
+      loadMoreWrapper.style.display =
+        "none";
+
+    }
+
+    /* ========================================================
+       EMPTY
+    ======================================================== */
+    function showEmpty() {
+
+      pressContainer.innerHTML = `
+
+        <div
+          class="press-empty"
+          style="
+            width:100%;
+            padding:60px 20px;
+            text-align:center;
+          ">
+
+          No press releases found.
+
+        </div>
+
+      `;
+
+      loadMoreWrapper.style.display =
+        "none";
+
+    }
+
+    /* ========================================================
+       ERROR
+    ======================================================== */
+    function showError() {
+
+      pressContainer.innerHTML = `
+
+        <div
+          class="press-error"
+          style="
+            width:100%;
+            padding:60px 20px;
+            text-align:center;
+          ">
+
+          Unable to load press releases.
+
+        </div>
+
+      `;
+
+      loadMoreWrapper.style.display =
+        "none";
+
+    }
+
+    /* ========================================================
+       HTML ESCAPE
+    ======================================================== */
+    function escapeHtml(
+      value
+    ) {
+
+      return String(
+        value ??
+        ""
+      )
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+        .replace(
+          /</g,
+          "&lt;"
+        )
+        .replace(
+          />/g,
+          "&gt;"
+        )
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+        .replace(
+          /'/g,
+          "&#039;"
+        );
+
+    }
+
+    /* ========================================================
+       ATTRIBUTE ESCAPE
+    ======================================================== */
+    function escapeAttribute(
+      value
+    ) {
+
+      return escapeHtml(
+        value
+      );
+
+    }
+
+    /* ========================================================
+       START
+    ======================================================== */
+    loadPressReleasesFromDatabase();
 
   </script>
-  
+
+</body>
+
 </html>
