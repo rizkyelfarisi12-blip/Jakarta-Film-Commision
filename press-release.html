@@ -553,7 +553,7 @@
 
             const imageWrapper =
               document.createElement(
-                "div"
+                "figure"
               );
 
             imageWrapper.className =
@@ -577,6 +577,40 @@
             imageWrapper.appendChild(
               image
             );
+
+            /*
+            |------------------------------------------------------------------
+            | CAPTION
+            |------------------------------------------------------------------
+            |
+            | Sebelumnya caption diisi di admin tapi tidak
+            | pernah dirender di halaman user. Sekarang
+            | ditampilkan sebagai figcaption di bawah gambar.
+            |
+            */
+            const captionText =
+              String(
+                block.caption || ""
+              ).trim();
+
+            if (captionText) {
+
+              const caption =
+                document.createElement(
+                  "figcaption"
+                );
+
+              caption.className =
+                "press-content-image-caption";
+
+              caption.textContent =
+                captionText;
+
+              imageWrapper.appendChild(
+                caption
+              );
+
+            }
 
             container.appendChild(
               imageWrapper

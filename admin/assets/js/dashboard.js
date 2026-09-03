@@ -1,6 +1,18 @@
 const Dashboard = {
 
     /* =====================================================
+       CONFIG
+
+       Sesuaikan path ini kalau lokasi file API Anda
+       berbeda dari asumsi di sini.
+    ===================================================== */
+
+    FEATURED_EVENT_API: "../api/events/get-featured-event.php",
+
+    PRESS_RELEASE_API: "../api/press-release/get-press.php",
+
+
+    /* =====================================================
        INIT
     ===================================================== */
 
@@ -8,9 +20,11 @@ const Dashboard = {
 
         try{
 
-            this.renderStats();
-
             await this.loadEvents();
+
+            await this.loadFeaturedEvent();
+
+            await this.loadPressReleases();
 
         }catch(error){
 
@@ -25,44 +39,7 @@ const Dashboard = {
 
 
     /* =====================================================
-       STATISTICS
-    ===================================================== */
-
-    renderStats(){
-
-        /*
-        |--------------------------------------------------------------------------
-        | TOTAL ARTICLES
-        |--------------------------------------------------------------------------
-        */
-
-        const totalArticles =
-            document.getElementById(
-                "totalArticles"
-            );
-
-
-        if(totalArticles){
-
-            /*
-            | Existing press-release system
-            | can update this later.
-            */
-
-            if(typeof allArticles !== "undefined"){
-
-                totalArticles.textContent =
-                    allArticles.length;
-
-            }
-
-        }
-
-    },
-
-
-    /* =====================================================
-       LOAD EVENTS
+       LOAD EVENTS (TOTAL + LATEST)
     ===================================================== */
 
     async loadEvents(){
@@ -145,15 +122,6 @@ const Dashboard = {
             );
 
 
-            /* =============================================
-               FEATURED EVENT
-            ============================================= */
-
-            this.renderFeaturedEvent(
-                data.featuredEvent
-            );
-
-
         }catch(error){
 
             console.error(
@@ -162,7 +130,276 @@ const Dashboard = {
             );
 
 
-            this.renderEventError();
+            const latest =
+                document.getElementById(
+                    "latestEvents"
+                );
+
+
+            if(latest){
+
+                latest.innerHTML = `
+
+                    <div class="dashboard-empty">
+
+                        Failed to load events.
+
+                    </div>
+
+                `;
+
+            }
+
+        }
+
+    },
+
+
+    /* =====================================================
+       LOAD FEATURED EVENT
+
+       Sumber datanya API terpisah (get-featured-event.php),
+       bukan dari dashboard-events.php. API ini mengembalikan
+       salah satu dari:
+
+       - { status: "success", type: "featured", event: {...} }
+       - { status: "success", type: "upcoming", event: {...} }
+       - { status: "empty" }
+    ===================================================== */
+
+    async loadFeaturedEvent(){
+
+        try{
+
+            const response =
+                await fetch(
+                    this.FEATURED_EVENT_API
+                );
+
+
+            const raw =
+                await response.text();
+
+
+            console.log(
+                "FEATURED EVENT RAW:",
+                raw
+            );
+
+
+            let data;
+
+
+            try{
+
+                data =
+                    JSON.parse(raw);
+
+            }catch(error){
+
+                console.error(
+                    "Featured event API bukan JSON:",
+                    raw
+                );
+
+                throw new Error(
+                    "API featured event mengembalikan response yang bukan JSON."
+                );
+
+            }
+
+
+            if(
+                data.status !== "success" ||
+                !data.event
+            ){
+
+                this.renderFeaturedEvent(
+                    null
+                );
+
+                return;
+
+            }
+
+
+            this.renderFeaturedEvent(
+                data.event,
+                data.type
+            );
+
+
+        }catch(error){
+
+            console.error(
+                "FEATURED EVENT ERROR:",
+                error
+            );
+
+
+            const featured =
+                document.getElementById(
+                    "featuredEvent"
+                );
+
+
+            if(featured){
+
+                featured.innerHTML = `
+
+                    <div class="dashboard-empty">
+
+                        Failed to load featured event.
+
+                    </div>
+
+                `;
+
+            }
+
+        }
+
+    },
+
+
+    /* =====================================================
+       LOAD PRESS RELEASES
+
+       Mengisi stat "Total Articles" dan tabel
+       "Latest Press Release" di dashboard, memakai
+       endpoint get-press.php (sama dengan yang dipakai
+       halaman Press Release Management).
+    ===================================================== */
+
+    async loadPressReleases(){
+
+        const totalArticles =
+            document.getElementById(
+                "totalArticles"
+            );
+
+        const recentTable =
+            document.getElementById(
+                "recentArticles"
+            );
+
+        try{
+
+            const response =
+                await fetch(
+                    this.PRESS_RELEASE_API
+                );
+
+
+            const raw =
+                await response.text();
+
+
+            console.log(
+                "PRESS RELEASE RAW:",
+                raw
+            );
+
+
+            let data;
+
+
+            try{
+
+                data =
+                    JSON.parse(raw);
+
+            }catch(error){
+
+                console.error(
+                    "Press release API bukan JSON:",
+                    raw
+                );
+
+                throw new Error(
+                    "API get-press.php mengembalikan response yang bukan JSON."
+                );
+
+            }
+
+
+            if(!data.success){
+
+                throw new Error(
+                    data.message ||
+                    "Gagal mengambil data press release."
+                );
+
+            }
+
+
+            /* =============================================
+               TOTAL ARTICLES
+            ============================================= */
+
+            if(totalArticles){
+
+                totalArticles.textContent =
+                    data.data?.total ?? 0;
+
+            }
+
+
+            /* =============================================
+               LATEST PRESS RELEASES
+
+               get-press.php sudah mengurutkan berdasarkan
+               published_date DESC, created_at DESC, id DESC
+               jadi tinggal ambil beberapa item teratas.
+            ============================================= */
+
+            const items =
+                Array.isArray(data.data?.items)
+                    ? data.data.items
+                    : [];
+
+
+            this.renderRecentArticles(
+                items.slice(0, 5)
+            );
+
+
+        }catch(error){
+
+            console.error(
+                "PRESS RELEASE ERROR:",
+                error
+            );
+
+
+            if(totalArticles){
+
+                totalArticles.textContent =
+                    "0";
+
+            }
+
+
+            if(recentTable){
+
+                recentTable.innerHTML = `
+
+                    <tr>
+
+                        <td
+                            colspan="5"
+                            style="text-align:center;padding:30px;"
+                        >
+
+                            Failed to load press releases.
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
 
         }
 
@@ -383,9 +620,14 @@ const Dashboard = {
 
     /* =====================================================
        FEATURED EVENT
+
+       "type" menandakan apakah event ini memang sedang
+       di-featured secara manual ("featured"), atau ini
+       cuma fallback event terdekat karena tidak ada yang
+       di-featured ("upcoming").
     ===================================================== */
 
-    renderFeaturedEvent(event){
+    renderFeaturedEvent(event, type = "featured"){
 
         const container =
             document.getElementById(
@@ -446,6 +688,12 @@ const Dashboard = {
                 );
 
 
+        const stateLabel =
+            type === "upcoming"
+                ? "Upcoming (auto)"
+                : "Featured";
+
+
         container.innerHTML = `
 
             <a
@@ -499,6 +747,15 @@ const Dashboard = {
                         <span class="featured-event-badge">
 
                             ${escapeHtml(
+                                stateLabel
+                            )}
+
+                        </span>
+
+
+                        <span class="featured-event-badge">
+
+                            ${escapeHtml(
                                 category
                             )}
 
@@ -537,51 +794,211 @@ const Dashboard = {
 
 
     /* =====================================================
-       ERROR
+       RECENT PRESS RELEASES (TABLE)
     ===================================================== */
 
-    renderEventError(){
+    renderRecentArticles(items){
 
-        const latest =
+        const container =
             document.getElementById(
-                "latestEvents"
+                "recentArticles"
             );
 
 
-        const featured =
-            document.getElementById(
-                "featuredEvent"
-            );
+        if(!container){
 
-
-        if(latest){
-
-            latest.innerHTML = `
-
-                <div class="dashboard-empty">
-
-                    Failed to load events.
-
-                </div>
-
-            `;
+            return;
 
         }
 
 
-        if(featured){
+        if(!items.length){
 
-            featured.innerHTML = `
+            container.innerHTML = `
 
-                <div class="dashboard-empty">
+                <tr>
 
-                    Failed to load featured event.
+                    <td
+                        colspan="5"
+                        style="text-align:center;padding:30px;"
+                    >
 
-                </div>
+                        No press releases have been added yet.
+
+                    </td>
+
+                </tr>
 
             `;
 
+            return;
+
         }
+
+
+        container.innerHTML =
+            items.map(item => {
+
+
+                /* =========================================
+                IMAGE
+                ========================================= */
+
+                const imageUrl =
+                    normalizePressReleaseImage(
+                        item.cover_image
+                    );
+
+
+                /* =========================================
+                CATEGORY
+                ========================================= */
+
+                const category =
+                    item.category_display ||
+                    item.category ||
+                    "-";
+
+
+                const categorySlug =
+                    getPressReleaseCategoryClass(
+                        item.category_filter ||
+                        item.category
+                    );
+
+
+                /* =========================================
+                STATUS
+                ========================================= */
+
+                const status =
+                    String(
+                        item.status || "draft"
+                    ).toLowerCase();
+
+
+                const statusClass =
+                    status === "published"
+                        ? "status-published"
+                        : "status-draft";
+
+
+                const statusLabel =
+                    status === "published"
+                        ? "Published"
+                        : "Draft";
+
+
+                /* =========================================
+                DATE
+                ========================================= */
+
+                const date =
+                    formatPressReleaseDate(
+                        item.published_date ||
+                        item.created_at
+                    );
+
+
+                /* =========================================
+                RETURN ROW
+                ========================================= */
+
+                return `
+
+                    <tr>
+
+                        <td>
+
+                            ${
+                                imageUrl
+
+                                ?
+
+                                `
+                                <img
+                                    src="${imageUrl}"
+                                    class="table-thumb"
+                                    alt="${escapeHtml(
+                                        item.title || "Press Release"
+                                    )}"
+                                    loading="lazy"
+                                    onerror="this.style.display='none';"
+                                >
+                                `
+
+                                :
+
+                                `
+                                <div class="table-thumb-placeholder">
+                                    No Image
+                                </div>
+                                `
+                            }
+
+                        </td>
+
+
+                        <td>
+
+                            <strong>
+
+                                ${escapeHtml(
+                                    item.title || "-"
+                                )}
+
+                            </strong>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="press-badge ${categorySlug}">
+
+                                ${escapeHtml(category)}
+
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            ${escapeHtml(date)}
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="table-action">
+
+                                <span class="status-badge ${statusClass}">
+
+                                    ${statusLabel}
+
+                                </span>
+
+
+                                <a
+                                    href="press-release/form.php?id=${item.id}"
+                                    class="table-btn edit"
+                                >
+
+                                    Edit
+
+                                </a>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }).join("");
 
     }
 
@@ -620,6 +1037,234 @@ function slugifyCategory(value = ""){
         .replace(/[^a-z0-9]+/g, "-")
 
         .replace(/^-|-$/g, "");
+
+}
+
+
+/* =========================================================
+   PRESS RELEASE CATEGORY COLOR CLASS
+
+   Dipetakan manual (bukan slugify otomatis) supaya cocok
+   dengan class warna yang sudah dipakai di tampilan user:
+
+   Industry News    -> .industry
+   Official Release -> .official-release
+   Program Update   -> .program
+   Others           -> .others
+========================================================= */
+
+function getPressReleaseCategoryClass(category){
+
+    const normalized =
+        String(category || "")
+            .toLowerCase()
+            .trim();
+
+
+    switch(normalized){
+
+        case "industry news":
+
+            return "industry";
+
+
+        case "official release":
+
+            return "official-release";
+
+
+        case "program update":
+
+            return "program";
+
+
+        default:
+
+            return "others";
+
+    }
+
+}
+
+
+/* =========================================================
+   TRUNCATE WORDS
+
+   Membatasi deskripsi pada card event (Latest Events &
+   Featured Event) supaya tidak terlalu panjang. Fungsi ini
+   sebelumnya dipanggil di renderLatestEvents() dan
+   renderFeaturedEvent() tapi belum pernah didefinisikan,
+   jadi truncation-nya tidak pernah benar-benar berjalan.
+========================================================= */
+
+function truncateWords(text, maxWords = 16){
+
+    if(!text){
+
+        return "";
+
+    }
+
+
+    const words =
+        String(text)
+            .replace(/\s+/g, " ")
+            .trim()
+            .split(" ");
+
+
+    if(words.length <= maxWords){
+
+        return words.join(" ");
+
+    }
+
+
+    return words.slice(0, maxWords).join(" ") + "...";
+
+}
+
+
+/* =========================================================
+   PRESS RELEASE IMAGE PATH
+
+   Sama seperti normalizeImageUrl() di press-release.js,
+   diberi nama berbeda supaya tidak bentrok kalau
+   press-release.js ikut ter-load di halaman yang sama.
+========================================================= */
+
+function normalizePressReleaseImage(path){
+
+    let value =
+        String(path || "").trim();
+
+
+    if(!value){
+
+        return "";
+
+    }
+
+
+    value =
+        value.replace(/\\/g, "/");
+
+
+    if(/^https?:\/\//i.test(value)){
+
+        return value;
+
+    }
+
+
+    if(value.startsWith("/jfc/")){
+
+        return value;
+
+    }
+
+
+    value =
+        value.replace(/^\/+/, "");
+
+
+    if(value.startsWith("uploads/press-release/")){
+
+        return "/jfc/" + value;
+
+    }
+
+
+    if(value.startsWith("assets/uploads/press-release/")){
+
+        return "/jfc/" + value;
+
+    }
+
+
+    return "/jfc/" + value;
+
+}
+
+
+/* =========================================================
+   PRESS RELEASE DATE FORMAT
+
+   Sama seperti formatDate() di press-release.js, diberi
+   nama berbeda untuk menghindari bentrok nama fungsi.
+========================================================= */
+
+function formatPressReleaseDate(value){
+
+    if(!value){
+
+        return "-";
+
+    }
+
+
+    const stringValue =
+        String(value).trim();
+
+
+    const dateOnlyMatch =
+        stringValue.match(
+            /^(\d{4})-(\d{2})-(\d{2})$/
+        );
+
+
+    if(dateOnlyMatch){
+
+        const year = dateOnlyMatch[1];
+
+        const month = dateOnlyMatch[2];
+
+        const day = dateOnlyMatch[3];
+
+
+        const date =
+            new Date(
+                Number(year),
+                Number(month) - 1,
+                Number(day)
+            );
+
+
+        if(!Number.isNaN(date.getTime())){
+
+            return date.toLocaleDateString(
+                "en-GB",
+                {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
+                }
+            );
+
+        }
+
+    }
+
+
+    const date =
+        new Date(stringValue);
+
+
+    if(!Number.isNaN(date.getTime())){
+
+        return date.toLocaleDateString(
+            "en-GB",
+            {
+                day: "2-digit",
+                month: "short",
+                year: "numeric"
+            }
+        );
+
+    }
+
+
+    return escapeHtml(stringValue);
 
 }
 

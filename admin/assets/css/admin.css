@@ -1986,6 +1986,68 @@ body.login-page {
   color: #aaa;
 }
 
+/* =========================
+EVENT TABLE TOOLS - WRAP
+========================= */
+
+.event-table-tools {
+    flex-wrap: wrap;
+    row-gap: 12px;
+}
+
+.event-table-tools > * {
+    flex: 0 0 auto;
+}
+
+.event-table-tools .table-search {
+    flex: 1 1 220px;
+    min-width: 200px;
+}
+
+.event-table-tools input[type="date"] {
+    min-width: 0;
+    flex: 1 1 150px;
+}
+
+.event-table-tools select.table-filter {
+    flex: 1 1 160px;
+}
+
+/* =========================
+PRESS RELEASE CATEGORY BADGE
+========================= */
+
+.press-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 26px;
+    padding: 0 10px;
+    border-radius: 999px;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 750;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.press-badge.industry {
+    background: #DA291C;
+}
+
+.press-badge.official-release {
+    background: #97B300;
+}
+
+.press-badge.program {
+    background: #FF6A14;
+}
+
+.press-badge.others {
+    background: #526E3E;
+}
+
 /* =========================================================
    PRESS RELEASE ARTICLE IMAGE
 ========================================================= */

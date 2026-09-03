@@ -108,7 +108,7 @@ async function loadPressReleases() {
         |---------------------------------------------------------
         */
 
-    renderPressReleases(pressReleaseData);
+    applyFilters();
   } catch (error) {
     console.error("LOAD PRESS RELEASE ERROR:", error);
 
@@ -361,6 +361,16 @@ function createPressReleaseRow(item) {
 
   /*
     |---------------------------------------------------------
+    | CATEGORY COLOR CLASS
+    |---------------------------------------------------------
+    */
+
+  const categorySlug = getPressReleaseCategoryClass(
+    item.category_filter || item.category,
+  );
+
+  /*
+    |---------------------------------------------------------
     | STATUS
     |---------------------------------------------------------
     */
@@ -508,7 +518,7 @@ function createPressReleaseRow(item) {
 
             <td>
 
-                <span class="badge">
+                <span class="press-badge ${categorySlug}">
 
                     ${category}
 
@@ -581,6 +591,36 @@ function getCategoryDisplay(item) {
     */
 
   return category || "Others";
+}
+
+/* =========================================================
+   CATEGORY COLOR CLASS
+
+   Dipetakan manual (bukan slugify otomatis) supaya cocok
+   dengan class warna yang sama dipakai di tampilan user:
+
+   Industry News    -> .industry
+   Official Release -> .official-release
+   Program Update   -> .program
+   Others           -> .others
+========================================================= */
+
+function getPressReleaseCategoryClass(category) {
+  const normalized = String(category || "").toLowerCase().trim();
+
+  switch (normalized) {
+    case "industry news":
+      return "industry";
+
+    case "official release":
+      return "official-release";
+
+    case "program update":
+      return "program";
+
+    default:
+      return "others";
+  }
 }
 
 /* =========================================================
@@ -737,7 +777,54 @@ function setupSearch() {
 }
 
 /* =========================================================
-   FILTER SETUP
+   SORT PRESS RELEASES
+========================================================= */
+
+function getPressReleaseSortTime(item) {
+  const value = item.updated_at || item.created_at || item.published_date || "";
+
+  const time = new Date(value).getTime();
+
+  return Number.isNaN(time) ? 0 : time;
+}
+
+function sortPressReleases(list, sortValue) {
+  switch (sortValue) {
+    case "updated_asc":
+      list.sort(
+        (a, b) => getPressReleaseSortTime(a) - getPressReleaseSortTime(b),
+      );
+      break;
+
+    case "date_desc":
+      list.sort((a, b) =>
+        String(b.published_date || "").localeCompare(
+          String(a.published_date || ""),
+        ),
+      );
+      break;
+
+    case "date_asc":
+      list.sort((a, b) =>
+        String(a.published_date || "").localeCompare(
+          String(b.published_date || ""),
+        ),
+      );
+      break;
+
+    case "updated_desc":
+    default:
+      list.sort(
+        (a, b) => getPressReleaseSortTime(b) - getPressReleaseSortTime(a),
+      );
+      break;
+  }
+
+  return list;
+}
+
+/* =========================================================
+   SETUP FILTERS
 ========================================================= */
 
 function setupFilters() {
@@ -745,12 +832,30 @@ function setupFilters() {
 
   const categoryFilter = document.getElementById("categoryFilter");
 
+  const dateFromFilter = document.getElementById("dateFromFilter");
+
+  const dateToFilter = document.getElementById("dateToFilter");
+
+  const sortFilter = document.getElementById("sortFilter");
+
   if (statusFilter) {
     statusFilter.addEventListener("change", applyFilters);
   }
 
   if (categoryFilter) {
     categoryFilter.addEventListener("change", applyFilters);
+  }
+
+  if (dateFromFilter) {
+    dateFromFilter.addEventListener("change", applyFilters);
+  }
+
+  if (dateToFilter) {
+    dateToFilter.addEventListener("change", applyFilters);
+  }
+
+  if (sortFilter) {
+    sortFilter.addEventListener("change", applyFilters);
   }
 }
 
@@ -788,6 +893,30 @@ function applyFilters() {
     */
 
   const category = categoryFilter ? categoryFilter.value : "";
+
+  /*
+    |---------------------------------------------------------
+    | DATE RANGE
+    |---------------------------------------------------------
+    */
+
+  const dateFromEl = document.getElementById("dateFromFilter");
+
+  const dateToEl = document.getElementById("dateToFilter");
+
+  const dateFrom = dateFromEl ? dateFromEl.value : "";
+
+  const dateTo = dateToEl ? dateToEl.value : "";
+
+  /*
+    |---------------------------------------------------------
+    | SORT
+    |---------------------------------------------------------
+    */
+
+  const sortEl = document.getElementById("sortFilter");
+
+  const sortValue = sortEl ? sortEl.value : "updated_desc";
 
   /*
     |---------------------------------------------------------
@@ -869,8 +998,38 @@ function applyFilters() {
 
     const matchesCategory = !category || itemCategory === category;
 
-    return matchesSearch && matchesStatus && matchesCategory;
+    /*
+                |---------------------------------------------
+                | DATE RANGE MATCH
+                |---------------------------------------------
+                |
+                | Berdasarkan published_date.
+                |
+                |---------------------------------------------
+                */
+
+    const itemDate = String(item.published_date || "").slice(0, 10);
+
+    const matchesDateFrom = !dateFrom || (itemDate && itemDate >= dateFrom);
+
+    const matchesDateTo = !dateTo || (itemDate && itemDate <= dateTo);
+
+    return (
+      matchesSearch &&
+      matchesStatus &&
+      matchesCategory &&
+      matchesDateFrom &&
+      matchesDateTo
+    );
   });
+
+  /*
+    |---------------------------------------------------------
+    | SORT
+    |---------------------------------------------------------
+    */
+
+  sortPressReleases(filtered, sortValue);
 
   /*
     |---------------------------------------------------------

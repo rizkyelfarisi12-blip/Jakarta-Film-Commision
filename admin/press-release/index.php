@@ -47,11 +47,8 @@ include "../includes/header.php";
 
         <section class="dashboard-stats">
 
-
             <!-- TOTAL -->
-
             <div class="stat-card">
-
                 <div class="stat-card-content">
 
                     <span class="stat-label">
@@ -63,14 +60,10 @@ include "../includes/header.php";
                     </strong>
 
                 </div>
-
             </div>
 
-
             <!-- PUBLISHED -->
-
             <div class="stat-card">
-
                 <div class="stat-card-content">
 
                     <span class="stat-label">
@@ -82,14 +75,10 @@ include "../includes/header.php";
                     </strong>
 
                 </div>
-
             </div>
 
-
             <!-- DRAFT -->
-
             <div class="stat-card">
-
                 <div class="stat-card-content">
 
                     <span class="stat-label">
@@ -101,9 +90,7 @@ include "../includes/header.php";
                     </strong>
 
                 </div>
-
             </div>
-
 
         </section>
 
@@ -155,6 +142,47 @@ include "../includes/header.php";
 
                         <option value="">
                             All Category
+                        </option>
+
+                    </select>
+
+
+                    <!-- DATE FROM -->
+
+                    <input
+                        type="date"
+                        id="dateFromFilter"
+                        class="table-filter"
+                        title="From Date">
+
+
+                    <!-- DATE TO -->
+
+                    <input
+                        type="date"
+                        id="dateToFilter"
+                        class="table-filter"
+                        title="To Date">
+
+
+                    <!-- SORT -->
+
+                    <select id="sortFilter" class="table-filter">
+
+                        <option value="updated_desc">
+                            Sort: Last Updated (Newest)
+                        </option>
+
+                        <option value="updated_asc">
+                            Sort: Last Updated (Oldest)
+                        </option>
+
+                        <option value="date_desc">
+                            Sort: Published Date (Newest)
+                        </option>
+
+                        <option value="date_asc">
+                            Sort: Published Date (Oldest)
                         </option>
 
                     </select>

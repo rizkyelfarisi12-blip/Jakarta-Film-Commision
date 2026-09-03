@@ -589,6 +589,40 @@ NAVBAR DROPDOWN
 .press-card.program{
     background:#FF6A14;
 }
+.press-card.others{
+    background:#526E3E;
+}
+
+/* =========================
+META CATEGORY COLOR (Press Release Detail)
+========================= */
+
+.meta-category.industry {
+    color: #DA291C;
+}
+
+.meta-category.official-release {
+    color: #97B300;
+}
+
+.meta-category.program {
+    color: #FF6A14;
+}
+
+.meta-category.others {
+    color: #526E3E;
+}
+
+/* =========================
+PRESS RELEASE ARTICLE IMAGE CAPTION
+========================= */
+
+.press-content-image-caption {
+    margin-top: 8px;
+    font-size: 13px;
+    color: #777;
+    text-align: center;
+}
 
 .press-category{
   color:#FFC82C;

@@ -31,21 +31,49 @@ include "../includes/header.php";
          STATS
     ====================================================== -->
 
-    <section class="dashboard-stats">
+    <section class="dashboard-stats ">
 
+        <!-- TOTAL -->
         <div class="stat-card">
-            <span class="stat-label">Total Events</span>
-            <strong class="stat-value" id="statTotalEvents">0</strong>
+            <div class="stat-card-content">
+
+                <span class="stat-label">
+                    Total Events
+                </span>
+
+                <strong class="stat-value" id="statTotalEvents">
+                    0
+                </strong>
+
+            </div>
         </div>
 
         <div class="stat-card">
-            <span>Published</span>
-            <strong class="stat-value" id="statPublishedEvents">0</strong>
+            <div class="stat-card-content">
+
+                <span class="stat-label">
+                    Total Events
+                </span>
+
+                <strong class="stat-value" id="statPublishedEvents">
+                    0
+                </strong>
+
+            </div>
         </div>
 
         <div class="stat-card">
-            <span>Draft</span>
-            <strong class="stat-value" id="statDraftEvents">0</strong>
+            <div class="stat-card-content">
+
+                <span class="stat-label">
+                    Total Events
+                </span>
+
+                <strong class="stat-value" id="statDraftEvents">
+                    0
+                </strong>
+
+            </div>
         </div>
 
     </section>
@@ -86,6 +114,32 @@ include "../includes/header.php";
                     <option value="Nonton Bareng">Nonton Bareng</option>
                     <option value="Jakarta Film Lab">Jakarta Film Lab</option>
                     <option value="Others">Others</option>
+
+                </select>
+
+                <input
+                    type="date"
+                    id="dateFromFilter"
+                    class="table-filter"
+                    title="From Date"
+                    onchange="filterEvents()">
+
+                <input
+                    type="date"
+                    id="dateToFilter"
+                    class="table-filter"
+                    title="To Date"
+                    onchange="filterEvents()">
+
+                <select
+                    id="sortFilter"
+                    class="table-filter"
+                    onchange="filterEvents()">
+
+                    <option value="updated_desc">Sort: Last Updated (Newest)</option>
+                    <option value="updated_asc">Sort: Last Updated (Oldest)</option>
+                    <option value="date_desc">Sort: Event Date (Newest)</option>
+                    <option value="date_asc">Sort: Event Date (Oldest)</option>
 
                 </select>
 

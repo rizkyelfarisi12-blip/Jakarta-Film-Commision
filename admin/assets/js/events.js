@@ -96,7 +96,7 @@ async function loadEvents(){
 
         renderStats(allEvents);
 
-        renderTable(allEvents);
+        filterEvents();
 
 
     }catch(error){
@@ -187,6 +187,81 @@ function renderStats(data){
 
 
 /* =========================================================
+   SORT EVENTS
+
+   "updated" memakai updated_at kalau API menyediakannya,
+   dengan fallback ke created_at lalu id (perkiraan urutan
+   dibuat) kalau updated_at tidak ada di response API.
+========================================================= */
+
+function getEventSortTime(event){
+
+    const value =
+        event.updated_at ||
+        event.created_at ||
+        event.start_date ||
+        "";
+
+    const time =
+        new Date(value).getTime();
+
+    return Number.isNaN(time) ? 0 : time;
+
+}
+
+
+function sortEvents(list, sortValue){
+
+    switch(sortValue){
+
+        case "updated_asc":
+
+            list.sort((a, b) =>
+                getEventSortTime(a) - getEventSortTime(b)
+            );
+
+            break;
+
+
+        case "date_desc":
+
+            list.sort((a, b) =>
+                String(b.start_date || "").localeCompare(
+                    String(a.start_date || "")
+                )
+            );
+
+            break;
+
+
+        case "date_asc":
+
+            list.sort((a, b) =>
+                String(a.start_date || "").localeCompare(
+                    String(b.start_date || "")
+                )
+            );
+
+            break;
+
+
+        case "updated_desc":
+        default:
+
+            list.sort((a, b) =>
+                getEventSortTime(b) - getEventSortTime(a)
+            );
+
+            break;
+
+    }
+
+    return list;
+
+}
+
+
+/* =========================================================
    FILTER EVENTS
 ========================================================= */
 
@@ -213,6 +288,26 @@ function filterEvents(){
         categoryEl
             ? categoryEl.value
             : "";
+
+
+    const dateFromEl =
+        document.getElementById("dateFromFilter");
+
+    const dateToEl =
+        document.getElementById("dateToFilter");
+
+    const dateFrom =
+        dateFromEl ? dateFromEl.value : "";
+
+    const dateTo =
+        dateToEl ? dateToEl.value : "";
+
+
+    const sortEl =
+        document.getElementById("sortFilter");
+
+    const sortValue =
+        sortEl ? sortEl.value : "updated_desc";
 
 
     currentStatusFilter =
@@ -267,13 +362,45 @@ function filterEvents(){
                 ).toLowerCase() === category.toLowerCase();
 
 
+            /*
+            |--------------------------------------------------------------
+            | DATE RANGE
+            |--------------------------------------------------------------
+            |
+            | Berdasarkan start_date event (kolom "Date" di tabel).
+            |
+            */
+
+            const eventDate =
+                String(event.start_date || "").slice(0, 10);
+
+            const matchesDateFrom =
+                !dateFrom ||
+                (eventDate && eventDate >= dateFrom);
+
+            const matchesDateTo =
+                !dateTo ||
+                (eventDate && eventDate <= dateTo);
+
+
             return (
                 matchesKeyword &&
                 matchesStatus &&
-                matchesCategory
+                matchesCategory &&
+                matchesDateFrom &&
+                matchesDateTo
             );
 
         });
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | SORT
+    |--------------------------------------------------------------------------
+    */
+
+    sortEvents(filtered, sortValue);
 
 
     renderTable(filtered);
@@ -336,6 +463,35 @@ function getStatusBadge(status){
             `;
 
     }
+
+}
+
+
+/* =========================================================
+   CATEGORY DISPLAY
+
+   Untuk category "Others", tampilkan category_name
+   (custom category) alih-alih tulisan "Others", sama
+   seperti di halaman Press Release.
+========================================================= */
+
+function getCategoryDisplay(event){
+
+    const category =
+        String(event.category || "").trim();
+
+    const categoryName =
+        String(event.category_name || "").trim();
+
+
+    if(category.toLowerCase() === "others"){
+
+        return categoryName || "Others";
+
+    }
+
+
+    return category || "Others";
 
 }
 
@@ -563,7 +719,11 @@ function renderTable(data){
 
                 <td>
 
-                    ${event.category || "Others"}
+                    <span class="event-category-badge ${getCategoryClass(event.category)}">
+
+                        ${getCategoryDisplay(event)}
+
+                    </span>
 
                 </td>
 
