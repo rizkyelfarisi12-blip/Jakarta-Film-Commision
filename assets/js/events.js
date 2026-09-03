@@ -9,59 +9,38 @@ let currentCategory = "All";
 
 let visibleCount = 6;
 
-const eventsGrid =
-    document.getElementById(
-        "eventsGrid"
-    );
+const eventsGrid = document.getElementById("eventsGrid");
 
-const loadMoreBtn =
-    document.getElementById(
-        "loadMoreBtn"
-    );
-
+const loadMoreBtn = document.getElementById("loadMoreBtn");
 
 /* ==========================================================
    FORMAT DATE
 ========================================================== */
 
 function formatDate(dateString) {
+  if (!dateString) {
+    return "";
+  }
 
-    if (!dateString) {
-        return "";
-    }
+  const parts = String(dateString).split("-");
 
-    const parts =
-        String(dateString).split("-");
+  if (parts.length !== 3) {
+    return dateString;
+  }
 
-    if (parts.length !== 3) {
-        return dateString;
-    }
+  const year = Number(parts[0]);
 
-    const year =
-        Number(parts[0]);
+  const month = Number(parts[1]) - 1;
 
-    const month =
-        Number(parts[1]) - 1;
+  const day = Number(parts[2]);
 
-    const day =
-        Number(parts[2]);
+  const date = new Date(year, month, day);
 
-    const date =
-        new Date(
-            year,
-            month,
-            day
-        );
-
-    return date.toLocaleDateString(
-        "en-US",
-        {
-            day: "numeric",
-            month: "short",
-            year: "numeric"
-        }
-    );
-
+  return date.toLocaleDateString("en-US", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
 }
 
 /* ==========================================================
@@ -69,179 +48,105 @@ function formatDate(dateString) {
 ========================================================== */
 
 function formatEventDate(event) {
+  if (!event.start_date) {
+    return "";
+  }
 
-    if (!event.start_date) {
-        return "";
-    }
+  const start = formatDate(event.start_date);
 
-    const start =
-        formatDate(
-            event.start_date
-        );
+  if (event.end_date && event.end_date !== event.start_date) {
+    const end = formatDate(event.end_date);
+    return `${start} - ${end}`;
+  }
 
-    if (
-        event.end_date &&
-        event.end_date !== event.start_date
-    ) {
-
-        const end =
-            formatDate(
-                event.end_date
-            );
-        return `${start} - ${end}`;
-
-    }
-
-    return start;
-
+  return start;
 }
 
 /* ==========================================================
    CATEGORY CLASS
 ========================================================== */
 function getCategoryClass(category) {
+  if (!category) {
+    return "category-others";
+  }
 
-    if (!category) {
-        return "category-others";
-    }
+  const normalized = String(category)
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9-]/g, "");
 
-    const normalized =
-        String(category)
-            .toLowerCase()
-            .trim()
-            .replace(/\s+/g, "-")
-            .replace(
-                /[^a-z0-9-]/g,
-                ""
-            );
+  switch (normalized) {
+    case "nonton-di":
+      return "category-nonton-di";
 
-    switch (normalized) {
+    case "nonton-bareng":
+      return "category-nonton-bareng";
 
-        case "nonton-di":
-            return "category-nonton-di";
+    case "jakarta-film-lab":
+      return "category-jakarta-film-lab";
 
-        case "nonton-bareng":
-            return "category-nonton-bareng";
-
-        case "jakarta-film-lab":
-            return "category-jakarta-film-lab";
-
-        default:
-            return "category-others";
-
-    }
-
+    default:
+      return "category-others";
+  }
 }
-
 
 /* ==========================================================
    TEXT LIMIT
 ========================================================== */
 
-function truncateText(
-    text,
-    maxLength
-) {
+function truncateText(text, maxLength) {
+  if (!text) {
+    return "";
+  }
 
-    if (!text) {
-        return "";
-    }
+  text = String(text).replace(/\s+/g, " ").trim();
 
-    text =
-        String(text)
-            .replace(/\s+/g, " ")
-            .trim();
+  if (text.length <= maxLength) {
+    return text;
+  }
 
-    if (
-        text.length <= maxLength
-    ) {
-        return text;
-    }
-
-    return (
-        text
-            .substring(
-                0,
-                maxLength
-            )
-            .trim()
-            .replace(
-                /\s+\S*$/,
-                ""
-            )
-        + "..."
-    );
-
+  return (
+    text
+      .substring(0, maxLength)
+      .trim()
+      .replace(/\s+\S*$/, "") + "..."
+  );
 }
-
 
 /* ==========================================================
    ESCAPE HTML
 ========================================================== */
 
 function escapeHtml(value) {
+  if (value === null || value === undefined) {
+    return "";
+  }
 
-    if (
-        value === null ||
-        value === undefined
-    ) {
-
-        return "";
-
-    }
-
-    return String(value)
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
-
 
 /* ==========================================================
    GET CATEGORY DISPLAY
 ========================================================== */
 
 function getCategoryDisplay(event) {
-
-    /*
+  /*
     |--------------------------------------------------------------------------
     | API baru
     |--------------------------------------------------------------------------
     */
 
-    if (
-        event.category_display &&
-        String(
-            event.category_display
-        ).trim()
-    ) {
+  if (event.category_display && String(event.category_display).trim()) {
+    return String(event.category_display).trim();
+  }
 
-        return String(
-            event.category_display
-        ).trim();
-
-    }
-
-
-    /*
+  /*
     |--------------------------------------------------------------------------
     | FALLBACK
     |--------------------------------------------------------------------------
@@ -250,97 +155,47 @@ function getCategoryDisplay(event) {
     |--------------------------------------------------------------------------
     */
 
-    if (
-        String(event.category || "")
-            .trim() === "Others" &&
-        event.category_name
-    ) {
+  if (String(event.category || "").trim() === "Others" && event.category_name) {
+    return String(event.category_name).trim();
+  }
 
-        return String(
-            event.category_name
-        ).trim();
-
-    }
-
-
-    return (
-        event.category ||
-        "Others"
-    );
-
+  return event.category || "Others";
 }
-
 
 // Get Category FIlter
 function getCategoryFilter(event) {
+  if (event.category_filter) {
+    return String(event.category_filter).trim();
+  }
 
-    if (
-        event.category_filter
-    ) {
-
-        return String(
-            event.category_filter
-        ).trim();
-
-    }
-
-    // Fallback
-    return String(
-        event.category || "Others"
-    ).trim();
-
+  // Fallback
+  return String(event.category || "Others").trim();
 }
 
 // Load Event
 async function loadEvents() {
+  try {
+    const response = await fetch("api/events/get-events.php");
 
-    try {
-
-        const response =
-            await fetch(
-                "api/events/get-events.php"
-            );
-
-        if (!response.ok) {
-
-            throw new Error(
-                "Failed to load events"
-            );
-
-        }
-
-        const data =
-            await response.json();
-
-        console.log(
-            "EVENTS:",
-            data
-        );
-
-
-        if (
-            !Array.isArray(data)
-        ) {
-
-            throw new Error(
-                "Invalid events data"
-            );
-
-        }
-
-        allEvents = data;
-
-        renderEvents();
-
+    if (!response.ok) {
+      throw new Error("Failed to load events");
     }
-    catch (error) {
 
-        console.error(
-            "Events API:",
-            error
-        );
+    const data = await response.json();
 
-        eventsGrid.innerHTML = `
+    console.log("EVENTS:", data);
+
+    if (!Array.isArray(data)) {
+      throw new Error("Invalid events data");
+    }
+
+    allEvents = data;
+
+    renderEvents();
+  } catch (error) {
+    console.error("Events API:", error);
+
+    eventsGrid.innerHTML = `
 
             <div class="event-empty">
 
@@ -356,53 +211,33 @@ async function loadEvents() {
 
         `;
 
-        loadMoreBtn.style.display =
-            "none";
-
-    }
-
+    loadMoreBtn.style.display = "none";
+  }
 }
 
 // Render Event
 function renderEvents() {
-
-    // Filter Event
-    const filteredEvents =
-
-        currentCategory === "All"
-
-        ? allEvents
-
-        : allEvents.filter(
-            event =>
-                getCategoryFilter(
-                    event
-                ) === currentCategory
+  // Filter Event
+  const filteredEvents =
+    currentCategory === "All"
+      ? allEvents
+      : allEvents.filter(
+          (event) => getCategoryFilter(event) === currentCategory,
         );
 
-    // Visible
-    const visibleEvents =
-        filteredEvents.slice(
-            0,
-            visibleCount
-        );
+  // Visible
+  const visibleEvents = filteredEvents.slice(0, visibleCount);
 
+  eventsGrid.innerHTML = "";
 
-    eventsGrid.innerHTML =
-        "";
-
-
-    /*
+  /*
     |--------------------------------------------------------------------------
     | EMPTY
     |--------------------------------------------------------------------------
     */
 
-    if (
-        !visibleEvents.length
-    ) {
-
-        eventsGrid.innerHTML = `
+  if (!visibleEvents.length) {
+    eventsGrid.innerHTML = `
 
             <div class="event-empty">
 
@@ -418,103 +253,54 @@ function renderEvents() {
 
         `;
 
+    loadMoreBtn.style.display = "none";
 
-        loadMoreBtn.style.display =
-            "none";
+    return;
+  }
 
-        return;
-
-    }
-
-
-    /*
+  /*
     |--------------------------------------------------------------------------
     | RENDER
     |--------------------------------------------------------------------------
     */
 
-    visibleEvents.forEach(
-        event => {
+  visibleEvents.forEach((event) => {
+    const card = document.createElement("article");
 
-
-            const card =
-                document.createElement(
-                    "article"
-                );
-
-
-            /*
+    /*
             |--------------------------------------------------------------
             | CATEGORY TYPE
             |--------------------------------------------------------------
             */
 
-            const categoryFilter =
-                getCategoryFilter(
-                    event
-                );
+    const categoryFilter = getCategoryFilter(event);
 
+    const categoryDisplay = getCategoryDisplay(event);
 
-            const categoryDisplay =
-                getCategoryDisplay(
-                    event
-                );
+    const categoryClass = getCategoryClass(categoryFilter);
 
+    card.className = `event-card ${categoryClass}`;
 
-            const categoryClass =
-                getCategoryClass(
-                    categoryFilter
-                );
-
-
-            card.className =
-                `event-card ${categoryClass}`;
-
-
-            /*
+    /*
             |--------------------------------------------------------------
             | TEXT
             |--------------------------------------------------------------
             */
 
-            const title =
-                truncateText(
-                    event.title ||
-                    "Untitled Event",
-                    65
-                );
+    const title = truncateText(event.title || "Untitled Event", 65);
 
+    const location = truncateText(
+      event.location || "Location not specified",
+      35,
+    );
 
-            const location =
-                truncateText(
-                    event.location ||
-                    "Location not specified",
-                    35
-                );
+    const description = truncateText(event.description || "", 125);
 
+    const category = truncateText(categoryDisplay, 25);
 
-            const description =
-                truncateText(
-                    event.description ||
-                    "",
-                    125
-                );
+    const date = formatEventDate(event);
 
-
-            const category =
-                truncateText(
-                    categoryDisplay,
-                    25
-                );
-
-
-            const date =
-                formatEventDate(
-                    event
-                );
-
-
-            /*
+    /*
             |--------------------------------------------------------------
             | COVER IMAGE
             |--------------------------------------------------------------
@@ -525,29 +311,26 @@ function renderEvents() {
             |--------------------------------------------------------------
             */
 
-            const hasCover =
-                event.cover_image &&
-                event.cover_image !== "undefined";
+    const hasCover = event.cover_image && event.cover_image !== "undefined";
 
-
-            /*
+    /*
             |--------------------------------------------------------------
             | CARD
             |--------------------------------------------------------------
             */
-            card.innerHTML = `
+    card.innerHTML = `
 
                 <div class="event-card-image">
 
                     ${
-                        hasCover
-                            ? `<img
+                      hasCover
+                        ? `<img
                                 src="${escapeHtml(event.cover_image)}"
                                 alt="${escapeHtml(event.title || "Event")}"
                                 loading="lazy"
                                 onerror="this.closest('.event-card-image').classList.add('no-image'); this.remove();"
                             >`
-                            : ""
+                        : ""
                     }
 
                     <span class="event-card-category">
@@ -598,7 +381,7 @@ function renderEvents() {
 
                         <a
                             href="event-detail.html?slug=${encodeURIComponent(
-                                event.slug || ""
+                              event.slug || "",
                             )}"
                             class="event-card-button">
 
@@ -618,101 +401,51 @@ function renderEvents() {
 
             `;
 
+    eventsGrid.appendChild(card);
+  });
 
-            eventsGrid.appendChild(
-                card
-            );
-
-        }
-    );
-
-
-    /*
+  /*
     |--------------------------------------------------------------------------
     | LOAD MORE
     |--------------------------------------------------------------------------
     */
 
-    if (
-        visibleCount <
-        filteredEvents.length
-    ) {
-
-        loadMoreBtn.style.display =
-            "inline-flex";
-
-    }
-    else {
-
-        loadMoreBtn.style.display =
-            "none";
-
-    }
-
+  if (visibleCount < filteredEvents.length) {
+    loadMoreBtn.style.display = "inline-flex";
+  } else {
+    loadMoreBtn.style.display = "none";
+  }
 }
-
 
 /* ==========================================================
    FILTER BUTTON
 ========================================================== */
-document
-    .querySelectorAll(".filter-btn")
-    .forEach(
-        button => {
+document.querySelectorAll(".filter-btn").forEach((button) => {
+  button.addEventListener("click", function () {
+    document.querySelectorAll(".filter-btn").forEach((btn) => {
+      btn.classList.remove("active");
+    });
 
-            button.addEventListener(
-                "click",
-                function () {
+    this.classList.add("active");
 
-                    document
-                        .querySelectorAll(
-                            ".filter-btn"
-                        )
-                        .forEach(
-                            btn => {
+    currentCategory = this.dataset.category;
 
-                                btn.classList.remove(
-                                    "active"
-                                );
+    visibleCount = 6;
 
-                            }
-                        );
-
-                    this.classList.add(
-                        "active"
-                    );
-
-                    currentCategory =
-                        this.dataset.category;
-
-                    visibleCount = 6;
-
-                    renderEvents();
-
-                }
-            );
-
-        }
-    );
-
+    renderEvents();
+  });
+});
 
 /* ==========================================================
    LOAD MORE
 ========================================================== */
 
 if (loadMoreBtn) {
+  loadMoreBtn.addEventListener("click", function () {
+    visibleCount += 6;
 
-    loadMoreBtn.addEventListener(
-        "click",
-        function () {
-
-            visibleCount += 6;
-
-            renderEvents();
-
-        }
-    );
-
+    renderEvents();
+  });
 }
 
 /* ==========================================================

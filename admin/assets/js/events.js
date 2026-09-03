@@ -3,113 +3,60 @@ let allEvents = [];
 let currentStatusFilter = "";
 let currentCategoryFilter = "";
 
-
 /* =========================================================
    INIT
 ========================================================= */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        loadEvents();
-
-    }
-);
-
+document.addEventListener("DOMContentLoaded", () => {
+  loadEvents();
+});
 
 /* =========================================================
    DEBUG
 ========================================================= */
 
-console.log(
-    "API_URL =",
-    API_URL
-);
+console.log("API_URL =", API_URL);
 
-console.log(
-    "UPLOAD_URL =",
-    UPLOAD_URL
-);
-
+console.log("UPLOAD_URL =", UPLOAD_URL);
 
 /* =========================================================
    LOAD EVENTS
 ========================================================= */
-async function loadEvents(){
+async function loadEvents() {
+  try {
+    const url = API_URL + "/events/get-admin-events.php";
 
-    try{
+    console.log("ADMIN EVENTS API:", url);
 
-        const url =
-            API_URL + "/events/get-admin-events.php";
+    const res = await fetch(url);
 
-        console.log(
-            "ADMIN EVENTS API:",
-            url
-        );
+    console.log("RESPONSE STATUS:", res.status);
 
-        const res =
-            await fetch(url);
+    if (!res.ok) {
+      throw new Error("HTTP Error " + res.status);
+    }
 
-        console.log(
-            "RESPONSE STATUS:",
-            res.status
-        );
+    const result = await res.json();
 
-        if(!res.ok){
+    console.log("ADMIN EVENTS DATA:", result);
 
-            throw new Error(
-                "HTTP Error " + res.status
-            );
+    console.log("FIRST EVENT STATUS:", result.data?.[0]?.status);
 
-        }
+    if (!result.success) {
+      throw new Error(result.message || "Failed to load events");
+    }
 
-        const result =
-            await res.json();
+    allEvents = Array.isArray(result.data) ? result.data : [];
 
-        console.log(
-            "ADMIN EVENTS DATA:",
-            result
-        );
+    renderStats(allEvents);
 
-        console.log(
-            "FIRST EVENT STATUS:",
-            result.data?.[0]?.status
-        );
+    filterEvents();
+  } catch (error) {
+    console.error("LOAD EVENTS ERROR:", error);
 
+    const tbody = document.getElementById("eventTable");
 
-        if(!result.success){
-
-            throw new Error(
-                result.message ||
-                "Failed to load events"
-            );
-
-        }
-
-
-        allEvents =
-            Array.isArray(result.data)
-                ? result.data
-                : [];
-
-
-        renderStats(allEvents);
-
-        filterEvents();
-
-
-    }catch(error){
-
-        console.error(
-            "LOAD EVENTS ERROR:",
-            error
-        );
-
-        const tbody =
-            document.getElementById("eventTable");
-
-        tbody.innerHTML = `
+    tbody.innerHTML = `
 
             <tr>
 
@@ -126,12 +73,9 @@ async function loadEvents(){
 
         `;
 
-        renderStats([]);
-
-    }
-
+    renderStats([]);
+  }
 }
-
 
 /* =========================================================
    RENDER STATS
@@ -141,50 +85,37 @@ async function loadEvents(){
    Press Release.
 ========================================================= */
 
-function renderStats(data){
+function renderStats(data) {
+  const list = Array.isArray(data) ? data : [];
 
-    const list =
-        Array.isArray(data) ? data : [];
+  const total = list.length;
 
+  const published = list.filter(
+    (event) =>
+      String(event.status || "")
+        .toLowerCase()
+        .trim() === "published",
+  ).length;
 
-    const total =
-        list.length;
+  const draft = list.filter(
+    (event) =>
+      String(event.status || "draft")
+        .toLowerCase()
+        .trim() === "draft",
+  ).length;
 
+  const totalEl = document.getElementById("statTotalEvents");
 
-    const published =
-        list.filter(event =>
-            String(event.status || "")
-                .toLowerCase()
-                .trim() === "published"
-        ).length;
+  const publishedEl = document.getElementById("statPublishedEvents");
 
+  const draftEl = document.getElementById("statDraftEvents");
 
-    const draft =
-        list.filter(event =>
-            String(event.status || "draft")
-                .toLowerCase()
-                .trim() === "draft"
-        ).length;
+  if (totalEl) totalEl.textContent = total;
 
+  if (publishedEl) publishedEl.textContent = published;
 
-    const totalEl =
-        document.getElementById("statTotalEvents");
-
-    const publishedEl =
-        document.getElementById("statPublishedEvents");
-
-    const draftEl =
-        document.getElementById("statDraftEvents");
-
-
-    if(totalEl) totalEl.textContent = total;
-
-    if(publishedEl) publishedEl.textContent = published;
-
-    if(draftEl) draftEl.textContent = draft;
-
+  if (draftEl) draftEl.textContent = draft;
 }
-
 
 /* =========================================================
    SORT EVENTS
@@ -194,175 +125,97 @@ function renderStats(data){
    dibuat) kalau updated_at tidak ada di response API.
 ========================================================= */
 
-function getEventSortTime(event){
+function getEventSortTime(event) {
+  const value = event.updated_at || event.created_at || event.start_date || "";
 
-    const value =
-        event.updated_at ||
-        event.created_at ||
-        event.start_date ||
-        "";
+  const time = new Date(value).getTime();
 
-    const time =
-        new Date(value).getTime();
-
-    return Number.isNaN(time) ? 0 : time;
-
+  return Number.isNaN(time) ? 0 : time;
 }
 
+function sortEvents(list, sortValue) {
+  switch (sortValue) {
+    case "updated_asc":
+      list.sort((a, b) => getEventSortTime(a) - getEventSortTime(b));
 
-function sortEvents(list, sortValue){
+      break;
 
-    switch(sortValue){
+    case "date_desc":
+      list.sort((a, b) =>
+        String(b.start_date || "").localeCompare(String(a.start_date || "")),
+      );
 
-        case "updated_asc":
+      break;
 
-            list.sort((a, b) =>
-                getEventSortTime(a) - getEventSortTime(b)
-            );
+    case "date_asc":
+      list.sort((a, b) =>
+        String(a.start_date || "").localeCompare(String(b.start_date || "")),
+      );
 
-            break;
+      break;
 
+    case "updated_desc":
+    default:
+      list.sort((a, b) => getEventSortTime(b) - getEventSortTime(a));
 
-        case "date_desc":
+      break;
+  }
 
-            list.sort((a, b) =>
-                String(b.start_date || "").localeCompare(
-                    String(a.start_date || "")
-                )
-            );
-
-            break;
-
-
-        case "date_asc":
-
-            list.sort((a, b) =>
-                String(a.start_date || "").localeCompare(
-                    String(b.start_date || "")
-                )
-            );
-
-            break;
-
-
-        case "updated_desc":
-        default:
-
-            list.sort((a, b) =>
-                getEventSortTime(b) - getEventSortTime(a)
-            );
-
-            break;
-
-    }
-
-    return list;
-
+  return list;
 }
-
 
 /* =========================================================
    FILTER EVENTS
 ========================================================= */
 
-function filterEvents(){
+function filterEvents() {
+  const keyword = document
+    .getElementById("searchEvent")
+    .value.toLowerCase()
+    .trim();
 
-    const keyword =
-        document
-            .getElementById("searchEvent")
-            .value
-            .toLowerCase()
-            .trim();
+  const status = document.getElementById("statusFilter").value;
 
+  const categoryEl = document.getElementById("categoryFilter");
 
-    const status =
-        document
-            .getElementById("statusFilter")
-            .value;
+  const category = categoryEl ? categoryEl.value : "";
 
+  const dateFromEl = document.getElementById("dateFromFilter");
 
-    const categoryEl =
-        document.getElementById("categoryFilter");
+  const dateToEl = document.getElementById("dateToFilter");
 
-    const category =
-        categoryEl
-            ? categoryEl.value
-            : "";
+  const dateFrom = dateFromEl ? dateFromEl.value : "";
 
+  const dateTo = dateToEl ? dateToEl.value : "";
 
-    const dateFromEl =
-        document.getElementById("dateFromFilter");
+  const sortEl = document.getElementById("sortFilter");
 
-    const dateToEl =
-        document.getElementById("dateToFilter");
+  const sortValue = sortEl ? sortEl.value : "updated_desc";
 
-    const dateFrom =
-        dateFromEl ? dateFromEl.value : "";
+  currentStatusFilter = status;
 
-    const dateTo =
-        dateToEl ? dateToEl.value : "";
+  currentCategoryFilter = category;
 
+  const filtered = allEvents.filter((event) => {
+    const title = String(event.title || "").toLowerCase();
 
-    const sortEl =
-        document.getElementById("sortFilter");
+    const eventCategory = String(event.category || "").toLowerCase();
 
-    const sortValue =
-        sortEl ? sortEl.value : "updated_desc";
+    const location = String(event.location || "").toLowerCase();
 
+    const matchesKeyword =
+      title.includes(keyword) ||
+      eventCategory.includes(keyword) ||
+      location.includes(keyword);
 
-    currentStatusFilter =
-        status;
+    const matchesStatus =
+      !status || String(event.status || "").toLowerCase() === status;
 
-    currentCategoryFilter =
-        category;
+    const matchesCategory =
+      !category ||
+      String(event.category || "").toLowerCase() === category.toLowerCase();
 
-
-    const filtered =
-        allEvents.filter(event => {
-
-
-            const title =
-                String(
-                    event.title || ""
-                )
-                .toLowerCase();
-
-
-            const eventCategory =
-                String(
-                    event.category || ""
-                )
-                .toLowerCase();
-
-
-            const location =
-                String(
-                    event.location || ""
-                )
-                .toLowerCase();
-
-
-            const matchesKeyword =
-                title.includes(keyword) ||
-                eventCategory.includes(keyword) ||
-                location.includes(keyword);
-
-
-            const matchesStatus =
-                !status ||
-                String(
-                    event.status || ""
-                ).toLowerCase() === status;
-
-
-            const matchesCategory =
-                !category ||
-                String(
-                    event.category || ""
-                ).toLowerCase() === category.toLowerCase();
-
-
-            /*
+    /*
             |--------------------------------------------------------------
             | DATE RANGE
             |--------------------------------------------------------------
@@ -371,101 +224,72 @@ function filterEvents(){
             |
             */
 
-            const eventDate =
-                String(event.start_date || "").slice(0, 10);
+    const eventDate = String(event.start_date || "").slice(0, 10);
 
-            const matchesDateFrom =
-                !dateFrom ||
-                (eventDate && eventDate >= dateFrom);
+    const matchesDateFrom = !dateFrom || (eventDate && eventDate >= dateFrom);
 
-            const matchesDateTo =
-                !dateTo ||
-                (eventDate && eventDate <= dateTo);
+    const matchesDateTo = !dateTo || (eventDate && eventDate <= dateTo);
 
+    return (
+      matchesKeyword &&
+      matchesStatus &&
+      matchesCategory &&
+      matchesDateFrom &&
+      matchesDateTo
+    );
+  });
 
-            return (
-                matchesKeyword &&
-                matchesStatus &&
-                matchesCategory &&
-                matchesDateFrom &&
-                matchesDateTo
-            );
-
-        });
-
-
-    /*
+  /*
     |--------------------------------------------------------------------------
     | SORT
     |--------------------------------------------------------------------------
     */
 
-    sortEvents(filtered, sortValue);
+  sortEvents(filtered, sortValue);
 
-
-    renderTable(filtered);
-
+  renderTable(filtered);
 }
-
 
 /* =========================================================
    SEARCH
 ========================================================= */
 
-function searchEvent(){
-
-    filterEvents();
-
+function searchEvent() {
+  filterEvents();
 }
-
 
 /* =========================================================
    STATUS BADGE
 ========================================================= */
 
-function getStatusBadge(status){
+function getStatusBadge(status) {
+  const normalized = String(status || "draft").toLowerCase();
 
-    const normalized =
-        String(
-            status || "draft"
-        )
-        .toLowerCase();
-
-
-    switch(normalized){
-
-        case "published":
-
-            return `
+  switch (normalized) {
+    case "published":
+      return `
                 <span class="event-status-badge published">
                     Published
                 </span>
             `;
 
-
-        case "archived":
-
-            return `
+    case "archived":
+      return `
                 <span class="event-status-badge archived">
                     Archived
                 </span>
             `;
 
+    case "draft":
 
-        case "draft":
-
-        default:
-
-            return `
+    default:
+      return `
                 <span class="event-status-badge draft">
                     Draft
                 </span>
             `;
-
-    }
-
+  }
 }
-
 
 /* =========================================================
    CATEGORY DISPLAY
@@ -475,89 +299,54 @@ function getStatusBadge(status){
    seperti di halaman Press Release.
 ========================================================= */
 
-function getCategoryDisplay(event){
+function getCategoryDisplay(event) {
+  const category = String(event.category || "").trim();
 
-    const category =
-        String(event.category || "").trim();
+  const categoryName = String(event.category_name || "").trim();
 
-    const categoryName =
-        String(event.category_name || "").trim();
+  if (category.toLowerCase() === "others") {
+    return categoryName || "Others";
+  }
 
-
-    if(category.toLowerCase() === "others"){
-
-        return categoryName || "Others";
-
-    }
-
-
-    return category || "Others";
-
+  return category || "Others";
 }
-
 
 /* =========================================================
    CATEGORY
 ========================================================= */
 
-function getCategoryClass(category){
+function getCategoryClass(category) {
+  const normalized = String(category || "Others")
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9-]/g, "");
 
-    const normalized =
-        String(
-            category || "Others"
-        )
-        .toLowerCase()
-        .trim()
-        .replace(
-            /\s+/g,
-            "-"
-        )
-        .replace(
-            /[^a-z0-9-]/g,
-            ""
-        );
+  switch (normalized) {
+    case "nonton-di":
+      return "category-nonton-di";
 
+    case "nonton-bareng":
+      return "category-nonton-bareng";
 
-    switch(normalized){
+    case "jakarta-film-lab":
+      return "category-jakarta-film-lab";
 
-        case "nonton-di":
-
-            return "category-nonton-di";
-
-
-        case "nonton-bareng":
-
-            return "category-nonton-bareng";
-
-
-        case "jakarta-film-lab":
-
-            return "category-jakarta-film-lab";
-
-
-        default:
-
-            return "category-others";
-
-    }
-
+    default:
+      return "category-others";
+  }
 }
-
 
 /* =========================================================
    RENDER TABLE
 ========================================================= */
-function renderTable(data){
+function renderTable(data) {
+  const tbody = document.getElementById("eventTable");
 
-    const tbody =
-        document.getElementById("eventTable");
+  tbody.innerHTML = "";
 
-    tbody.innerHTML = "";
-
-
-    if(!Array.isArray(data) || data.length === 0){
-
-        tbody.innerHTML = `
+  if (!Array.isArray(data) || data.length === 0) {
+    tbody.innerHTML = `
 
             <tr>
 
@@ -577,42 +366,31 @@ function renderTable(data){
 
         `;
 
-        return;
+    return;
+  }
 
-    }
-
-
-    data.forEach(event => {
-
-
-        /*
+  data.forEach((event) => {
+    /*
         |--------------------------------------------------------------------------
         | IMAGE
         |--------------------------------------------------------------------------
         */
 
-        let image = "";
+    let image = "";
 
-        if(event.cover_image){
+    if (event.cover_image) {
+      image = event.cover_image.replace("uploads/", "");
+    }
 
-            image =
-                event.cover_image
-                    .replace("uploads/", "");
-
-        }
-
-
-        const imageHTML = image
-
-            ? `
+    const imageHTML = image
+      ? `
                 <img
                     src="${UPLOAD_URL}/${image}"
                     class="table-thumb"
                     alt="${event.title || "Event"}"
                 >
             `
-
-            : `
+      : `
                 <div
                     class="table-thumb"
                     style="
@@ -626,78 +404,55 @@ function renderTable(data){
                 </div>
             `;
 
-
-        /* =========================================================
+    /* =========================================================
         STATUS
         ========================================================= */
 
-        const status =
-            String(
-                event.status || "draft"
-            )
-            .toLowerCase()
-            .trim();
+    const status = String(event.status || "draft")
+      .toLowerCase()
+      .trim();
 
+    let statusClass = "status-draft";
 
-        let statusClass = "status-draft";
+    let statusLabel = "Draft";
 
-        let statusLabel = "Draft";
+    switch (status) {
+      case "published":
+        statusClass = "status-published";
 
+        statusLabel = "Published";
 
-        switch(status){
+        break;
 
-            case "published":
+      case "draft":
+        statusClass = "status-draft";
 
-                statusClass =
-                    "status-published";
+        statusLabel = "Draft";
 
-                statusLabel =
-                    "Published";
+        break;
 
-                break;
+      case "archived":
+        statusClass = "status-archived";
 
+        statusLabel = "Archived";
 
-            case "draft":
+        break;
 
-                statusClass =
-                    "status-draft";
+      default:
+        statusClass = "status-draft";
 
-                statusLabel =
-                    "Draft";
+        statusLabel = "Draft";
 
-                break;
+        break;
+    }
 
-
-            case "archived":
-
-                statusClass =
-                    "status-archived";
-
-                statusLabel =
-                    "Archived";
-
-                break;
-
-
-            default:
-
-                statusClass =
-                    "status-draft";
-
-                statusLabel =
-                    "Draft";
-
-                break;
-
-        }      
-
-        /*
+    /*
         |--------------------------------------------------------------------------
         | ROW
         |--------------------------------------------------------------------------
         */
 
-        tbody.innerHTML += `
+    tbody.innerHTML += `
 
             <tr>
 
@@ -783,84 +538,43 @@ function renderTable(data){
             </tr>
 
         `;
-
-    });
-
+  });
 }
-
 
 /* =========================================================
    DELETE EVENT
 ========================================================= */
 
-async function deleteEvent(id){
+async function deleteEvent(id) {
+  if (!confirm("Delete Event?")) {
+    return;
+  }
 
-    if(
-        !confirm(
-            "Delete Event?"
-        )
-    ){
+  try {
+    const response = await fetch(API_URL + "/events/delete-event.php", {
+      method: "POST",
 
-        return;
+      headers: {
+        "Content-Type": "application/json",
+      },
 
+      body: JSON.stringify({
+        id: id,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (!result.success) {
+      alert(result.message || "Failed to delete event.");
+
+      return;
     }
 
+    await loadEvents();
+  } catch (error) {
+    console.error("DELETE EVENT ERROR:", error);
 
-    try{
-
-        const response =
-            await fetch(
-                API_URL +
-                "/events/delete-event.php",
-                {
-
-                    method:"POST",
-
-                    headers:{
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body:
-                        JSON.stringify({
-                            id:id
-                        })
-
-                }
-            );
-
-
-        const result =
-            await response.json();
-
-
-        if(!result.success){
-
-            alert(
-                result.message ||
-                "Failed to delete event."
-            );
-
-            return;
-
-        }
-
-
-        await loadEvents();
-
-
-    }catch(error){
-
-        console.error(
-            "DELETE EVENT ERROR:",
-            error
-        );
-
-
-        alert(
-            "Failed to delete event."
-        );
-
-    }
-
+    alert("Failed to delete event.");
+  }
 }

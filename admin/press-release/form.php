@@ -12,28 +12,21 @@ include "../includes/header.php";
 
     <?php include "../includes/sidebar.php"; ?>
 
-
     <main class="main-content">
 
         <div class="admin-form-page">
 
-
             <!-- =====================================================
                  PAGE HEADER
             ====================================================== -->
-
             <header class="page-header">
 
                 <div>
 
-                    <a
-                        href="index.php"
-                        class="back-link"
-                    >
+                    <a href="index.php" class="back-link">
                         <i class="ri-arrow-left-line"></i>
                         Back to Press Releases
                     </a>
-
 
                     <h1 id="pageTitle">
                         New Press Release
@@ -44,24 +37,13 @@ include "../includes/header.php";
 
                 <div class="page-actions">
 
-                    <a
-                        href="index.php"
-                        class="btn btn-secondary"
-                    >
+                    <a href="index.php" class="btn btn-secondary">
                         Cancel
                     </a>
 
-
-                    <button
-                        type="button"
-                        class="btn btn-primary"
-                        id="savePressReleaseBtn"
-                    >
-
+                    <button type="button" class="btn btn-primary" id="savePressReleaseBtn">
                         <i class="ri-save-line"></i>
-
                         Save Press Release
-
                     </button>
 
                 </div>
@@ -72,60 +54,35 @@ include "../includes/header.php";
             <!-- =====================================================
                  FORM
             ====================================================== -->
-
-            <form
-                id="pressReleaseForm"
-                enctype="multipart/form-data"
-            >
+            <form id="pressReleaseForm" enctype="multipart/form-data">
 
                 <!-- PRESS RELEASE ID -->
-
-                <input
-                    type="hidden"
-                    id="pressReleaseId"
-                    name="id"
-                    value=""
-                >
-
+                <input type="hidden" id="pressReleaseId" name="id" value="">
 
                 <!-- EXISTING COVER IMAGE -->
-
-                <input
-                    type="hidden"
-                    id="existingCoverImage"
-                    name="existing_cover_image"
-                    value=""
-                >
-
+                <input type="hidden" id="existingCoverImage" name="existing_cover_image" value="">
 
                 <div class="form-layout">
-
 
                     <!-- =================================================
                          MAIN CONTENT
                     ================================================== -->
-
                     <div class="form-main">
-
 
                         <!-- =============================================
                              BASIC INFORMATION
                         ============================================== -->
-
                         <section class="admin-card">
 
                             <h2>
                                 Press Release Information
                             </h2>
 
-
                             <div class="form-grid">
-
 
                                 <!-- =====================================
                                      TITLE
                                 ====================================== -->
-
                                 <div class="form-group">
 
                                     <label for="title">
@@ -138,16 +95,13 @@ include "../includes/header.php";
                                         name="title"
                                         placeholder="Enter press release title"
                                         autocomplete="off"
-                                        required
-                                    >
+                                        required>
 
                                 </div>
-
 
                                 <!-- =====================================
                                      SLUG
                                 ====================================== -->
-
                                 <div class="form-group">
 
                                     <label for="slug">
@@ -159,8 +113,7 @@ include "../includes/header.php";
                                         id="slug"
                                         name="slug"
                                         placeholder="press-release-slug"
-                                        readonly
-                                    >
+                                        readonly>
 
                                     <small>
                                         Automatically generated from the title.
@@ -168,11 +121,9 @@ include "../includes/header.php";
 
                                 </div>
 
-
                                 <!-- =====================================
                                      CATEGORY
                                 ====================================== -->
-
                                 <div class="form-group">
 
                                     <label for="category">
@@ -182,8 +133,7 @@ include "../includes/header.php";
                                     <select
                                         id="category"
                                         name="category"
-                                        required
-                                    >
+                                        required>
 
                                         <option value="">
                                             Select Category
@@ -217,8 +167,7 @@ include "../includes/header.php";
                                 <div
                                     class="form-group"
                                     id="categoryNameGroup"
-                                    style="display:none;"
-                                >
+                                    style="display:none;">
 
                                     <label for="category_name">
                                         Category Name
@@ -228,8 +177,7 @@ include "../includes/header.php";
                                         type="text"
                                         id="category_name"
                                         name="category_name"
-                                        placeholder="Enter custom category name"
-                                    >
+                                        placeholder="Enter custom category name">
 
                                     <small>
                                         Enter the category label that will be displayed to users.
@@ -241,19 +189,13 @@ include "../includes/header.php";
                                 <!-- =====================================
                                      DATE
                                 ====================================== -->
-
                                 <div class="form-group">
 
                                     <label for="date">
                                         Date
                                     </label>
 
-                                    <input
-                                        type="date"
-                                        id="date"
-                                        name="date"
-                                        required
-                                    >
+                                    <input type="date" id="date" name="date" required>
 
                                     <small>
                                         The publication date of this press release.
@@ -277,8 +219,7 @@ include "../includes/header.php";
                                         id="location"
                                         name="location"
                                         placeholder="Enter location"
-                                        maxlength="255"
-                                    >
+                                        maxlength="255">
 
                                     <small>
                                         Example: Jakarta, Indonesia
@@ -286,11 +227,9 @@ include "../includes/header.php";
 
                                 </div>
 
-
                                 <!-- =====================================
                                      DESCRIPTION
                                 ====================================== -->
-
                                 <div class="form-group">
 
                                     <label for="description">

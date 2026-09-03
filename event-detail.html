@@ -112,9 +112,7 @@
             ========================= -->
             <div class="event-detail-meta">
 
-                <span
-                    class="event-meta-category"
-                    id="eventMetaCategory">
+                <span class="event-meta-category" id="eventMetaCategory">
                 </span>
 
                 <span class="event-meta-dot"></span>
@@ -133,11 +131,7 @@
 
                     <!-- FEATURED IMAGE -->
                     <div class="event-detail-featured-image">
-                        <img
-                            id="eventFeaturedImage"
-                            src=""
-                            alt=""
-                        >
+                        <img id="eventFeaturedImage" src="" alt="">
                     </div>
 
 
@@ -633,8 +627,8 @@
                     currentEvent.category_display ||
                     (
                         category === "Others"
-                        ? currentEvent.category_name
-                        : category
+                            ? currentEvent.category_name
+                            : category
                     ) ||
                     "Others";
 
@@ -783,325 +777,325 @@
 
                 }
 
-            sidebarDate.textContent =
-                dateText;
+                sidebarDate.textContent =
+                    dateText;
 
-            /* ============================================
-            TIME
-            ============================================ */
-            const timeText =
-                formatEventTime(
-                    currentEvent.start_time,
-                    currentEvent.end_time
-                );
+                /* ============================================
+                TIME
+                ============================================ */
+                const timeText =
+                    formatEventTime(
+                        currentEvent.start_time,
+                        currentEvent.end_time
+                    );
 
-            eventTime.textContent =
-                timeText;
+                eventTime.textContent =
+                    timeText;
 
-            /* ============================================
-                LOCATION
-            ============================================ */
-            const location =
-                currentEvent.location ||
-                "Location TBA";
+                /* ============================================
+                    LOCATION
+                ============================================ */
+                const location =
+                    currentEvent.location ||
+                    "Location TBA";
 
-            const address =
-                currentEvent.address ||
-                "";
+                const address =
+                    currentEvent.address ||
+                    "";
 
-            eventLocation.innerHTML = `
+                eventLocation.innerHTML = `
                 <span class="location-icon"><img src="assets/icon/pin.png" alt="Location"></span>
                 ${escapeHtml(location)}
             `;
 
-            sidebarLocation.textContent =
-                location;
+                sidebarLocation.textContent =
+                    location;
 
-            sidebarAddress.textContent =
-                address ||
-                "Address TBA";
+                sidebarAddress.textContent =
+                    address ||
+                    "Address TBA";
 
-            /* ============================================
-                COVER IMAGE
-            ============================================ */
+                /* ============================================
+                    COVER IMAGE
+                ============================================ */
 
-            eventCover.onerror = function () {
-                this.closest(".event-detail-bg")?.classList.add("event-cover-broken");
-                this.style.display = "none";
-            };
+                eventCover.onerror = function () {
+                    this.closest(".event-detail-bg")?.classList.add("event-cover-broken");
+                    this.style.display = "none";
+                };
 
-            if (
-                currentEvent.cover_image &&
-                currentEvent.cover_image !== "undefined"
-            ) {
+                if (
+                    currentEvent.cover_image &&
+                    currentEvent.cover_image !== "undefined"
+                ) {
 
-                eventCover.src =
-                    currentEvent.cover_image;
-
-
-                /* FEATURED IMAGE */
-
-                if (eventFeaturedImage) {
-
-                    eventFeaturedImage.src =
+                    eventCover.src =
                         currentEvent.cover_image;
 
-                    eventFeaturedImage.alt =
-                        title;
 
-                }
+                    /* FEATURED IMAGE */
 
+                    if (eventFeaturedImage) {
 
-                /* OG IMAGE */
+                        eventFeaturedImage.src =
+                            currentEvent.cover_image;
 
-                const imageUrl =
-                    new URL(
-                        currentEvent.cover_image,
-                        window.location.href
-                    ).href;
-
-                if (ogImage) {
-
-                    ogImage.content =
-                        imageUrl;
-
-                }
-
-            }
-
-            if (ogTitle) {
-
-                ogTitle.content =
-                    pageTitle;
-
-            }
-
-            if (ogDescription) {
-
-                ogDescription.content =
-                    description;
-
-            }
-
-            /* ============================================
-            EVENT STRUCTURED DATA
-            ============================================ */
-            generateEventSchema(
-                currentEvent,
-                canonical
-            );
-
-            eventCover.alt =
-                currentEvent.title ||
-                "Event";
-
-            /* ============================================
-                MAP
-            ============================================ */
-            if (
-                currentEvent.map_url
-            ) {
-
-                mapsLink.href =
-                    currentEvent.map_url;
-
-                mapsLink.style.display =
-                    "inline-flex";
-
-            } else {
-
-                mapsLink.style.display =
-                    "none";
-
-            }
-
-            /* ============================================
-                CONTENT
-            ============================================ */
-            eventContent.innerHTML =
-                "";
-
-            let content = [];
-
-            if (
-                currentEvent.content
-            ) {
-                try {
-
-                    content =
-                        JSON.parse(
-                            currentEvent.content
-                        );
-
-                } catch (error) {
-
-                    console.error(
-                        "CONTENT JSON ERROR:",
-                        error
-                    );
-
-                    content = [
-                        currentEvent.content
-                    ];
-
-                }
-            }
-
-            if (
-                Array.isArray(content) &&
-                content.length
-            ) {
-            content.forEach(block => {
-
-                /* =========================================
-                PARAGRAPH
-                ========================================= */
-                if (
-                    block &&
-                    block.type === "paragraph"
-                ) {
-
-                    const p =
-                        document.createElement("p");
-
-                    /*
-                    | block.text berisi HTML (hasil rich-text
-                    | editor di admin), jadi harus dirender
-                    | dengan innerHTML setelah disanitasi -
-                    | bukan textContent (yang akan menampilkan
-                    | tag HTML sebagai teks mentah).
-                    */
-                    p.innerHTML =
-                        sanitizeRichText(block.text || "");
-
-                    eventContent.appendChild(p);
-
-                }
-
-                /* =========================================
-                IMAGE
-                ========================================= */
-                if (
-                    block &&
-                    block.type === "image"
-                ) {
-
-                    const figure =
-                        document.createElement("figure");
-
-                    figure.className =
-                        "event-article-image";
-
-                    const img =
-                        document.createElement("img");
-
-                    img.src =
-                        block.src;
-
-                    img.alt =
-                        block.alt ||
-                        "";
-
-                    img.loading =
-                        "lazy";
-
-                    img.onerror =
-                        function () {
-                            this.closest("figure")?.classList.add("event-article-image-broken");
-                            this.style.display = "none";
-                        };
-
-                    figure.appendChild(img);
-
-                    /* =====================================
-                    CAPTION
-                    ===================================== */
-                    if (block.caption) {
-
-                        const caption =
-                            document.createElement(
-                                "figcaption"
-                            );
-
-                        caption.textContent =
-                            block.caption;
-
-                        figure.appendChild(
-                            caption
-                        );
+                        eventFeaturedImage.alt =
+                            title;
 
                     }
 
-                    eventContent.appendChild(
-                        figure
-                    );
+
+                    /* OG IMAGE */
+
+                    const imageUrl =
+                        new URL(
+                            currentEvent.cover_image,
+                            window.location.href
+                        ).href;
+
+                    if (ogImage) {
+
+                        ogImage.content =
+                            imageUrl;
+
+                    }
 
                 }
 
-            });
+                if (ogTitle) {
 
-            } else {
+                    ogTitle.content =
+                        pageTitle;
 
-                eventContent.innerHTML = `
+                }
+
+                if (ogDescription) {
+
+                    ogDescription.content =
+                        description;
+
+                }
+
+                /* ============================================
+                EVENT STRUCTURED DATA
+                ============================================ */
+                generateEventSchema(
+                    currentEvent,
+                    canonical
+                );
+
+                eventCover.alt =
+                    currentEvent.title ||
+                    "Event";
+
+                /* ============================================
+                    MAP
+                ============================================ */
+                if (
+                    currentEvent.map_url
+                ) {
+
+                    mapsLink.href =
+                        currentEvent.map_url;
+
+                    mapsLink.style.display =
+                        "inline-flex";
+
+                } else {
+
+                    mapsLink.style.display =
+                        "none";
+
+                }
+
+                /* ============================================
+                    CONTENT
+                ============================================ */
+                eventContent.innerHTML =
+                    "";
+
+                let content = [];
+
+                if (
+                    currentEvent.content
+                ) {
+                    try {
+
+                        content =
+                            JSON.parse(
+                                currentEvent.content
+                            );
+
+                    } catch (error) {
+
+                        console.error(
+                            "CONTENT JSON ERROR:",
+                            error
+                        );
+
+                        content = [
+                            currentEvent.content
+                        ];
+
+                    }
+                }
+
+                if (
+                    Array.isArray(content) &&
+                    content.length
+                ) {
+                    content.forEach(block => {
+
+                        /* =========================================
+                        PARAGRAPH
+                        ========================================= */
+                        if (
+                            block &&
+                            block.type === "paragraph"
+                        ) {
+
+                            const p =
+                                document.createElement("p");
+
+                            /*
+                            | block.text berisi HTML (hasil rich-text
+                            | editor di admin), jadi harus dirender
+                            | dengan innerHTML setelah disanitasi -
+                            | bukan textContent (yang akan menampilkan
+                            | tag HTML sebagai teks mentah).
+                            */
+                            p.innerHTML =
+                                sanitizeRichText(block.text || "");
+
+                            eventContent.appendChild(p);
+
+                        }
+
+                        /* =========================================
+                        IMAGE
+                        ========================================= */
+                        if (
+                            block &&
+                            block.type === "image"
+                        ) {
+
+                            const figure =
+                                document.createElement("figure");
+
+                            figure.className =
+                                "event-article-image";
+
+                            const img =
+                                document.createElement("img");
+
+                            img.src =
+                                block.src;
+
+                            img.alt =
+                                block.alt ||
+                                "";
+
+                            img.loading =
+                                "lazy";
+
+                            img.onerror =
+                                function () {
+                                    this.closest("figure")?.classList.add("event-article-image-broken");
+                                    this.style.display = "none";
+                                };
+
+                            figure.appendChild(img);
+
+                            /* =====================================
+                            CAPTION
+                            ===================================== */
+                            if (block.caption) {
+
+                                const caption =
+                                    document.createElement(
+                                        "figcaption"
+                                    );
+
+                                caption.textContent =
+                                    block.caption;
+
+                                figure.appendChild(
+                                    caption
+                                );
+
+                            }
+
+                            eventContent.appendChild(
+                                figure
+                            );
+
+                        }
+
+                    });
+
+                } else {
+
+                    eventContent.innerHTML = `
                     <p>
                         No event description available.
                     </p>
                 `;
 
-            }
+                }
 
-            /* ============================================
-                SCHEDULE
-            ============================================ */
-            scheduleList.innerHTML = "";
+                /* ============================================
+                    SCHEDULE
+                ============================================ */
+                scheduleList.innerHTML = "";
 
-            let schedules = [];
+                let schedules = [];
 
-            /* ============================================
-                PARSE SCHEDULE
-            ============================================ */
-            if (currentEvent.schedule) {
+                /* ============================================
+                    PARSE SCHEDULE
+                ============================================ */
+                if (currentEvent.schedule) {
 
-                try {
+                    try {
 
-                    schedules =
-                        JSON.parse(
-                            currentEvent.schedule
+                        schedules =
+                            JSON.parse(
+                                currentEvent.schedule
+                            );
+
+                    } catch (error) {
+
+                        console.error(
+                            "SCHEDULE JSON ERROR:",
+                            error
                         );
 
-                } catch (error) {
+                        schedules = [];
 
-                    console.error(
-                        "SCHEDULE JSON ERROR:",
-                        error
-                    );
-
-                    schedules = [];
+                    }
 
                 }
 
-            }
+                /* ============================================
+                    HAS SCHEDULE
+                ============================================ */
+                if (
+                    Array.isArray(schedules) &&
+                    schedules.length > 0
+                ) {
 
-            /* ============================================
-                HAS SCHEDULE
-            ============================================ */
-            if (
-                Array.isArray(schedules) &&
-                schedules.length > 0
-            ) {
+                    schedules.forEach(
+                        item => {
 
-                schedules.forEach(
-                    item => {
+                            const scheduleItem =
+                                document.createElement(
+                                    "div"
+                                );
 
-                        const scheduleItem =
-                            document.createElement(
-                                "div"
-                            );
+                            scheduleItem.className =
+                                "schedule-item";
 
-                        scheduleItem.className =
-                            "schedule-item";
-
-                        scheduleItem.innerHTML = `
+                            scheduleItem.innerHTML = `
 
                             <div class="schedule-time">
                                 ${escapeHtml(item.time || "TBA")}
@@ -1121,19 +1115,19 @@
 
                         `;
 
-                        scheduleList.appendChild(
-                            scheduleItem
-                        );
+                            scheduleList.appendChild(
+                                scheduleItem
+                            );
 
-                    }
-                );
+                        }
+                    );
 
-                /*
-                |------------------------------------------
-                | SHOW SCHEDULE
-                |------------------------------------------
-                */
-                scheduleSection.style.display = "";
+                    /*
+                    |------------------------------------------
+                    | SHOW SCHEDULE
+                    |------------------------------------------
+                    */
+                    scheduleSection.style.display = "";
 
                 } else {
 
@@ -1404,7 +1398,7 @@
             };
 
             //  START DATE
-           
+
             const start =
                 new Date(
                     startDate + "T00:00:00"

@@ -3,33 +3,35 @@
    Expandable Service Panels
    ============================================ */
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener("DOMContentLoaded", function () {
   // Get all service panels
-  const panels = document.querySelectorAll('.service-panel');
+  const panels = document.querySelectorAll(".service-panel");
 
   if (panels.length === 0) {
-    console.warn('No service panels found. Make sure .service-panel elements exist in HTML.');
+    console.warn(
+      "No service panels found. Make sure .service-panel elements exist in HTML.",
+    );
     return;
   }
 
   // Add click event to each panel
   panels.forEach((panel, index) => {
-    panel.addEventListener('click', function(e) {
+    panel.addEventListener("click", function (e) {
       e.stopPropagation();
-      
+
       // Remove active class from all panels
-      panels.forEach(p => p.classList.remove('active'));
-      
+      panels.forEach((p) => p.classList.remove("active"));
+
       // Add active class to clicked panel
-      this.classList.add('active');
-      
-      console.log('Panel ' + (index + 1) + ' activated');
+      this.classList.add("active");
+
+      console.log("Panel " + (index + 1) + " activated");
     });
 
     // Add keyboard support
-    panel.setAttribute('tabindex', '0');
-    panel.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
+    panel.setAttribute("tabindex", "0");
+    panel.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         panel.click();
       }
@@ -38,8 +40,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Set first panel as active on load
   if (panels.length > 0) {
-    panels[0].classList.add('active');
-    console.log('First panel set as active');
+    panels[0].classList.add("active");
+    console.log("First panel set as active");
   }
 
   // ============================================
@@ -47,21 +49,29 @@ document.addEventListener('DOMContentLoaded', function() {
   // ============================================
   let touchStartX = 0;
   let touchEndX = 0;
-  const servicesExpand = document.querySelector('.services-expand');
+  const servicesExpand = document.querySelector(".services-expand");
 
   if (servicesExpand) {
-    servicesExpand.addEventListener('touchstart', (e) => {
-      touchStartX = e.changedTouches[0].screenX;
-    }, false);
+    servicesExpand.addEventListener(
+      "touchstart",
+      (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      },
+      false,
+    );
 
-    servicesExpand.addEventListener('touchend', (e) => {
-      touchEndX = e.changedTouches[0].screenX;
-      handleSwipe();
-    }, false);
+    servicesExpand.addEventListener(
+      "touchend",
+      (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+      },
+      false,
+    );
   }
 
   function handleSwipe() {
-    const activePanel = document.querySelector('.service-panel.active');
+    const activePanel = document.querySelector(".service-panel.active");
     const activeIndex = Array.from(panels).indexOf(activePanel);
 
     if (touchEndX < touchStartX - 50) {
@@ -78,18 +88,18 @@ document.addEventListener('DOMContentLoaded', function() {
   // ============================================
   // KEYBOARD NAVIGATION (Arrow Keys)
   // ============================================
-  document.addEventListener('keydown', (e) => {
-    const activePanel = document.querySelector('.service-panel.active');
-    
+  document.addEventListener("keydown", (e) => {
+    const activePanel = document.querySelector(".service-panel.active");
+
     if (!activePanel) return;
-    
+
     const activeIndex = Array.from(panels).indexOf(activePanel);
 
-    if (e.key === 'ArrowRight') {
+    if (e.key === "ArrowRight") {
       e.preventDefault();
       const nextIndex = (activeIndex + 1) % panels.length;
       panels[nextIndex].click();
-    } else if (e.key === 'ArrowLeft') {
+    } else if (e.key === "ArrowLeft") {
       e.preventDefault();
       const prevIndex = (activeIndex - 1 + panels.length) % panels.length;
       panels[prevIndex].click();
@@ -99,8 +109,8 @@ document.addEventListener('DOMContentLoaded', function() {
   // ============================================
   // PREVENT CONTENT CLICK FROM CLOSING PANEL
   // ============================================
-  document.querySelectorAll('.service-content').forEach(content => {
-    content.addEventListener('click', (e) => {
+  document.querySelectorAll(".service-content").forEach((content) => {
+    content.addEventListener("click", (e) => {
       e.stopPropagation();
     });
   });
@@ -108,13 +118,13 @@ document.addEventListener('DOMContentLoaded', function() {
   // ============================================
   // PREVENT LINK CLICK FROM CLOSING PANEL
   // ============================================
-  document.querySelectorAll('.service-content a').forEach(link => {
-    link.addEventListener('click', (e) => {
+  document.querySelectorAll(".service-content a").forEach((link) => {
+    link.addEventListener("click", (e) => {
       e.stopPropagation();
       // You can add navigation logic here if needed
       // e.g., window.location.href = link.href;
     });
   });
 
-  console.log('Service panels initialized successfully!');
+  console.log("Service panels initialized successfully!");
 });

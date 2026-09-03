@@ -1,11 +1,7 @@
 function formatDateTimeLocal(value) {
+  if (!value) return "";
 
-    if (!value) return "";
-
-    return value
-        .replace(" ", "T")
-        .slice(0, 16);
-
+  return value.replace(" ", "T").slice(0, 16);
 }
 
 /* =========================================================
@@ -14,748 +10,512 @@ function formatDateTimeLocal(value) {
 let currentRichTextEditor = null;
 let currentRichTextRange = null;
 
-document
-    .getElementById("featured")
-    .addEventListener("change", function () {
+document.getElementById("featured").addEventListener("change", function () {
+  const fields = document.getElementById("featuredDateFields");
 
-        const fields =
-            document.getElementById("featuredDateFields");
+  if (this.checked) {
+    fields.style.display = "block";
+  } else {
+    fields.style.display = "none";
 
-        if (this.checked) {
-
-            fields.style.display = "block";
-
-        } else {
-
-            fields.style.display = "none";
-
-            document.getElementById("featured_start").value = "";
-            document.getElementById("featured_until").value = "";
-
-        }
-
-    });
+    document.getElementById("featured_start").value = "";
+    document.getElementById("featured_until").value = "";
+  }
+});
 
 function fillForm(event) {
+  if (!event) {
+    console.error("Event tidak ditemukan");
+    return;
+  }
 
-    if (!event) {
-        console.error("Event tidak ditemukan");
-        return;
-    }
+  document.getElementById("eventId").value = event.id ?? "";
 
-    document.getElementById("eventId").value =
-        event.id ?? "";
+  document.getElementById("title").value = event.title ?? "";
 
-    document.getElementById("title").value =
-        event.title ?? "";
+  document.getElementById("slug").value = event.slug ?? "";
 
-    document.getElementById("slug").value =
-        event.slug ?? "";
-
-    /* =========================
+  /* =========================
     CATEGORY
     ========================= */
 
-    const categorySelect =
-        document.getElementById("category");
+  const categorySelect = document.getElementById("category");
 
-    const categoryNameInput =
-        document.getElementById("category_name");
+  const categoryNameInput = document.getElementById("category_name");
 
-    const customCategoryGroup =
-        document.getElementById("customCategoryGroup");
+  const customCategoryGroup = document.getElementById("customCategoryGroup");
 
-    categorySelect.value =
-        event.category ?? "";
+  categorySelect.value = event.category ?? "";
 
-    categoryNameInput.value =
-        event.category_name ?? "";
+  categoryNameInput.value = event.category_name ?? "";
 
-    if (event.category === "Others") {
+  if (event.category === "Others") {
+    customCategoryGroup.style.display = "block";
+  } else {
+    customCategoryGroup.style.display = "none";
 
-        customCategoryGroup.style.display = "block";
+    categoryNameInput.value = "";
+  }
 
-    } else {
+  document.getElementById("start_date").value = event.start_date ?? "";
 
-        customCategoryGroup.style.display = "none";
+  document.getElementById("end_date").value = event.end_date ?? "";
 
-        categoryNameInput.value = "";
+  document.getElementById("start_time").value = event.start_time ?? "";
 
-    }
+  document.getElementById("end_time").value = event.end_time ?? "";
 
-    document.getElementById("start_date").value =
-        event.start_date ?? "";
+  document.getElementById("location").value = event.location ?? "";
 
-    document.getElementById("end_date").value =
-        event.end_date ?? "";
+  document.getElementById("address").value = event.address ?? "";
 
-    document.getElementById("start_time").value =
-        event.start_time ?? "";
+  document.getElementById("description").value = event.description ?? "";
 
-    document.getElementById("end_time").value =
-        event.end_time ?? "";
+  document.getElementById("map_url").value = event.map_url ?? "";
 
-    document.getElementById("location").value =
-        event.location ?? "";
+  document.getElementById("meta_title").value = event.meta_title ?? "";
 
-    document.getElementById("address").value =
-        event.address ?? "";
+  document.getElementById("meta_description").value =
+    event.meta_description ?? "";
 
-    document.getElementById("description").value =
-        event.description ?? "";
+  document.getElementById("featured").checked = Number(event.featured) === 1;
 
-    document.getElementById("map_url").value =
-        event.map_url ?? "";
+  document.getElementById("featured_start").value = event.featured_start ?? "";
 
-    document.getElementById("meta_title").value =
-        event.meta_title ?? "";
+  document.getElementById("featured_until").value = event.featured_until ?? "";
 
-    document.getElementById("meta_description").value =
-        event.meta_description ?? "";
+  document.getElementById("status").value = event.status ?? "draft";
 
-    document.getElementById("featured").checked =
-        Number(event.featured) === 1;
+  /* trigger toggle so featuredDateFields visibility matches state */
+  document.getElementById("featured").dispatchEvent(new Event("change"));
 
-    document.getElementById("featured_start").value =
-        event.featured_start ?? "";
-
-    document.getElementById("featured_until").value =
-        event.featured_until ?? "";
-
-    document.getElementById("status").value =
-        event.status ?? "draft";
-
-    /* trigger toggle so featuredDateFields visibility matches state */
-    document.getElementById("featured")
-        .dispatchEvent(new Event("change"));
-
-
-    /* =========================
+  /* =========================
        COVER IMAGE
     ========================= */
-    document.getElementById("image").value =
-        event.cover_image ?? "";
+  document.getElementById("image").value = event.cover_image ?? "";
 
-    if (event.cover_image) {
+  if (event.cover_image) {
+    document.getElementById("imagePreview").src = resolveImagePath(
+      event.cover_image,
+    );
 
-        document.getElementById("imagePreview").src =
-            resolveImagePath(event.cover_image);
+    document.getElementById("imagePreview").style.display = "block";
+  } else {
+    const imagePreview = document.getElementById("imagePreview");
 
-        document.getElementById("imagePreview").style.display =
-            "block";
+    imagePreview.src = "";
 
-    } else {
+    imagePreview.style.display = "none";
 
-        const imagePreview =
-            document.getElementById("imagePreview");
+    document.getElementById("imagePreview").style.display = "none";
+  }
 
-        imagePreview.src = "";
-
-        imagePreview.style.display =
-            "none";
-
-        document.getElementById("imagePreview").style.display =
-            "none";
-    }
-
-    /* =========================
+  /* =========================
     ARTICLE CONTENT
     ========================= */
 
-    const paragraphContainer =
-        document.getElementById("paragraphContainer");
+  const paragraphContainer = document.getElementById("paragraphContainer");
 
-    paragraphContainer.innerHTML = "";
+  paragraphContainer.innerHTML = "";
 
-    try {
+  try {
+    const content = event.content ? JSON.parse(event.content) : [];
 
-        const content =
-            event.content
-                ? JSON.parse(event.content)
-                : [];
-
-
-        if (
-            Array.isArray(content) &&
-            content.length
-        ) {
-
-            content.forEach(block => {
-
-                /* =========================
+    if (Array.isArray(content) && content.length) {
+      content.forEach((block) => {
+        /* =========================
                 PARAGRAPH
                 ========================= */
 
-                if (
-                    block &&
-                    block.type === "paragraph"
-                ) {
+        if (block && block.type === "paragraph") {
+          addParagraph(block.text || "");
+        }
 
-                    addParagraph(
-                        block.text || ""
-                    );
-
-                }
-
-                /* =========================
+        /* =========================
                 IMAGE
                 ========================= */
 
-                if (
-                    block &&
-                    block.type === "image"
-                ) {
+        if (block && block.type === "image") {
+          addArticleImage({
+            src: block.src || "",
 
-                    addArticleImage({
-                        src:
-                            block.src || "",
+            caption: block.caption || "",
 
-                        caption:
-                            block.caption || "",
-
-                        alt:
-                            block.alt || ""
-                    });
-
-                }
-
-            });
-
-        } else {
-
-            addParagraph();
-
+            alt: block.alt || "",
+          });
         }
-
-
-    } catch (error) {
-
-        console.error(
-            "Content JSON error:",
-            error
-        );
-
-        addParagraph();
-
+      });
+    } else {
+      addParagraph();
     }
+  } catch (error) {
+    console.error("Content JSON error:", error);
 
-    /* =========================
+    addParagraph();
+  }
+
+  /* =========================
        SCHEDULE
     ========================= */
 
-    const scheduleContainer =
-        document.getElementById("scheduleContainer");
+  const scheduleContainer = document.getElementById("scheduleContainer");
 
-    scheduleContainer.innerHTML = "";
+  scheduleContainer.innerHTML = "";
 
-    try {
+  try {
+    const schedules = event.schedule ? JSON.parse(event.schedule) : [];
 
-        const schedules =
-            event.schedule
-                ? JSON.parse(event.schedule)
-                : [];
-
-        if (Array.isArray(schedules) && schedules.length) {
-
-            schedules.forEach(item => {
-
-                addScheduleRow(
-                    item.time ?? "",
-                    item.title ?? "",
-                    item.description ?? ""
-                );
-
-            });
-
-        } else {
-
-            addScheduleRow();
-
-        }
-
-    } catch (error) {
-
-        console.error(
-            "Schedule JSON error:",
-            error
+    if (Array.isArray(schedules) && schedules.length) {
+      schedules.forEach((item) => {
+        addScheduleRow(
+          item.time ?? "",
+          item.title ?? "",
+          item.description ?? "",
         );
-
-        addScheduleRow();
+      });
+    } else {
+      addScheduleRow();
     }
+  } catch (error) {
+    console.error("Schedule JSON error:", error);
 
+    addScheduleRow();
+  }
 
-    /* =========================
+  /* =========================
        UI
     ========================= */
 
-    document.getElementById("pageTitle").innerText =
-        "Edit Event";
+  document.getElementById("pageTitle").innerText = "Edit Event";
 
-    document.getElementById("saveBtn").innerText =
-        "Update Event";
+  document.getElementById("saveBtn").innerText = "Update Event";
 }
 
 async function saveEvent() {
+  try {
+    const id = document.getElementById("eventId").value.trim();
 
-    try {
-
-        const id =
-            document.getElementById("eventId").value.trim();
-
-
-        /* =========================
+    /* =========================
            SCHEDULE
         ========================= */
 
-        const schedules = [];
+    const schedules = [];
 
-        document
-            .querySelectorAll(".schedule-item")
-            .forEach(row => {
+    document.querySelectorAll(".schedule-item").forEach((row) => {
+      const time = row.querySelector(".schedule-time")?.value ?? "";
 
-                const time =
-                    row.querySelector(".schedule-time")?.value ?? "";
+      const title = row.querySelector(".schedule-title")?.value ?? "";
 
-                const title =
-                    row.querySelector(".schedule-title")?.value ?? "";
+      const description =
+        row.querySelector(".schedule-description")?.value ?? "";
 
-                const description =
-                    row.querySelector(".schedule-description")?.value ?? "";
+      if (time || title || description) {
+        schedules.push({
+          time: time,
+          title: title,
+          description: description,
+        });
+      }
+    });
 
-                if (time || title || description) {
-
-                    schedules.push({
-                        time: time,
-                        title: title,
-                        description: description
-                    });
-
-                }
-
-            });
-
-        /* =========================
+    /* =========================
            CONTENT
         ========================= */
-        const articleContent = [];
+    const articleContent = [];
 
-        document
-            .querySelectorAll("#paragraphContainer .article-block")
-            .forEach(block => {
+    document
+      .querySelectorAll("#paragraphContainer .article-block")
+      .forEach((block) => {
+        const type = block.dataset.type;
 
-                const type =
-                    block.dataset.type;
-
-                /*
+        /*
                 |--------------------------------------------------------------------------
                 | PARAGRAPH (rich text)
                 |--------------------------------------------------------------------------
                 */
-                if (type === "paragraph") {
+        if (type === "paragraph") {
+          const editor = block.querySelector(".article-richtext-input");
 
-                    const editor =
-                        block.querySelector(".article-richtext-input");
+          const html = editor ? editor.innerHTML.trim() : "";
 
-                    const html =
-                        editor ? editor.innerHTML.trim() : "";
+          const plain = stripHtmlText(html).trim();
 
-                    const plain =
-                        stripHtmlText(html).trim();
+          if (plain) {
+            articleContent.push({
+              type: "paragraph",
 
-                    if (plain) {
+              text: html,
+            });
+          }
+        }
 
-                        articleContent.push({
-
-                            type: "paragraph",
-
-                            text: html
-
-                        });
-
-                    }
-
-                }
-
-                /*
+        /*
                 |--------------------------------------------------------------------------
                 | IMAGE
                 |--------------------------------------------------------------------------
                 */
-                if (type === "image") {
+        if (type === "image") {
+          const src = block.querySelector(".article-image-src")?.value.trim();
 
-                    const src =
-                        block
-                            .querySelector(".article-image-src")
-                            ?.value
-                            .trim();
+          const caption = block
+            .querySelector(".article-image-caption")
+            ?.value.trim();
 
-                    const caption =
-                        block
-                            .querySelector(".article-image-caption")
-                            ?.value
-                            .trim();
+          const alt = block.querySelector(".article-image-alt")?.value.trim();
 
-                    const alt =
-                        block
-                            .querySelector(".article-image-alt")
-                            ?.value
-                            .trim();
-
-                    if (src) {
-
-                        articleContent.push({
-                            type: "image",
-                            src: src,
-                            caption: caption,
-                            alt: alt
-                        });
-
-                    }
-
-                }
-
+          if (src) {
+            articleContent.push({
+              type: "image",
+              src: src,
+              caption: caption,
+              alt: alt,
             });
+          }
+        }
+      });
 
-        /* =========================
+    /* =========================
            PAYLOAD
         ========================= */
 
-        const payload = {
+    const payload = {
+      id: id,
 
-            id: id,
+      title: document.getElementById("title").value.trim(),
 
-            title:
-                document.getElementById("title").value.trim(),
+      slug: document.getElementById("slug").value.trim(),
 
-            slug:
-                document.getElementById("slug").value.trim(),
+      category: document.getElementById("category").value,
 
-            category:
-                document.getElementById("category").value,
+      category_name:
+        document.getElementById("category").value === "Others"
+          ? document.getElementById("category_name").value.trim()
+          : null,
 
-            category_name:
-                document.getElementById("category").value === "Others"
-                    ? document.getElementById("category_name").value.trim()
-                    : null,
+      start_date: document.getElementById("start_date").value || null,
 
-            start_date:
-                document.getElementById("start_date").value || null,
+      end_date: document.getElementById("end_date").value || null,
 
-            end_date:
-                document.getElementById("end_date").value || null,
+      start_time: document.getElementById("start_time").value || null,
 
-            start_time:
-                document.getElementById("start_time").value || null,
+      end_time: document.getElementById("end_time").value || null,
 
-            end_time:
-                document.getElementById("end_time").value || null,
+      location: document.getElementById("location").value.trim(),
 
-            location:
-                document.getElementById("location").value.trim(),
+      address: document.getElementById("address").value.trim(),
 
-            address:
-                document.getElementById("address").value.trim(),
+      cover_image: document.getElementById("image").value.trim(),
 
-            cover_image:
-                document.getElementById("image").value.trim(),
+      description: document.getElementById("description").value.trim(),
 
-            description:
-                document.getElementById("description").value.trim(),
+      content: JSON.stringify(articleContent),
 
-            content:
-                JSON.stringify(articleContent),
+      schedule: JSON.stringify(schedules),
 
-            schedule:
-                JSON.stringify(schedules),
+      map_url: document.getElementById("map_url").value.trim(),
 
-            map_url:
-                document.getElementById("map_url").value.trim(),
+      featured: document.getElementById("featured").checked ? 1 : 0,
 
-            featured:
-                document.getElementById("featured").checked
-                    ? 1
-                    : 0,
+      featured_start: document.getElementById("featured_start").value || null,
 
-            featured_start:
-                document.getElementById("featured_start").value || null,
+      featured_until: document.getElementById("featured_until").value || null,
 
-            featured_until:
-                document.getElementById("featured_until").value || null,
+      meta_title: document.getElementById("meta_title").value.trim(),
 
-            meta_title:
-                document.getElementById("meta_title").value.trim(),
+      meta_description: document
+        .getElementById("meta_description")
+        .value.trim(),
 
-            meta_description:
-                document.getElementById("meta_description").value.trim(),
+      status: document.getElementById("status").value,
+    };
 
-            status:
-                document.getElementById("status").value
+    console.log("PAYLOAD:", payload);
 
-        };
-
-        console.log("PAYLOAD:", payload);
-
-        /* =========================
+    /* =========================
         REQUIRED VALIDATION
         ========================= */
 
-        if (!payload.title) {
+    if (!payload.title) {
+      alert("Title wajib diisi.");
 
-            alert("Title wajib diisi.");
+      document.getElementById("title").focus();
 
-            document
-                .getElementById("title")
-                .focus();
+      return;
+    }
 
-            return;
+    if (!payload.category) {
+      alert("Category wajib dipilih.");
 
-        }
+      document.getElementById("category").focus();
 
-        if (!payload.category) {
+      return;
+    }
 
-            alert("Category wajib dipilih.");
+    if (!payload.cover_image) {
+      alert("Cover Image wajib diupload.");
 
-            document
-                .getElementById("category")
-                .focus();
+      document.getElementById("imageFile").focus();
 
-            return;
+      return;
+    }
 
-        }
+    if (!payload.description) {
+      alert("Description wajib diisi.");
 
-        if (!payload.cover_image) {
+      document.getElementById("description").focus();
 
-            alert("Cover Image wajib diupload.");
+      return;
+    }
 
-            document
-                .getElementById("imageFile")
-                .focus();
+    if (payload.category === "Others" && !payload.category_name) {
+      alert("Silakan masukkan nama category untuk Others.");
+      document.getElementById("category_name").focus();
 
-            return;
+      return;
+    }
 
-        }
-
-        if (!payload.description) {
-
-            alert("Description wajib diisi.");
-
-            document
-                .getElementById("description")
-                .focus();
-
-            return;
-
-        }
-
-        if (
-            payload.category === "Others" &&
-            !payload.category_name
-        ) {
-
-            alert("Silakan masukkan nama category untuk Others.");
-            document.getElementById("category_name").focus();
-
-            return;
-
-        }
-
-        /* =========================
+    /* =========================
            API
         ========================= */
 
-        const url =
-            id
-                ? API_URL + "/events/update-event.php"
-                : API_URL + "/events/create-event.php";
+    const url = id
+      ? API_URL + "/events/update-event.php"
+      : API_URL + "/events/create-event.php";
 
-        console.log("REQUEST URL:", url);
+    console.log("REQUEST URL:", url);
 
-        const response =
-            await fetch(url, {
+    const response = await fetch(url, {
+      method: "POST",
 
-                method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
 
-                headers: {
-                    "Content-Type": "application/json"
-                },
+      body: JSON.stringify(payload),
+    });
 
-                body: JSON.stringify(payload)
-
-            });
-
-
-        /* =========================
+    /* =========================
            DEBUG RAW RESPONSE
         ========================= */
 
-        const raw =
-            await response.text();
+    const raw = await response.text();
 
-        console.log(
-            "RAW API RESPONSE:",
-            raw
-        );
+    console.log("RAW API RESPONSE:", raw);
 
+    let result;
 
-        let result;
-
-        try {
-
-            result =
-                JSON.parse(raw);
-
-        } catch (error) {
-
-            console.error(
-                "API mengembalikan response bukan JSON:",
-                raw
-            );
-
-            alert(
-                "Server API mengalami error.\n\n" +
-                "Buka Console untuk melihat detail."
-            );
-
-            return;
-        }
-
-        /* =========================
-           RESULT
-        ========================= */
-        if (result.success) {
-
-            alert(
-                id
-                    ? "Event berhasil diupdate."
-                    : "Event berhasil dibuat."
-            );
-
-            window.location.href =
-                "index.php";
-
-            return;
-
-        }
-
-        alert(
-            result.message ||
-            result.error ||
-            "Gagal menyimpan event."
-        );
-
+    try {
+      result = JSON.parse(raw);
     } catch (error) {
+      console.error("API mengembalikan response bukan JSON:", raw);
 
-        console.error(
-            "SAVE EVENT ERROR:",
-            error
-        );
+      alert(
+        "Server API mengalami error.\n\n" +
+          "Buka Console untuk melihat detail.",
+      );
 
-        alert(
-            "Terjadi error saat menyimpan event.\n\n" +
-            error.message
-        );
-
+      return;
     }
 
+    /* =========================
+           RESULT
+        ========================= */
+    if (result.success) {
+      alert(id ? "Event berhasil diupdate." : "Event berhasil dibuat.");
+
+      window.location.href = "index.php";
+
+      return;
+    }
+
+    alert(result.message || result.error || "Gagal menyimpan event.");
+  } catch (error) {
+    console.error("SAVE EVENT ERROR:", error);
+
+    alert("Terjadi error saat menyimpan event.\n\n" + error.message);
+  }
 }
 
 function resetForm() {
+  document.getElementById("eventId").value = "";
 
-    document.getElementById("eventId").value = "";
+  document.getElementById("title").value = "";
 
-    document.getElementById("title").value = "";
+  document.getElementById("slug").value = "";
 
-    document.getElementById("slug").value = "";
+  document.getElementById("category").value = "";
 
-    document.getElementById("category").value = "";
+  document.getElementById("category_name").value = "";
 
-    document.getElementById("category_name").value = "";
+  document.getElementById("customCategoryGroup").style.display = "none";
 
-    document.getElementById("customCategoryGroup").style.display = "none";
+  document.getElementById("start_date").value = "";
 
-    document.getElementById("start_date").value = "";
+  document.getElementById("end_date").value = "";
 
-    document.getElementById("end_date").value = "";
+  document.getElementById("start_time").value = "";
 
-    document.getElementById("start_time").value = "";
+  document.getElementById("end_time").value = "";
 
-    document.getElementById("end_time").value = "";
+  document.getElementById("featured").checked = false;
 
-    document.getElementById("featured").checked = false;
+  document.getElementById("featured_start").value = "";
 
-    document.getElementById("featured_start").value = "";
+  document.getElementById("featured_until").value = "";
 
-    document.getElementById("featured_until").value = "";
+  document.getElementById("featuredDateFields").style.display = "none";
 
-    document.getElementById("featuredDateFields").style.display = "none";
+  document.getElementById("meta_title").value = "";
 
-    document.getElementById("meta_title").value = "";
+  document.getElementById("meta_description").value = "";
 
-    document.getElementById("meta_description").value = "";
+  document.getElementById("location").value = "";
 
-    document.getElementById("location").value = "";
+  document.getElementById("address").value = "";
 
-    document.getElementById("address").value = "";
+  document.getElementById("image").value = "";
 
-    document.getElementById("image").value = "";
+  document.getElementById("description").value = "";
 
-    document.getElementById("description").value = "";
+  document.getElementById("paragraphContainer").innerHTML = "";
 
-    document.getElementById("paragraphContainer").innerHTML = "";
+  addParagraph();
 
-    addParagraph();
+  document.getElementById("map_url").value = "";
 
-    document.getElementById("map_url").value = "";
+  document.getElementById("scheduleContainer").innerHTML = "";
 
-    document.getElementById("scheduleContainer").innerHTML = "";
+  addScheduleRow();
 
-    addScheduleRow();
+  document.getElementById("saveBtn").innerText = "Save Event";
 
-    document.getElementById("saveBtn").innerText =
-        "Save Event";
+  document.getElementById("status").value = "draft";
 
-    document.getElementById("status").value =
-        "draft";
+  document.getElementById("imagePreview").src = "";
 
-    document.getElementById("imagePreview").src = "";
-
-    document.getElementById("imageFile").value = "";
-
+  document.getElementById("imageFile").value = "";
 }
 
 async function deleteEvent(id) {
+  if (!confirm("Delete event?")) return;
 
-    if (!confirm("Delete event?"))
-        return;
-
-    await fetch(
-        "../api/delete-event.php",
-        {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ id })
-        });
+  await fetch("../api/delete-event.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ id }),
+  });
 }
 
-function addScheduleRow(
+function addScheduleRow(time = "", title = "", description = "") {
+  const container = document.getElementById("scheduleContainer");
 
-    time = "",
-    title = "",
-    description = ""
+  const item = document.createElement("div");
 
-) {
-    const container =
-        document.getElementById("scheduleContainer");
+  item.className = "schedule-item";
 
-    const item =
-        document.createElement("div");
-
-    item.className =
-        "schedule-item";
-
-    item.innerHTML = `
+  item.innerHTML = `
 
 <div class="schedule-top">
 
@@ -790,27 +550,22 @@ function addScheduleRow(
 
 `;
 
-    container.appendChild(item);
+  container.appendChild(item);
 }
 
 /* =========================================================
    PARAGRAPH (RICH TEXT)
 ========================================================= */
 function addParagraph(text = "") {
+  const container = document.getElementById("paragraphContainer");
 
-    const container =
-        document.getElementById("paragraphContainer");
+  const item = document.createElement("div");
 
-    const item =
-        document.createElement("div");
+  item.className = "article-block article-paragraph-block";
 
-    item.className =
-        "article-block article-paragraph-block";
+  item.dataset.type = "paragraph";
 
-    item.dataset.type =
-        "paragraph";
-
-    item.innerHTML = `
+  item.innerHTML = `
 
     <div class="article-block-header">
 
@@ -876,181 +631,160 @@ function addParagraph(text = "") {
 
     `;
 
-    container.appendChild(item);
+  container.appendChild(item);
 
-    const editor =
-        item.querySelector(".article-richtext-input");
+  const editor = item.querySelector(".article-richtext-input");
 
-    editor.innerHTML = text || "";
+  editor.innerHTML = text || "";
 
-    ["focus", "click"].forEach(ev =>
-        editor.addEventListener(ev, () => {
-            currentRichTextEditor = editor;
-            updateRichTextToolbarState(editor);
-        })
+  ["focus", "click"].forEach((ev) =>
+    editor.addEventListener(ev, () => {
+      currentRichTextEditor = editor;
+      updateRichTextToolbarState(editor);
+    }),
+  );
+
+  ["keyup", "mouseup"].forEach((ev) =>
+    editor.addEventListener(ev, () => updateRichTextToolbarState(editor)),
+  );
+
+  editor.addEventListener("paste", handleRichTextPaste);
+
+  item.querySelectorAll(".richtext-btn").forEach((btn) => {
+    btn.addEventListener("mousedown", (e) => e.preventDefault());
+    btn.addEventListener("click", () =>
+      handleRichTextCommand(btn.dataset.command, editor),
     );
+  });
 
-    ["keyup", "mouseup"].forEach(ev =>
-        editor.addEventListener(ev, () => updateRichTextToolbarState(editor))
-    );
-
-    editor.addEventListener("paste", handleRichTextPaste);
-
-    item.querySelectorAll(".richtext-btn").forEach(btn => {
-        btn.addEventListener("mousedown", e => e.preventDefault());
-        btn.addEventListener("click", () =>
-            handleRichTextCommand(btn.dataset.command, editor)
-        );
-    });
-
-    setTimeout(() => {
-        currentRichTextEditor = editor;
-        editor.focus();
-    }, 50);
-
+  setTimeout(() => {
+    currentRichTextEditor = editor;
+    editor.focus();
+  }, 50);
 }
 
 /* =========================================================
    RICH TEXT COMMANDS
 ========================================================= */
 function handleRichTextCommand(cmd, editor) {
+  if (!editor) return;
 
-    if (!editor) return;
+  currentRichTextEditor = editor;
 
-    currentRichTextEditor = editor;
+  saveRichTextSelection(editor);
 
-    saveRichTextSelection(editor);
+  if (cmd === "createLink") {
+    openRichTextLinkModal(editor);
+    return;
+  }
 
-    if (cmd === "createLink") {
-        openRichTextLinkModal(editor);
-        return;
-    }
+  editor.focus();
 
-    editor.focus();
+  document.execCommand(cmd, false, null);
 
-    document.execCommand(cmd, false, null);
-
-    updateRichTextToolbarState(editor);
-
+  updateRichTextToolbarState(editor);
 }
 
 function saveRichTextSelection(editor) {
+  const selection = getSelection();
 
-    const selection = getSelection();
-
-    if (
-        selection?.rangeCount &&
-        editor.contains(selection.getRangeAt(0).commonAncestorContainer)
-    ) {
-        currentRichTextRange = selection.getRangeAt(0).cloneRange();
-    }
-
+  if (
+    selection?.rangeCount &&
+    editor.contains(selection.getRangeAt(0).commonAncestorContainer)
+  ) {
+    currentRichTextRange = selection.getRangeAt(0).cloneRange();
+  }
 }
 
 function restoreRichTextSelection(editor) {
-
-    if (!currentRichTextRange) {
-        editor.focus();
-        return;
-    }
-
-    const selection = getSelection();
-
-    selection.removeAllRanges();
-    selection.addRange(currentRichTextRange);
-
+  if (!currentRichTextRange) {
     editor.focus();
+    return;
+  }
 
+  const selection = getSelection();
+
+  selection.removeAllRanges();
+  selection.addRange(currentRichTextRange);
+
+  editor.focus();
 }
 
 function updateRichTextToolbarState(editor) {
+  const wrapper = editor?.closest(".article-richtext-editor");
 
-    const wrapper =
-        editor?.closest(".article-richtext-editor");
+  if (!wrapper) return;
 
-    if (!wrapper) return;
+  wrapper.querySelectorAll(".richtext-btn[data-command]").forEach((btn) => {
+    let active = false;
+    const command = btn.dataset.command;
 
-    wrapper.querySelectorAll(".richtext-btn[data-command]").forEach(btn => {
+    if (["bold", "italic", "underline"].includes(command)) {
+      try {
+        active = document.queryCommandState(command);
+      } catch (error) {}
+    }
 
-        let active = false;
-        const command = btn.dataset.command;
+    if (command === "createLink") {
+      active = isSelectionInsideLink(editor);
+    }
 
-        if (["bold", "italic", "underline"].includes(command)) {
-            try {
-                active = document.queryCommandState(command);
-            } catch (error) {}
-        }
-
-        if (command === "createLink") {
-            active = isSelectionInsideLink(editor);
-        }
-
-        btn.classList.toggle("active", active);
-
-    });
-
+    btn.classList.toggle("active", active);
+  });
 }
 
 function isSelectionInsideLink(editor) {
+  const selection = getSelection();
 
-    const selection = getSelection();
+  if (!selection?.rangeCount) return false;
 
-    if (!selection?.rangeCount) return false;
+  let node = selection.anchorNode;
 
-    let node = selection.anchorNode;
-
-    while (node && node !== editor) {
-
-        if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "A") {
-            return true;
-        }
-
-        node = node.parentNode;
-
+  while (node && node !== editor) {
+    if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "A") {
+      return true;
     }
 
-    return false;
+    node = node.parentNode;
+  }
 
+  return false;
 }
 
 /* =========================================================
    RICH TEXT LINK MODAL
 ========================================================= */
 function openRichTextLinkModal(editor) {
+  currentRichTextEditor = editor;
 
-    currentRichTextEditor = editor;
+  saveRichTextSelection(editor);
 
-    saveRichTextSelection(editor);
+  document.getElementById("richTextLinkModalOverlay")?.remove();
 
-    document.getElementById("richTextLinkModalOverlay")?.remove();
+  const selection = getSelection();
 
-    const selection = getSelection();
+  const selectedText = selection?.toString().trim() || "";
 
-    const selectedText = selection?.toString().trim() || "";
+  let url = "",
+    openInNewTab = true,
+    node = selection?.anchorNode;
 
-    let url = "",
-        openInNewTab = true,
-        node = selection?.anchorNode;
-
-    while (node && node !== editor) {
-
-        if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "A") {
-            url = node.getAttribute("href") || "";
-            openInNewTab = node.getAttribute("target") === "_blank";
-            break;
-        }
-
-        node = node.parentNode;
-
+  while (node && node !== editor) {
+    if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "A") {
+      url = node.getAttribute("href") || "";
+      openInNewTab = node.getAttribute("target") === "_blank";
+      break;
     }
 
-    const overlay =
-        document.createElement("div");
+    node = node.parentNode;
+  }
 
-    overlay.id = "richTextLinkModalOverlay";
-    overlay.className = "richtext-link-modal-overlay";
+  const overlay = document.createElement("div");
 
-    overlay.innerHTML = `
+  overlay.id = "richTextLinkModalOverlay";
+  overlay.className = "richtext-link-modal-overlay";
+
+  overlay.innerHTML = `
         <div class="richtext-link-modal" role="dialog" aria-modal="true">
 
             <div class="richtext-link-modal-header">
@@ -1098,88 +832,85 @@ function openRichTextLinkModal(editor) {
         </div>
     `;
 
-    document.body.appendChild(overlay);
+  document.body.appendChild(overlay);
 
-    requestAnimationFrame(() => overlay.classList.add("show"));
+  requestAnimationFrame(() => overlay.classList.add("show"));
 
-    const getEl = id => document.getElementById(id),
-        urlInput = getEl("richTextLinkUrl"),
-        newTabCheckbox = getEl("richTextLinkNewTab");
+  const getEl = (id) => document.getElementById(id),
+    urlInput = getEl("richTextLinkUrl"),
+    newTabCheckbox = getEl("richTextLinkNewTab");
 
-    const close = () => {
-        overlay.classList.remove("show");
-        setTimeout(() => overlay.remove(), 180);
-        document.removeEventListener("keydown", onEscape);
-    };
+  const close = () => {
+    overlay.classList.remove("show");
+    setTimeout(() => overlay.remove(), 180);
+    document.removeEventListener("keydown", onEscape);
+  };
 
-    const onEscape = e => {
-        if (e.key === "Escape") close();
-    };
+  const onEscape = (e) => {
+    if (e.key === "Escape") close();
+  };
 
-    getEl("richTextLinkClose").onclick = close;
-    getEl("richTextLinkCancel").onclick = close;
+  getEl("richTextLinkClose").onclick = close;
+  getEl("richTextLinkCancel").onclick = close;
 
-    overlay.onclick = e => {
-        if (e.target === overlay) close();
-    };
+  overlay.onclick = (e) => {
+    if (e.target === overlay) close();
+  };
 
-    document.addEventListener("keydown", onEscape);
+  document.addEventListener("keydown", onEscape);
 
-    getEl("richTextLinkApply").onclick = () => {
+  getEl("richTextLinkApply").onclick = () => {
+    let link = urlInput.value.trim();
 
-        let link = urlInput.value.trim();
+    if (!link) {
+      alert("Please enter a URL.");
+      return;
+    }
 
-        if (!link) {
-            alert("Please enter a URL.");
-            return;
-        }
+    if (!/^https?:\/\//i.test(link)) {
+      link = "https://" + link;
+    }
 
-        if (!/^https?:\/\//i.test(link)) {
-            link = "https://" + link;
-        }
+    try {
+      new URL(link);
+    } catch (error) {
+      alert("Please enter a valid URL.");
+      return;
+    }
 
-        try {
-            new URL(link);
-        } catch (error) {
-            alert("Please enter a valid URL.");
-            return;
-        }
+    restoreRichTextSelection(editor);
 
-        restoreRichTextSelection(editor);
+    const currentSelection = getSelection();
 
-        const currentSelection = getSelection();
+    if (!currentSelection?.toString().trim()) {
+      alert("Please select text in the paragraph first.");
+      return;
+    }
 
-        if (!currentSelection?.toString().trim()) {
-            alert("Please select text in the paragraph first.");
-            return;
-        }
+    document.execCommand("createLink", false, link);
 
-        document.execCommand("createLink", false, link);
+    const links = editor.querySelectorAll("a"),
+      lastLink = links[links.length - 1];
 
-        const links = editor.querySelectorAll("a"),
-            lastLink = links[links.length - 1];
+    if (lastLink) {
+      if (newTabCheckbox.checked) {
+        lastLink.target = "_blank";
+        lastLink.rel = "noopener noreferrer";
+      } else {
+        lastLink.removeAttribute("target");
+        lastLink.removeAttribute("rel");
+      }
+    }
 
-        if (lastLink) {
-            if (newTabCheckbox.checked) {
-                lastLink.target = "_blank";
-                lastLink.rel = "noopener noreferrer";
-            } else {
-                lastLink.removeAttribute("target");
-                lastLink.removeAttribute("rel");
-            }
-        }
+    updateRichTextToolbarState(editor);
 
-        updateRichTextToolbarState(editor);
+    close();
+  };
 
-        close();
-
-    };
-
-    setTimeout(() => {
-        urlInput.focus();
-        if (url) urlInput.select();
-    }, 100);
-
+  setTimeout(() => {
+    urlInput.focus();
+    if (url) urlInput.select();
+  }, 100);
 }
 
 /* =========================================================
@@ -1188,23 +919,18 @@ function openRichTextLinkModal(editor) {
 let articleImageInputCounter = 0;
 
 function addArticleImage(data = {}) {
+  const container = document.getElementById("paragraphContainer");
 
-    const container =
-        document.getElementById("paragraphContainer");
+  const item = document.createElement("div");
 
-    const item =
-        document.createElement("div");
+  item.className = "article-block article-image-block";
 
-    item.className =
-        "article-block article-image-block";
+  item.dataset.type = "image";
 
-    item.dataset.type =
-        "image";
+  const inputId =
+    "article-image-input-" + Date.now() + "-" + ++articleImageInputCounter;
 
-    const inputId =
-        "article-image-input-" + Date.now() + "-" + (++articleImageInputCounter);
-
-    item.innerHTML = `
+  item.innerHTML = `
 
     <div class="article-block-header">
 
@@ -1302,249 +1028,158 @@ function addArticleImage(data = {}) {
 
     `;
 
-    container.appendChild(item);
+  container.appendChild(item);
 
-    const preview =
-        item.querySelector(".article-image-preview");
+  const preview = item.querySelector(".article-image-preview");
 
-    const placeholder =
-        item.querySelector(".article-upload-placeholder");
+  const placeholder = item.querySelector(".article-upload-placeholder");
 
-    const fileInput =
-        item.querySelector(".article-image-file");
+  const fileInput = item.querySelector(".article-image-file");
 
-    const changeButton =
-        item.querySelector(".article-change-image-btn");
+  const changeButton = item.querySelector(".article-change-image-btn");
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | EXISTING IMAGE
     |--------------------------------------------------------------------------
     */
 
-    if (data.src) {
+  if (data.src) {
+    preview.src = resolveImagePath(data.src);
 
-        preview.src =
-            resolveImagePath(data.src);
+    preview.style.display = "block";
 
-        preview.style.display =
-            "block";
+    placeholder.style.display = "none";
+  } else {
+    preview.style.display = "none";
 
-        placeholder.style.display =
-            "none";
+    placeholder.style.display = "flex";
+  }
 
-    } else {
-
-        preview.style.display =
-            "none";
-
-        placeholder.style.display =
-            "flex";
-
-    }
-
-    /*
+  /*
     |--------------------------------------------------------------------------
     | FILE UPLOAD
     |--------------------------------------------------------------------------
     */
 
-    fileInput.addEventListener(
-        "change",
-        function () {
+  fileInput.addEventListener("change", function () {
+    uploadArticleImage(this, item);
+  });
 
-            uploadArticleImage(
-                this,
-                item
-            );
+  changeButton.addEventListener("click", function (event) {
+    event.preventDefault();
 
-        }
-    );
-
-    changeButton.addEventListener(
-        "click",
-        function (event) {
-
-            event.preventDefault();
-
-            fileInput.click();
-
-        }
-    );
-
+    fileInput.click();
+  });
 }
 
-async function uploadArticleImage(
-    input,
-    item
-) {
+async function uploadArticleImage(input, item) {
+  const file = input.files[0];
 
-    const file =
-        input.files[0];
+  if (!file) {
+    return;
+  }
 
-    if (!file) {
-        return;
+  const formData = new FormData();
+
+  formData.append("image", file);
+
+  formData.append("type", "article");
+
+  const changeButton = item.querySelector(".article-change-image-btn");
+
+  const originalButtonHtml = changeButton ? changeButton.innerHTML : "";
+
+  if (changeButton) {
+    changeButton.disabled = true;
+    changeButton.innerHTML = "Uploading...";
+  }
+
+  try {
+    const response = await fetch(API_URL + "/events/upload-image.php", {
+      method: "POST",
+      body: formData,
+    });
+
+    const result = await response.json();
+
+    console.log("ARTICLE IMAGE:", result);
+
+    if (!result.success) {
+      alert(result.message || "Upload gambar gagal.");
+
+      return;
     }
 
-    const formData =
-        new FormData();
-
-    formData.append(
-        "image",
-        file
-    );
-
-    formData.append(
-        "type",
-        "article"
-    );
-
-    const changeButton =
-        item.querySelector(".article-change-image-btn");
-
-    const originalButtonHtml =
-        changeButton ? changeButton.innerHTML : "";
-
-    if (changeButton) {
-        changeButton.disabled = true;
-        changeButton.innerHTML = "Uploading...";
-    }
-
-    try {
-
-        const response =
-            await fetch(
-                API_URL +
-                "/events/upload-image.php",
-                {
-                    method: "POST",
-                    body: formData
-                }
-            );
-
-        const result =
-            await response.json();
-
-        console.log(
-            "ARTICLE IMAGE:",
-            result
-        );
-
-        if (!result.success) {
-
-            alert(
-                result.message ||
-                "Upload gambar gagal."
-            );
-
-            return;
-
-        }
-
-
-        /*
+    /*
         |--------------------------------------------------------------------------
         | SAVE PATH
         |--------------------------------------------------------------------------
         */
 
-        item.querySelector(
-            ".article-image-src"
-        ).value =
-            result.path;
+    item.querySelector(".article-image-src").value = result.path;
 
-        /*
+    /*
         |--------------------------------------------------------------------------
         | PREVIEW
         |--------------------------------------------------------------------------
         */
-        const preview =
-            item.querySelector(".article-image-preview");
+    const preview = item.querySelector(".article-image-preview");
 
-        const placeholder =
-            item.querySelector(".article-upload-placeholder");
+    const placeholder = item.querySelector(".article-upload-placeholder");
 
-        preview.src =
-            resolveImagePath(result.path);
+    preview.src = resolveImagePath(result.path);
 
-        preview.style.display =
-            "block";
+    preview.style.display = "block";
 
-        if (placeholder) {
-            placeholder.style.display = "none";
-        }
-
-    } catch (error) {
-
-        console.error(
-            "ARTICLE IMAGE UPLOAD ERROR:",
-            error
-        );
-
-        alert(
-            "Terjadi error saat upload gambar."
-        );
-
-    } finally {
-
-        if (changeButton) {
-            changeButton.disabled = false;
-            changeButton.innerHTML = originalButtonHtml;
-        }
-
+    if (placeholder) {
+      placeholder.style.display = "none";
     }
+  } catch (error) {
+    console.error("ARTICLE IMAGE UPLOAD ERROR:", error);
 
+    alert("Terjadi error saat upload gambar.");
+  } finally {
+    if (changeButton) {
+      changeButton.disabled = false;
+      changeButton.innerHTML = originalButtonHtml;
+    }
+  }
 }
 
 function searchEvent() {
+  const keyword = document.getElementById("searchEvent").value.toLowerCase();
 
-    const keyword =
-        document
-            .getElementById("searchEvent")
-            .value
-            .toLowerCase();
+  const rows = document.querySelectorAll("#eventTable tr");
 
-    const rows =
-        document.querySelectorAll(
-            "#eventTable tr"
-        );
-
-    rows.forEach(row => {
-
-        row.style.display =
-            row.innerText
-                .toLowerCase()
-                .includes(keyword)
-                ? ""
-                : "none";
-
-    });
+  rows.forEach((row) => {
+    row.style.display = row.innerText.toLowerCase().includes(keyword)
+      ? ""
+      : "none";
+  });
 }
 
 function escapeHtml(value = "") {
+  return String(value)
+    .replace(/&/g, "&amp;")
 
-    return String(value)
+    .replace(/</g, "&lt;")
 
-        .replace(/&/g, "&amp;")
+    .replace(/>/g, "&gt;")
 
-        .replace(/</g, "&lt;")
+    .replace(/"/g, "&quot;")
 
-        .replace(/>/g, "&gt;")
-
-        .replace(/"/g, "&quot;")
-
-        .replace(/'/g, "&#039;");
-
+    .replace(/'/g, "&#039;");
 }
 
 function escapeAttribute(value = "") {
-    return escapeHtml(value);
+  return escapeHtml(value);
 }
 
 function stripHtmlText(html) {
-    const div = document.createElement("div");
-    div.innerHTML = html || "";
-    return div.textContent || div.innerText || "";
+  const div = document.createElement("div");
+  div.innerHTML = html || "";
+  return div.textContent || div.innerText || "";
 }
 
 /* =========================================================
@@ -1553,15 +1188,15 @@ function stripHtmlText(html) {
    gambar rusak saat path dari API sudah absolut)
 ========================================================= */
 function resolveImagePath(path) {
-    if (!path) return "";
-    let v = String(path).trim().replace(/\\/g, "/");
-    if (/^https?:\/\//i.test(v) || v.startsWith("/jfc/")) return v;
-    if (v.startsWith("jfc/")) return "/" + v;
-    if (v.startsWith("uploads/")) return "/jfc/" + v;
-    if (v.startsWith("/uploads/")) return "/jfc" + v;
-    if (v.startsWith("assets/")) return "/jfc/" + v;
-    if (v.startsWith("/assets/")) return "/jfc" + v;
-    return (ROOT_PATH || "") + "/" + v.replace(/^\/+/, "");
+  if (!path) return "";
+  let v = String(path).trim().replace(/\\/g, "/");
+  if (/^https?:\/\//i.test(v) || v.startsWith("/jfc/")) return v;
+  if (v.startsWith("jfc/")) return "/" + v;
+  if (v.startsWith("uploads/")) return "/jfc/" + v;
+  if (v.startsWith("/uploads/")) return "/jfc" + v;
+  if (v.startsWith("assets/")) return "/jfc/" + v;
+  if (v.startsWith("/assets/")) return "/jfc" + v;
+  return (ROOT_PATH || "") + "/" + v.replace(/^\/+/, "");
 }
 
 /* =========================================================
@@ -1570,222 +1205,152 @@ function resolveImagePath(path) {
    dari Word/Google Docs/halaman lain tidak ikut masuk)
 ========================================================= */
 function handleRichTextPaste(event) {
-    event.preventDefault();
-    const clipboardData = event.clipboardData || window.clipboardData;
-    const text = clipboardData ? clipboardData.getData("text/plain") : "";
-    document.execCommand("insertText", false, text);
+  event.preventDefault();
+  const clipboardData = event.clipboardData || window.clipboardData;
+  const text = clipboardData ? clipboardData.getData("text/plain") : "";
+  document.execCommand("insertText", false, text);
 }
 
 async function initForm() {
+  const params = new URLSearchParams(window.location.search);
 
-    const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
 
-    const id = params.get("id");
+  if (!id) {
+    addParagraph();
+    addScheduleRow();
+    return;
+  }
 
-    if (!id) {
+  document.getElementById("pageTitle").innerText = "Edit Event";
+  document.getElementById("saveBtn").innerText = "Update Event";
 
-        addParagraph();
-        addScheduleRow();
-        return;
+  const response = await fetch(
+    API_URL + "/events/get-event-detail.php?id=" + id,
+  );
 
-    }
+  const event = await response.json();
 
-    document.getElementById("pageTitle").innerText = "Edit Event";
-    document.getElementById("saveBtn").innerText = "Update Event";
+  console.log("EVENT DATA");
+  console.log(event);
 
-    const response = await fetch(
-        API_URL + "/events/get-event-detail.php?id=" + id
-    );
-
-    const event = await response.json();
-
-    console.log("EVENT DATA");
-    console.log(event);
-
-    fillForm(event);
-
+  fillForm(event);
 }
 
 initForm();
 document
-    .getElementById("imageFile")
-    .addEventListener("change", async function () {
+  .getElementById("imageFile")
+  .addEventListener("change", async function () {
+    const file = this.files[0];
 
-        const file = this.files[0];
+    if (!file) return;
 
-        if (!file) return;
-
-        /* =========================
+    /* =========================
            LOCAL PREVIEW
            ========================= */
 
-        const preview =
-            document.getElementById("imagePreview");
+    const preview = document.getElementById("imagePreview");
 
-        const localUrl =
-            URL.createObjectURL(file);
+    const localUrl = URL.createObjectURL(file);
 
-        preview.src =
-            localUrl;
+    preview.src = localUrl;
 
-        preview.style.display =
-            "block";
+    preview.style.display = "block";
 
-        /* =========================
+    /* =========================
            UPLOAD
            ========================= */
 
-        const formData =
-            new FormData();
+    const formData = new FormData();
 
-        formData.append(
-            "image",
-            file
-        );
+    formData.append("image", file);
 
-        formData.append(
-            "type",
-            "cover"
-        );
+    formData.append("type", "cover");
 
-        try {
+    try {
+      const response = await fetch(API_URL + "/events/upload-image.php", {
+        method: "POST",
+        body: formData,
+      });
 
-            const response =
-                await fetch(
-                    API_URL + "/events/upload-image.php",
-                    {
-                        method: "POST",
-                        body: formData
-                    }
-                );
+      const result = await response.json();
 
-            const result =
-                await response.json();
+      console.log("COVER IMAGE UPLOAD:", result);
 
-            console.log(
-                "COVER IMAGE UPLOAD:",
-                result
-            );
-
-            if (result.success) {
-
-                /*
+      if (result.success) {
+        /*
                 |----------------------------------------------------------
                 | SAVE IMAGE PATH
                 |----------------------------------------------------------
                 */
 
-                document
-                    .getElementById("image")
-                    .value =
-                    result.path;
+        document.getElementById("image").value = result.path;
 
-                /*
+        /*
                 |----------------------------------------------------------
                 | USE SERVER IMAGE PATH
                 |----------------------------------------------------------
                 */
 
-                preview.src =
-                    resolveImagePath(result.path);
+        preview.src = resolveImagePath(result.path);
 
-                preview.style.display =
-                    "block";
-
-            } else {
-
-                /*
+        preview.style.display = "block";
+      } else {
+        /*
                 |----------------------------------------------------------
                 | REMOVE PREVIEW IF UPLOAD FAILED
                 |----------------------------------------------------------
                 */
 
-                preview.src = "";
+        preview.src = "";
 
-                preview.style.display =
-                    "none";
+        preview.style.display = "none";
 
-                document
-                    .getElementById("image")
-                    .value = "";
+        document.getElementById("image").value = "";
 
-                alert(
-                    result.message ||
-                    "Upload gambar gagal."
-                );
+        alert(result.message || "Upload gambar gagal.");
+      }
+    } catch (error) {
+      console.error("COVER IMAGE UPLOAD ERROR:", error);
 
-            }
+      preview.src = "";
 
-        } catch (error) {
+      preview.style.display = "none";
 
-            console.error(
-                "COVER IMAGE UPLOAD ERROR:",
-                error
-            );
+      document.getElementById("image").value = "";
 
-            preview.src = "";
+      alert("Terjadi error saat upload gambar.");
+    }
+  });
 
-            preview.style.display =
-                "none";
+document.getElementById("title").addEventListener("keyup", function () {
+  let slug = this.value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
 
-            document
-                .getElementById("image")
-                .value = "";
-
-            alert(
-                "Terjadi error saat upload gambar."
-            );
-
-        }
-
-    });
-
-document
-    .getElementById("title")
-    .addEventListener("keyup", function () {
-
-        let slug =
-            this.value
-                .toLowerCase()
-                .trim()
-                .replace(/[^a-z0-9]+/g, "-")
-                .replace(/^-|-$/g, "");
-
-        document
-            .getElementById("slug")
-            .value = slug;
-
-    });
+  document.getElementById("slug").value = slug;
+});
 
 /* =========================================================
    CATEGORY CUSTOM
 ========================================================= */
 
-document
-    .getElementById("category")
-    .addEventListener("change", function () {
+document.getElementById("category").addEventListener("change", function () {
+  const customGroup = document.getElementById("customCategoryGroup");
 
-        const customGroup =
-            document.getElementById("customCategoryGroup");
+  const customInput = document.getElementById("category_name");
 
-        const customInput =
-            document.getElementById("category_name");
+  const isOthers = this.value === "Others";
 
-        const isOthers =
-            this.value === "Others";
+  if (isOthers) {
+    customGroup.style.display = "block";
 
-        if (isOthers) {
+    customInput.focus();
+  } else {
+    customGroup.style.display = "none";
 
-            customGroup.style.display = "block";
-
-            customInput.focus();
-
-        } else {
-
-            customGroup.style.display = "none";
-
-            customInput.value = "";
-
-        }
-
-    });
+    customInput.value = "";
+  }
+});

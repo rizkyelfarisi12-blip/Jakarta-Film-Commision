@@ -606,7 +606,9 @@ function getCategoryDisplay(item) {
 ========================================================= */
 
 function getPressReleaseCategoryClass(category) {
-  const normalized = String(category || "").toLowerCase().trim();
+  const normalized = String(category || "")
+    .toLowerCase()
+    .trim();
 
   switch (normalized) {
     case "industry news":

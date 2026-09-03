@@ -1,102 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Jakarta Film Commission</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jakarta Film Commission</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
- <!-- internal resources -->
- <link rel="stylesheet" href="assets/css/custom.css">
+    <!-- internal resources -->
+    <link rel="stylesheet" href="assets/css/custom.css">
 
 </head>
 
 <body>
-  <!-- LOADER -->
-  <div id="loader-container"></div>
-  
-  <!-- Hamburger Menu -->
-  <div class="menu-overlay" id="menuOverlay"></div>
+    <!-- LOADER -->
+    <div id="loader-container"></div>
 
-  <!-- WHATSAPP -->
-  <!-- <div id="whatsapp-container"></div> -->
-  
-  <!-- NAVBAR -->
-  <div id="navbar"></div>
+    <!-- Hamburger Menu -->
+    <div class="menu-overlay" id="menuOverlay"></div>
 
-  <section class="films-hero">
+    <!-- WHATSAPP -->
+    <!-- <div id="whatsapp-container"></div> -->
 
-    <div class="films-hero-bg">
-        <img src="gallery/cover/film-board-take-person.webp" alt="Films">
-    </div>
+    <!-- NAVBAR -->
+    <div id="navbar"></div>
 
-    <div class="films-hero-overlay"></div>
+    <section class="films-hero">
 
-    <div class="container">
-
-        <div class="films-hero-content">
-
-        <span class="films-label">
-            Supported Productions
-        </span>
-
-        <h1>
-            STORIES<br>
-            MADE IN<br>
-            JAKARTA
-        </h1>
-
-        <p>
-            Explore feature films, series, documentaries, and international productions supported through Jakarta’s growing film ecosystem.
-        </p>
-
+        <div class="films-hero-bg">
+            <img src="gallery/cover/film-board-take-person.webp" alt="Films">
         </div>
 
-    </div>
+        <div class="films-hero-overlay"></div>
+
+        <div class="container">
+
+            <div class="films-hero-content">
+
+                <span class="films-label">
+                    Supported Productions
+                </span>
+
+                <h1>
+                    STORIES<br>
+                    MADE IN<br>
+                    JAKARTA
+                </h1>
+
+                <p>
+                    Explore feature films, series, documentaries, and international productions supported through
+                    Jakarta’s growing film ecosystem.
+                </p>
+
+            </div>
+
+        </div>
 
     </section>
 
     <section class="section" style="background-color: #FF6A14;">
-    <div class="container">
+        <div class="container">
 
-        <div class="section-header">
+            <div class="section-header">
 
-        <div>
-            <span class="section-label">
-            Production Archive
-            </span>
+                <div>
+                    <span class="section-label">
+                        Production Archive
+                    </span>
 
-            <h2 class="section-title" style="color: #fff;">
-            Film Catalogue
-            </h2>
+                    <h2 class="section-title" style="color: #fff;">
+                        Film Catalogue
+                    </h2>
+                </div>
+
+            </div>
+
+            <div class="film-grid" id="filmGrid"></div>
+
+            <div class="film-button-wrap">
+                <button id="loadMoreBtn" class="film-button">
+                    Show More Productions
+                </button>
+            </div>
+
         </div>
-
-        </div>
-
-        <div class="film-grid" id="filmGrid"></div>
-
-        <div class="film-button-wrap">
-        <button id="loadMoreBtn" class="film-button">
-            Show More Productions
-        </button>
-        </div>
-
-    </div>
     </section>
 
-  <!-- FOOTER -->
-  <div id="footer"></div>
- 
+    <!-- FOOTER -->
+    <div id="footer"></div>
+
 
 </body>
 
 <!-- JAVASCRIPT -->
-  <script src="assets/js/components.js"></script>
-  <script src="assets/js/custom.js"></script>
+<script src="assets/js/components.js"></script>
+<script src="assets/js/custom.js"></script>
 
-  <script>
+<script>
     const filmGrid = document.getElementById("filmGrid");
     const loadMoreBtn = document.getElementById("loadMoreBtn");
 
@@ -104,21 +107,21 @@
     let currentIndex = 0;
 
     fetch("assets/data/films.json")
-    .then(res => res.json())
-    .then(data => {
+        .then(res => res.json())
+        .then(data => {
 
-        allFilms = data;
+            allFilms = data;
 
-        renderFilms();
-    });
+            renderFilms();
+        });
 
-    function renderFilms(){
+    function renderFilms() {
 
-    const nextFilms = allFilms.slice(currentIndex, currentIndex + 6);
+        const nextFilms = allFilms.slice(currentIndex, currentIndex + 6);
 
-    nextFilms.forEach(film => {
+        nextFilms.forEach(film => {
 
-        filmGrid.innerHTML += `
+            filmGrid.innerHTML += `
         <div class="film-card">
 
             <div class="film-poster">
@@ -143,15 +146,16 @@
 
         </div>
         `;
-    });
+        });
 
-    currentIndex += 6;
+        currentIndex += 6;
 
-    if(currentIndex >= allFilms.length){
-        loadMoreBtn.style.display = "none";
-    }
+        if (currentIndex >= allFilms.length) {
+            loadMoreBtn.style.display = "none";
+        }
     }
 
     loadMoreBtn.addEventListener("click", renderFilms);
-  </script>
+</script>
+
 </html>

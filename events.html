@@ -1,128 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Events | Jakarta Film Commission</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Events | Jakarta Film Commission</title>
 
-  
-  <link rel="icon" type="image/png" href="assets/icon/JakartaFilmCommissionLogo-9.ico">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="assets/icon/JakartaFilmCommissionLogo-9.ico">
 
- <!-- internal resources -->
- <link rel="stylesheet" href="assets/css/custom.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- internal resources -->
+    <link rel="stylesheet" href="assets/css/custom.css">
 
 </head>
 
 <body>
-  <!-- LOADER -->
-  <div id="loader-container"></div>
-  
-  <!-- Hamburger Menu -->
-  <div class="menu-overlay" id="menuOverlay"></div>
+    <!-- LOADER -->
+    <div id="loader-container"></div>
 
-  <!-- WHATSAPP -->
-  <!-- <div id="whatsapp-container"></div> -->
+    <!-- Hamburger Menu -->
+    <div class="menu-overlay" id="menuOverlay"></div>
 
-  <!-- NAVBAR -->
-  <div id="navbar"></div>
+    <!-- WHATSAPP -->
+    <!-- <div id="whatsapp-container"></div> -->
+
+    <!-- NAVBAR -->
+    <div id="navbar"></div>
 
     <!-- =========================
     EVENT HERO
     ========================= -->
     <section class="event-hero">
 
-    <div class="event-hero-bg">
-        <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=1974&auto=format&fit=crop" alt="">
-        <div class="event-hero-overlay"></div>
-    </div>
+        <div class="event-hero-bg">
+            <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=1974&auto=format&fit=crop"
+                alt="">
+            <div class="event-hero-overlay"></div>
+        </div>
 
-      <div class="container">
-          
-        <div class="event-hero-content">
-          <span class="event-hero-label">
-              Featured Event
-          </span>
-          <h1>
-              Jakarta Premiere <br>
-              Night 2026
-          </h1>
-          <p>
-              Join the city's most prestigious screening event featuring the latest masterpieces from local visionaries.
-          </p>
-          <!-- <a href="#" class="event-hero-button">
+        <div class="container">
+
+            <div class="event-hero-content">
+                <span class="event-hero-label">
+                    Featured Event
+                </span>
+                <h1>
+                    Jakarta Premiere <br>
+                    Night 2026
+                </h1>
+                <p>
+                    Join the city's most prestigious screening event featuring the latest masterpieces from local
+                    visionaries.
+                </p>
+                <!-- <a href="#" class="event-hero-button">
               Book Premiere Tickets
           </a> -->
+            </div>
         </div>
-      </div>
     </section>
 
     <!-- =========================
     EVENTS SECTION
     ========================= -->
     <section class="events-section">
-    <div class="container">
+        <div class="container">
 
-        <!-- HEADER -->
-        <div class="events-header">
-        <div>
-            <span class="events-label">Discover The Pulse of Jakarta's Film Community</span>
-            <h2 class="events-title"  style="color: #FF6A14;">Upcoming Events</h2>
-        </div>
+            <!-- HEADER -->
+            <div class="events-header">
+                <div>
+                    <span class="events-label">Discover The Pulse of Jakarta's Film Community</span>
+                    <h2 class="events-title" style="color: #FF6A14;">Upcoming Events</h2>
+                </div>
 
-        <!-- <a href="#" class="events-filter">
+                <!-- <a href="#" class="events-filter">
             View All Events
         </a> -->
+            </div>
+
+            <!-- FILTER -->
+            <div class="events-category-filter">
+
+                <button class="filter-btn active" data-category="All">
+                    All
+                </button>
+
+                <button class="filter-btn" data-category="Nonton Di">
+                    Nonton Di
+                </button>
+
+                <button class="filter-btn" data-category="Nonton Bareng">
+                    Nonton Bareng
+                </button>
+
+                <button class="filter-btn" data-category="Jakarta Film Lab">
+                    Jakarta Film Lab
+                </button>
+
+                <button class="filter-btn" data-category="Others">
+                    Others
+                </button>
+
+            </div>
+
+            <!-- GRID -->
+            <div class="events-grid" id="eventsGrid"></div>
+
+
+            <!-- BUTTON -->
+            <div class="events-load">
+                <button class="events-button" id="loadMoreBtn">
+                    Load More Events
+                </button>
+            </div>
+
         </div>
-
-          <!-- FILTER -->
-          <div class="events-category-filter">
-
-            <button class="filter-btn active" data-category="All">
-                All
-            </button>
-
-            <button class="filter-btn" data-category="Nonton Di">
-                Nonton Di
-            </button>
-
-            <button class="filter-btn" data-category="Nonton Bareng">
-                Nonton Bareng
-            </button>
-
-            <button class="filter-btn" data-category="Jakarta Film Lab">
-                Jakarta Film Lab
-            </button>
-
-            <button class="filter-btn" data-category="Others">
-                Others
-            </button>
-
-          </div>
-
-        <!-- GRID -->
-        <div class="events-grid" id="eventsGrid"></div>
-
-
-        <!-- BUTTON -->
-        <div class="events-load">
-            <button class="events-button" id="loadMoreBtn">
-                Load More Events
-            </button>
-        </div>
-
-    </div>
     </section>
 
-  <!-- FOOTER -->
-  <div id="footer"></div>
- 
+    <!-- FOOTER -->
+    <div id="footer"></div>
+
 </body>
 
 <!-- JAVASCRIPT -->
-  <script src="assets/js/components.js"></script>
-  <script src="assets/js/custom.js"></script>
-  <script src="assets/js/events.js"></script> 
+<script src="assets/js/components.js"></script>
+<script src="assets/js/custom.js"></script>
+<script src="assets/js/events.js"></script>
+
 </html>
