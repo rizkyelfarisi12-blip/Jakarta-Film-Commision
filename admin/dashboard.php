@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . "/includes/auth.php";
+
 $pageTitle="Dashboard";
 $assetPath = "";
 
@@ -81,12 +83,8 @@ include 'includes/header.php';
                     </p>
                 </div>
 
-                <a
-                    href="events/index.php"
-                    class="dashboard-view-all">
-
+                <a href="events/index.php" class="dashboard-view-all">
                     View All
-
                 </a>
 
             </div>
@@ -102,7 +100,6 @@ include 'includes/header.php';
             </div>
 
         </div>
-
 
         <!-- FEATURED EVENT -->
         <div class="dashboard-card">

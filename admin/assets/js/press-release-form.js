@@ -360,6 +360,7 @@ function setupCoverImage() {
     }
   });
 }
+
 function setCoverUploadingState(loading) {
   const a = document.querySelector(".upload-area"),
     h = a?.querySelector("h4");
@@ -368,12 +369,14 @@ function setCoverUploadingState(loading) {
     ? `<i class="ri-loader-4-line ri-spin"></i> Uploading...`
     : "Upload Cover Image";
 }
+
 function removeArticleBlock(i) {
   if (i < 0 || i >= articleBlocks.length) return;
   if (!confirm("Remove this article block?")) return;
   articleBlocks.splice(i, 1);
   renderArticleBlocks();
 }
+
 function focusLastParagraph() {
   setTimeout(() => {
     const e = document.querySelectorAll(".article-richtext-input");
@@ -383,6 +386,7 @@ function focusLastParagraph() {
     }
   }, 50);
 }
+
 function handleRichTextCommand(cmd, ed) {
   if (!ed) return;
   currentRichTextEditor = ed;
@@ -396,11 +400,13 @@ function handleRichTextCommand(cmd, ed) {
   syncCurrentEditor(ed);
   updateRichTextToolbarState(ed);
 }
+
 function saveRichTextSelection(ed) {
   const s = getSelection();
   if (s?.rangeCount && ed.contains(s.getRangeAt(0).commonAncestorContainer))
     currentRichTextRange = s.getRangeAt(0).cloneRange();
 }
+
 function restoreRichTextSelection(ed) {
   if (!currentRichTextRange) {
     ed.focus();
@@ -411,11 +417,13 @@ function restoreRichTextSelection(ed) {
   s.addRange(currentRichTextRange);
   ed.focus();
 }
+
 function syncCurrentEditor(ed) {
   const w = ed?.closest(".article-block");
   const b = w && articleBlocks.find((x) => x.id === w.dataset.blockId);
   if (b) b.content = ed.innerHTML;
 }
+
 function updateRichTextToolbarState(ed) {
   const w = ed?.closest(".article-richtext-editor");
   if (!w) return;
@@ -430,6 +438,7 @@ function updateRichTextToolbarState(ed) {
     btn.classList.toggle("active", a);
   });
 }
+
 function isSelectionInsideLink(ed) {
   const s = getSelection();
   if (!s?.rangeCount) return false;
@@ -440,7 +449,9 @@ function isSelectionInsideLink(ed) {
   }
   return false;
 }
+
 function setupRichTextModal() {}
+
 function openRichTextLinkModal(ed) {
   currentRichTextEditor = ed;
   saveRichTextSelection(ed);
@@ -458,20 +469,24 @@ function openRichTextLinkModal(ed) {
     }
     n = n.parentNode;
   }
+
   const o = document.createElement("div");
   o.id = "richTextLinkModalOverlay";
   o.className = "richtext-link-modal-overlay";
   o.innerHTML = `<div class="richtext-link-modal" role="dialog" aria-modal="true"><div class="richtext-link-modal-header"><div class="richtext-link-modal-icon"><i class="ri-link"></i></div><div class="richtext-link-modal-heading"><h3>Insert Link</h3><p>Add a link to the selected text.</p></div><button type="button" class="richtext-link-modal-close" id="richTextLinkClose"><i class="ri-close-line"></i></button></div><div class="richtext-link-modal-body"><div class="form-group"><label>Selected Text</label><input type="text" id="richTextLinkText" value="${escapeAttribute(text)}" readonly></div><div class="form-group"><label for="richTextLinkUrl">URL</label><input type="url" id="richTextLinkUrl" placeholder="https://example.com" value="${escapeAttribute(url)}" autocomplete="off"></div><label class="richtext-link-checkbox"><input type="checkbox" id="richTextLinkNewTab" ${blank ? "checked" : ""}><span class="richtext-link-checkbox-box"><i class="ri-check-line"></i></span> Open link in a new tab</label></div><div class="richtext-link-modal-footer"><button type="button" class="btn btn-secondary" id="richTextLinkCancel">Cancel</button><button type="button" class="btn btn-primary" id="richTextLinkApply"><i class="ri-link"></i> Apply Link</button></div></div>`;
   document.body.appendChild(o);
   requestAnimationFrame(() => o.classList.add("show"));
+
   const ui = (id) => document.getElementById(id),
     urlInput = ui("richTextLinkUrl"),
     newTab = ui("richTextLinkNewTab");
+
   const close = () => {
     o.classList.remove("show");
     setTimeout(() => o.remove(), 180);
     document.removeEventListener("keydown", esc);
   };
+
   const esc = (e) => {
     if (e.key === "Escape") close();
   };
@@ -480,6 +495,7 @@ function openRichTextLinkModal(ed) {
   o.onclick = (e) => {
     if (e.target === o) close();
   };
+
   document.addEventListener("keydown", esc);
   ui("richTextLinkApply").onclick = () => {
     let u = urlInput.value.trim();
@@ -497,6 +513,7 @@ function openRichTextLinkModal(ed) {
       alert("Please select text in the paragraph first.");
       return;
     }
+
     document.execCommand("createLink", false, u);
     const links = ed.querySelectorAll("a"),
       last = links[links.length - 1];
@@ -509,64 +526,80 @@ function openRichTextLinkModal(ed) {
         last.removeAttribute("rel");
       }
     }
+
     syncCurrentEditor(ed);
     updateRichTextToolbarState(ed);
     close();
   };
+
   setTimeout(() => {
     urlInput.focus();
     if (url) urlInput.select();
   }, 100);
 }
+
 function syncArticleBlocks() {
   document.querySelectorAll(".article-richtext-input").forEach((ed) => {
     const w = ed.closest(".article-block"),
       b = w && articleBlocks.find((x) => x.id === w.dataset.blockId);
     if (b) b.content = ed.innerHTML;
   });
+
   document.querySelectorAll(".article-image-caption").forEach((i) => {
     const w = i.closest(".article-block"),
       b = w && articleBlocks.find((x) => x.id === w.dataset.blockId);
     if (b) b.caption = i.value;
   });
+
   document.querySelectorAll(".article-image-alt").forEach((i) => {
     const w = i.closest(".article-block"),
       b = w && articleBlocks.find((x) => x.id === w.dataset.blockId);
     if (b) b.alt = i.value;
   });
+
 }
+
 async function handleArticleImageSelect(input, b, w) {
   const file = input.files?.[0];
+
   if (!file) return;
   const types = ["image/jpeg", "image/png", "image/webp"];
+
   if (!types.includes(file.type)) {
     alert("Only JPG, PNG and WEBP images are allowed.");
     input.value = "";
     return;
   }
+
   if (file.size > 5 * 1024 * 1024) {
     alert("Image size must not exceed 5 MB.");
     input.value = "";
     return;
   }
+
   b.file = file;
   const p = w?.querySelector(".article-image-preview"),
     ph = w?.querySelector(".article-upload-placeholder");
   previewFile(file, p, ph);
+
   try {
     showImageUploadingState(w, true);
     const u = await uploadPressReleaseImage(file, "article"),
       path = u.url || u.path;
+      
     if (!path) throw Error("Uploaded article image path is missing.");
     b.src = path;
     b.file = null;
     b.uploaded = true;
     input.dataset.uploadedPath = path;
+    
     if (p) {
       p.src = resolveImagePath(path);
       p.style.display = "block";
     }
+
     if (ph) ph.style.display = "none";
+
   } catch (e) {
     alert(e.message || "Failed to upload article image.");
     input.value = "";
@@ -574,44 +607,66 @@ async function handleArticleImageSelect(input, b, w) {
     b.src = "";
     b.uploaded = false;
     input.dataset.uploadedPath = "";
+
     if (p) {
       p.removeAttribute("src");
       p.style.display = "none";
     }
+
     if (ph) ph.style.display = "flex";
+
   } finally {
     showImageUploadingState(w, false);
   }
+
 }
+
 function validateForm() {
+
   const title = getValue("title").trim(),
-    cat = getValue("category").trim(),
+
+  cat = getValue("category").trim(),
+
     cn = getValue("category_name").trim(),
+
     desc = getValue("description").trim(),
+
     status = getValue("status").trim(),
+
     loc = getValue("location").trim(),
+
     cover = getValue("existingCoverImage").trim();
+
   if (!title) return { valid: false, message: "Title is required." };
+
   if (!cat) return { valid: false, message: "Please select a category." };
+
   if (cat === "Others" && !cn)
     return { valid: false, message: "Please enter the custom category name." };
+
   if (!desc) return { valid: false, message: "Short description is required." };
+
   if (!loc) {
     const e = document.getElementById("location");
+
     if (e) e.value = "Jakarta";
   }
+
   if (!cover)
     return {
       valid: false,
       message: "Cover image is required. Please upload a cover image first.",
     };
+
   if (!["draft", "published"].includes(status))
     return { valid: false, message: "Invalid status." };
+
   if (!articleBlocks.length)
     return {
       valid: false,
       message: "Please add at least one paragraph to the article.",
     };
+
   if (
     !articleBlocks.some(
       (b) => b.type === "paragraph" && stripHtml(b.content).trim(),
@@ -621,26 +676,40 @@ function validateForm() {
       valid: false,
       message: "At least one paragraph with content is required.",
     };
+
   for (let i = 0; i < articleBlocks.length; i++) {
+
     const b = articleBlocks[i];
+
     if (b.type === "paragraph" && !stripHtml(b.content).trim())
       return { valid: false, message: `Paragraph ${i + 1} is empty.` };
+
     if (b.type === "image" && !b.src)
       return {
         valid: false,
         message: `Article image ${i + 1} has not finished uploading.`,
       };
+
   }
+
   return { valid: true };
+
 }
+
 function stripHtml(html) {
+
   const d = document.createElement("div");
   d.innerHTML = html || "";
   return d.textContent || d.innerText || "";
+
 }
+
 function collectFormData() {
+
   const cat = getValue("category").trim(),
-    cn = getValue("category_name").trim(),
+
+  cn = getValue("category_name").trim(),
+
     content = articleBlocks.map((b) =>
       b.type === "paragraph"
         ? { type: "paragraph", content: b.content || "" }
@@ -653,156 +722,256 @@ function collectFormData() {
             }
           : b,
     );
+
   let location = getValue("location").trim() || "Jakarta";
+
   return {
+
     id: getValue("pressReleaseId") || null,
+    
     title: getValue("title").trim(),
+
     slug: getValue("slug").trim(),
+
     description: getValue("description").trim(),
+
     content: JSON.stringify(content),
+
     cover_image: getValue("existingCoverImage").trim(),
+
     category: cat,
+
     category_name: cat === "Others" ? cn : "",
+
     location,
+
     published_date: getValue("date") || null,
+
     status: getValue("status") || "draft",
+
     meta_title: getValue("meta_title").trim(),
+
     meta_description: getValue("meta_description").trim(),
+
   };
+
 }
+
 function setupSaveButton() {
+
   const b = document.getElementById("savePressReleaseBtn");
+
   if (b)
     b.addEventListener("click", (e) => {
       e.preventDefault();
       savePressRelease();
     });
+
 }
+
 function setupFormSubmitProtection() {
+
   const f = document.getElementById("pressReleaseForm");
+
   if (f)
+
     f.addEventListener("submit", (e) => {
       e.preventDefault();
       savePressRelease();
     });
+
 }
+
 async function savePressRelease() {
   const form = document.getElementById("pressReleaseForm"),
     button = document.getElementById("savePressReleaseBtn");
+
   if (!form) return;
+
   syncArticleBlocks();
+
   const v = validateForm();
+
   if (!v.valid) {
     alert(v.message);
     return;
   }
+
   const data = collectFormData();
+
   if (button) {
     button.disabled = true;
     button.dataset.originalText = button.innerHTML;
     button.innerHTML = `<i class="ri-loader-4-line ri-spin"></i> Saving...`;
   }
+
   try {
+
     const endpoint = isEditMode
         ? window.JFC_PRESS_RELEASE_UPDATE_API
         : window.JFC_PRESS_RELEASE_CREATE_API,
-      response = await fetch(endpoint, {
+
+        response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
+
     let result;
+
     try {
       result = await response.json();
+
     } catch (e) {
+
       throw Error(`Server returned HTTP ${response.status}.`);
+
     }
+
     if (!response.ok)
       throw Error(
         result?.message ||
           result?.error ||
           `Server returned HTTP ${response.status}.`,
       );
+
     if (!result?.success)
       throw Error(
         result?.message || result?.error || "Failed to save Press Release.",
       );
+
     alert(result.message || "Press Release successfully saved.");
     location.href = "index.php";
+
   } catch (e) {
+
     console.error(e);
     alert(e.message || "An error occurred while saving Press Release.");
+
   } finally {
+
     if (button) {
       button.disabled = false;
+
       if (button.dataset.originalText)
         button.innerHTML = button.dataset.originalText;
     }
+
   }
+
 }
+
 async function loadPressRelease(id) {
+
   try {
     const r = await fetch(
       window.JFC_PRESS_RELEASE_GET_API + "?id=" + encodeURIComponent(id),
     );
+
     if (!r.ok) throw Error("Failed to load Press Release. HTTP " + r.status);
+
     const result = await r.json();
+
     if (!result.success)
       throw Error(result.message || "Failed to load Press Release.");
+
     let item = null;
+
     if (Array.isArray(result.data?.items))
       item = result.data.items.find((x) => Number(x.id) === Number(id));
+
     if (!item && result.data?.item) item = result.data.item;
+
     if (!item && result.data?.id) item = result.data;
+
     if (!item) throw Error("Press Release not found.");
+
     pressReleaseData = item;
+
     populateForm(item);
+
     setPageTitle("Edit Press Release");
+
   } catch (e) {
+
     console.error(e);
     alert(e.message || "Failed to load Press Release.");
+
   }
+
 }
+
 function populateForm(item) {
+
   setValue("pressReleaseId", item.id);
+
   setValue("title", item.title);
+
   setValue("slug", item.slug || generateSlug(item.title));
+
   const slug = document.getElementById("slug");
+
   if (slug) slug.readOnly = true;
+
   if (item.category_name?.trim()) {
+
     setValue("category", "Others");
     setValue("category_name", item.category_name);
+
   } else {
+
     setValue("category", item.category);
     setValue("category_name", "");
+
   }
+
   setValue("date", item.published_date || item.start_date || "");
+
   setValue("location", item.location || "Jakarta");
+
   setValue("description", item.description || item.excerpt || "");
+
   setValue("status", item.status || "draft");
+
   setValue("meta_title", item.meta_title || "");
+
   setValue("meta_description", item.meta_description || "");
+
   document.getElementById("category")?.dispatchEvent(new Event("change"));
+
   setValue("existingCoverImage", item.cover_image || "");
+
   const ci = document.getElementById("coverImage");
+
   if (ci && item.cover_image) ci.dataset.uploadedPath = item.cover_image;
+
   if (item.cover_image) {
+
     const p = document.getElementById("imagePreview");
+
     if (p) {
       p.src = resolveImagePath(item.cover_image);
       p.style.display = "block";
     }
   }
+
   articleBlocks = parseArticleContent(item.content);
   renderArticleBlocks();
 }
+
 function parseArticleContent(content) {
+
   if (!content) return [];
   let parsed = content;
+
   if (typeof content === "string") {
+
     try {
+
       parsed = JSON.parse(content);
+
     } catch (e) {
+
       return [
         {
           id: createBlockId(),
@@ -810,8 +979,10 @@ function parseArticleContent(content) {
           content: escapeHtml(content),
         },
       ];
+      
     }
   }
+
   if (Array.isArray(parsed))
     return parsed.map((i) =>
       i.type === "image"
@@ -831,12 +1002,16 @@ function parseArticleContent(content) {
           },
     );
   if (Array.isArray(parsed?.blocks)) return parseArticleContent(parsed.blocks);
+
   if (typeof parsed?.content === "string")
+
     return [
       { id: createBlockId(), type: "paragraph", content: parsed.content },
     ];
+
   return [];
 }
+
 window.savePressRelease = savePressRelease;
 window.addParagraphBlock = addParagraphBlock;
 window.addImageBlock = addImageBlock;

@@ -1,5 +1,8 @@
 <?php
 
+require_once __DIR__ . "/../includes/auth.php";
+requireRole(["super_admin", "content_admin"]);
+
 $pageTitle = "Press Release Management";
 $assetPath = "../";
 

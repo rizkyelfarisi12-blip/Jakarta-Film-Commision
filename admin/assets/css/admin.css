@@ -2456,3 +2456,56 @@ PRESS RELEASE CATEGORY BADGE
     border-radius: 14px;
   }
 }
+
+.role-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 26px;
+    padding: 0 10px;
+    border-radius: 999px;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 750;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.role-badge.super-admin { background: #da291c; }
+.role-badge.content-admin { background: #ff5a1f; }
+.role-badge.communication-admin { background: #526e3e; }
+.role-badge.membership-admin { background: #97b300; }
+.role-badge.other { background: #8e938e; }
+
+.status-active { background: #e8f6eb; color: #267337; }
+.status-inactive { background: #eceeec; color: #666b66; }
+
+.user-avatar-initials {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ff5a1f;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* =========================
+LOGIN ERROR MESSAGE
+========================= */
+
+.login-error {
+    margin-bottom: 15px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: rgba(218, 41, 28, 0.15);
+    border: 1px solid rgba(218, 41, 28, 0.35);
+    color: #ffb4b0;
+    font-size: 13px;
+    text-align: left;
+}

@@ -1,5 +1,8 @@
 <?php
 
+require_once __DIR__ . "/../includes/auth.php";
+requireRole(["super_admin", "content_admin"]);
+
 $pageTitle = "Press Release";
 
 $assetPath = "../";
@@ -89,13 +92,8 @@ include "../includes/header.php";
                                         Title
                                     </label>
 
-                                    <input
-                                        type="text"
-                                        id="title"
-                                        name="title"
-                                        placeholder="Enter press release title"
-                                        autocomplete="off"
-                                        required>
+                                    <input type="text" id="title" name="title" placeholder="Enter press release title"
+                                        autocomplete="off" required>
 
                                 </div>
 
@@ -108,12 +106,7 @@ include "../includes/header.php";
                                         Slug
                                     </label>
 
-                                    <input
-                                        type="text"
-                                        id="slug"
-                                        name="slug"
-                                        placeholder="press-release-slug"
-                                        readonly>
+                                    <input type="text" id="slug" name="slug" placeholder="press-release-slug" readonly>
 
                                     <small>
                                         Automatically generated from the title.
@@ -130,10 +123,7 @@ include "../includes/header.php";
                                         Category
                                     </label>
 
-                                    <select
-                                        id="category"
-                                        name="category"
-                                        required>
+                                    <select id="category" name="category" required>
 
                                         <option value="">
                                             Select Category
@@ -164,19 +154,13 @@ include "../includes/header.php";
                                      CUSTOM CATEGORY
                                 ====================================== -->
 
-                                <div
-                                    class="form-group"
-                                    id="categoryNameGroup"
-                                    style="display:none;">
+                                <div class="form-group" id="categoryNameGroup" style="display:none;">
 
                                     <label for="category_name">
                                         Category Name
                                     </label>
 
-                                    <input
-                                        type="text"
-                                        id="category_name"
-                                        name="category_name"
+                                    <input type="text" id="category_name" name="category_name"
                                         placeholder="Enter custom category name">
 
                                     <small>
@@ -214,11 +198,7 @@ include "../includes/header.php";
                                         Location
                                     </label>
 
-                                    <input
-                                        type="text"
-                                        id="location"
-                                        name="location"
-                                        placeholder="Enter location"
+                                    <input type="text" id="location" name="location" placeholder="Enter location"
                                         maxlength="255">
 
                                     <small>
@@ -236,11 +216,8 @@ include "../includes/header.php";
                                         Short Description
                                     </label>
 
-                                    <textarea
-                                        id="description"
-                                        name="description"
-                                        placeholder="Write a short description that will appear on the press release card..."
-                                    ></textarea>
+                                    <textarea id="description" name="description"
+                                        placeholder="Write a short description that will appear on the press release card..."></textarea>
 
                                     <small>
                                         This description will be used as the main highlight on the press release list.
@@ -277,11 +254,7 @@ include "../includes/header.php";
 
                                 <div class="article-add-buttons">
 
-                                    <button
-                                        type="button"
-                                        class="btn btn-secondary"
-                                        id="addParagraphBtn"
-                                    >
+                                    <button type="button" class="btn btn-secondary" id="addParagraphBtn">
 
                                         <i class="ri-text"></i>
 
@@ -290,11 +263,7 @@ include "../includes/header.php";
                                     </button>
 
 
-                                    <button
-                                        type="button"
-                                        class="btn btn-secondary"
-                                        id="addImageBtn"
-                                    >
+                                    <button type="button" class="btn btn-secondary" id="addImageBtn">
 
                                         <i class="ri-image-line"></i>
 
@@ -308,27 +277,16 @@ include "../includes/header.php";
 
 
                             <!-- ARTICLE BLOCKS -->
-
                             <div id="articleContent">
 
                                 <!-- Dynamic article blocks -->
-
                             </div>
 
-
                             <!-- EMPTY STATE -->
-
-                            <div
-                                id="articleEmptyState"
-                                class="dashboard-empty"
-                            >
-
+                            <div id="articleEmptyState" class="dashboard-empty">
                                 No article content yet.
-
                                 <br>
-
                                 Add a paragraph or image to start writing.
-
                             </div>
 
                         </section>
@@ -353,13 +311,8 @@ include "../includes/header.php";
                                     Meta Title
                                 </label>
 
-                                <input
-                                    type="text"
-                                    id="meta_title"
-                                    name="meta_title"
-                                    placeholder="SEO title"
-                                    maxlength="255"
-                                >
+                                <input type="text" id="meta_title" name="meta_title" placeholder="SEO title"
+                                    maxlength="255">
 
                                 <small>
                                     Optional. If empty, the press release title can be used.
@@ -370,20 +323,14 @@ include "../includes/header.php";
 
                             <!-- META DESCRIPTION -->
 
-                            <div
-                                class="form-group"
-                                style="margin-top:20px;"
-                            >
+                            <div class="form-group" style="margin-top:20px;">
 
                                 <label for="meta_description">
                                     Meta Description
                                 </label>
 
-                                <textarea
-                                    id="meta_description"
-                                    name="meta_description"
-                                    placeholder="SEO description"
-                                ></textarea>
+                                <textarea id="meta_description" name="meta_description"
+                                    placeholder="SEO description"></textarea>
 
                             </div>
 
@@ -417,10 +364,7 @@ include "../includes/header.php";
                                     Status
                                 </label>
 
-                                <select
-                                    id="status"
-                                    name="status"
-                                >
+                                <select id="status" name="status">
 
                                     <option value="draft">
                                         Draft
@@ -450,17 +394,10 @@ include "../includes/header.php";
 
                             <div class="upload-box">
 
-                                <label
-                                    for="coverImage"
-                                    class="upload-area"
-                                >
+                                <label for="coverImage" class="upload-area">
 
-                                    <img
-                                        src="<?= $assetPath ?>assets/icon/image-upload.png"
-                                        class="upload-icon"
-                                        alt="Upload"
-                                        onerror="this.style.display='none';"
-                                    >
+                                    <img src="<?= $assetPath ?>assets/icon/image-upload.png" class="upload-icon"
+                                        alt="Upload" onerror="this.style.display='none';">
 
 
                                     <h4>
@@ -480,20 +417,11 @@ include "../includes/header.php";
                                 </label>
 
 
-                                <input
-                                    type="file"
-                                    id="coverImage"
-                                    name="cover_image"
-                                    accept="image/jpeg,image/png,image/webp"
-                                    hidden
-                                >
+                                <input type="file" id="coverImage" name="cover_image"
+                                    accept="image/jpeg,image/png,image/webp" hidden>
 
 
-                                <img
-                                    id="imagePreview"
-                                    src=""
-                                    alt="Cover Preview"
-                                >
+                                <img id="imagePreview" src="" alt="Cover Preview">
 
                             </div>
 

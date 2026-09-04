@@ -5983,7 +5983,9 @@ SUPPORTED FILMS
   height:54px;
   padding:0 32px;
   border:1px solid rgba(255,255,255,.08);
-  font-size:11px;
+  background-color: #526E3E;
+  color:#fff;
+  font-size:14px;
   letter-spacing:.16em;
   text-transform:uppercase;
   transition:.3s ease;
