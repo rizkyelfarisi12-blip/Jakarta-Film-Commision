@@ -1,0 +1,257 @@
+/* =========================================================
+   JAKARTA FILM COMMISSION
+   CINEMATIC EFFECTS LAYER
+
+   File tambahan - load SETELAH custom.css, tidak mengubah
+   atau menimpa style yang sudah ada, cuma menambah animasi.
+========================================================= */
+
+
+/* =========================================================
+   1. HERO - KEN BURNS ZOOM
+
+   Memanfaatkan class .active yang SUDAH ditoggle oleh
+   slider JS Anda yang ada sekarang - tidak perlu ubah JS
+   slider sama sekali.
+========================================================= */
+
+.hero-slide img {
+    transform: scale(1.12);
+}
+
+.hero-slide.active img {
+    animation: jfcKenBurns 9s ease-out forwards;
+}
+
+@keyframes jfcKenBurns {
+
+    from {
+        transform: scale(1.12);
+    }
+
+    to {
+        transform: scale(1);
+    }
+
+}
+
+
+/* =========================================================
+   2. HERO - TEXT REVEAL BERTAHAP
+
+   Eyebrow muncul dulu, judul menyusul - efek "title card".
+========================================================= */
+
+.hero-slide .hero-eyebrow,
+.hero-slide h1 {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+        opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-slide.active .hero-eyebrow {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.35s;
+}
+
+.hero-slide.active h1 {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.55s;
+}
+
+
+/* =========================================================
+   3. SCROLL REVEAL (konten statis)
+
+   Dikendalikan oleh cinematic-effects.js lewat
+   IntersectionObserver. Tambahkan class "reveal" ke elemen
+   yang mau di-animasikan, atau "reveal-stagger" ke
+   container supaya semua anaknya otomatis kebagian delay
+   berurutan.
+========================================================= */
+
+.reveal {
+    opacity: 0;
+    transform: translateY(36px);
+    transition:
+        opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: calc(var(--reveal-index, 0) * 0.09s);
+}
+
+.reveal.reveal-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* =========================================================
+   4. SECTION TITLE - GARIS BAWAH "MENGGAMBAR DIRI"
+========================================================= */
+
+.section-title {
+    position: relative;
+    display: inline-block;
+}
+
+.section-title::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -10px;
+    height: 3px;
+    width: 0;
+    background: #ff5a1f;
+    transition: width 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.2s;
+}
+
+.reveal-visible .section-title::after,
+.section-title.reveal-visible::after {
+    width: 64px;
+}
+
+
+/* =========================================================
+   5. FADE-IN OTOMATIS UNTUK KONTEN DINAMIS
+   (Featured Event & Press Release cards)
+
+   Ini pakai @keyframes (bukan transition), karena
+   @keyframes otomatis jalan begitu elemen baru muncul di
+   DOM - jadi TIDAK PERLU ubah JS fetch/render Anda sama
+   sekali, tetap jalan walau kontennya baru datang belakangan
+   dari API.
+========================================================= */
+
+@keyframes jfcCardFadeUp {
+
+    from {
+        opacity: 0;
+        transform: translateY(28px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+.press-card,
+.featured-event-card {
+    animation: jfcCardFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.press-grid .press-card:nth-child(1) { animation-delay: 0.05s; }
+.press-grid .press-card:nth-child(2) { animation-delay: 0.16s; }
+.press-grid .press-card:nth-child(3) { animation-delay: 0.27s; }
+.press-grid .press-card:nth-child(4) { animation-delay: 0.38s; }
+.press-grid .press-card:nth-child(5) { animation-delay: 0.49s; }
+.press-grid .press-card:nth-child(6) { animation-delay: 0.60s; }
+
+
+/* =========================================================
+   6. HOVER POLISH - PRESS CARD
+========================================================= */
+
+.press-card {
+    transition:
+        transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.4s ease;
+}
+
+.press-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.press-image {
+    overflow: hidden;
+}
+
+.press-image img {
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.press-card:hover .press-image img {
+    transform: scale(1.08);
+}
+
+
+/* =========================================================
+   7. HOVER POLISH - FEATURED EVENT
+========================================================= */
+
+.featured-event-image {
+    overflow: hidden;
+}
+
+.featured-event-image img {
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.featured-event-card:hover .featured-event-image img {
+    transform: scale(1.06);
+}
+
+.featured-event-btn {
+    transition:
+        transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.3s ease;
+}
+
+.featured-event-card:hover .featured-event-btn {
+    transform: translateX(4px);
+}
+
+
+/* =========================================================
+   8. NAVBAR - MENYATU DENGAN SCROLL
+
+   Dikontrol oleh cinematic-effects.js (toggle class
+   "navbar-scrolled" di elemen #navbar saat di-scroll).
+
+   CATATAN: nilai warna di bawah ini tebakan yang aman
+   (hitam transparan). Kalau navbar Anda sudah punya
+   background sendiri, sesuaikan warnanya di sini supaya
+   konsisten dengan brand.
+========================================================= */
+
+#navbar {
+    transition:
+        background-color 0.35s ease,
+        box-shadow 0.35s ease,
+        backdrop-filter 0.35s ease;
+}
+
+#navbar.navbar-scrolled {
+    background-color: rgba(15, 15, 15, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+}
+
+
+/* =========================================================
+   9. ACCESSIBILITY - prefers-reduced-motion
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .hero-slide img,
+    .hero-slide .hero-eyebrow,
+    .hero-slide h1,
+    .reveal,
+    .press-card,
+    .featured-event-card,
+    .press-image img,
+    .featured-event-image img,
+    #navbar {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+
+}

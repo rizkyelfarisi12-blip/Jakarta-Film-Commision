@@ -1363,15 +1363,13 @@
             /* -------------------------------------------------
                IMAGE
             ------------------------------------------------- */
+            let image = String(event.cover_image || "").trim();
 
-            let image =
-                String(
-                    event.cover_image || ""
-                ).trim();
-
-
-            image =
-                image.replace(/^\/+/, "");
+            if (!image || image === "undefined") {
+                image = "gallery/cover/camera-take-person.webp"; // atau gambar default lain
+            } else {
+                image = image.replace(/^\/+/, "");
+            }
 
 
             /* -------------------------------------------------

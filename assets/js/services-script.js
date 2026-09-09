@@ -14,16 +14,58 @@ document.addEventListener("DOMContentLoaded", function () {
     return;
   }
 
+  /*
+  |----------------------------------------------------------------------
+  | TRANSITION LOCK
+  |----------------------------------------------------------------------
+  |
+  | Mencegah klik beruntun memicu transisi baru sebelum yang
+  | sebelumnya selesai (penyebab utama "lag"/patah saat klik
+  | cepat berturut-turut). Kunci dilepas begitu transisi CSS
+  | panel selesai (transitionend), dengan safety-net timeout
+  | kalau ternyata tidak ada transisi CSS yang terpasang / durasi
+  | berubah - supaya UI tidak pernah macet permanen.
+  |
+  |----------------------------------------------------------------------
+  */
+
+  let isTransitioning = false;
+
+  function activatePanel(panel) {
+
+    // No-op kalau panel yang diklik memang sudah aktif -
+    // jangan paksa reflow untuk sesuatu yang tidak berubah.
+    if (panel.classList.contains("active")) {
+      return;
+    }
+
+    if (isTransitioning) {
+      return;
+    }
+
+    isTransitioning = true;
+
+    panels.forEach((p) => p.classList.remove("active"));
+    panel.classList.add("active");
+
+    const release = () => {
+      isTransitioning = false;
+    };
+
+    panel.addEventListener("transitionend", release, { once: true });
+
+    // Safety net: kalau tidak ada transisi CSS (atau selector-nya
+    // tidak match), jangan sampai isTransitioning macet true selamanya.
+    setTimeout(release, 700);
+
+  }
+
   // Add click event to each panel
   panels.forEach((panel, index) => {
     panel.addEventListener("click", function (e) {
       e.stopPropagation();
 
-      // Remove active class from all panels
-      panels.forEach((p) => p.classList.remove("active"));
-
-      // Add active class to clicked panel
-      this.classList.add("active");
+      activatePanel(this);
 
       console.log("Panel " + (index + 1) + " activated");
     });
@@ -33,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
     panel.addEventListener("keydown", (e) => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
-        panel.click();
+        activatePanel(panel);
       }
     });
   });
@@ -48,7 +90,6 @@ document.addEventListener("DOMContentLoaded", function () {
   // TOUCH SUPPORT (Mobile Swipe)
   // ============================================
   let touchStartX = 0;
-  let touchEndX = 0;
   const servicesExpand = document.querySelector(".services-expand");
 
   if (servicesExpand) {
@@ -57,53 +98,97 @@ document.addEventListener("DOMContentLoaded", function () {
       (e) => {
         touchStartX = e.changedTouches[0].screenX;
       },
-      false,
+      { passive: true },
     );
 
     servicesExpand.addEventListener(
       "touchend",
       (e) => {
-        touchEndX = e.changedTouches[0].screenX;
-        handleSwipe();
+        const touchEndX = e.changedTouches[0].screenX;
+        const deltaX = touchEndX - touchStartX;
+
+        // Cuma dianggap swipe kalau geraknya cukup jauh (>50px).
+        // Kalau bukan swipe (cuma tap biasa), biarkan browser
+        // menangani klik-nya sendiri secara natural.
+        if (Math.abs(deltaX) > 50) {
+
+          // PENTING: preventDefault() di sini mencegah browser
+          // mengirim event klik "hantu" (ghost click) susulan ke
+          // elemen yang sekarang berada di posisi jari diangkat -
+          // yang sudah jadi panel BEDA karena lebar panel berubah
+          // begitu handleSwipe() memindahkan panel aktif.
+          e.preventDefault();
+
+          handleSwipe(deltaX);
+
+        }
       },
-      false,
+      { passive: false },
     );
   }
 
-  function handleSwipe() {
+  function handleSwipe(deltaX) {
+
     const activePanel = document.querySelector(".service-panel.active");
     const activeIndex = Array.from(panels).indexOf(activePanel);
 
-    if (touchEndX < touchStartX - 50) {
+    if (deltaX < 0) {
       // Swiped left - go to next panel
       const nextIndex = (activeIndex + 1) % panels.length;
-      panels[nextIndex].click();
-    } else if (touchEndX > touchStartX + 50) {
+      activatePanel(panels[nextIndex]);
+    } else {
       // Swiped right - go to previous panel
       const prevIndex = (activeIndex - 1 + panels.length) % panels.length;
-      panels[prevIndex].click();
+      activatePanel(panels[prevIndex]);
     }
+
   }
 
   // ============================================
   // KEYBOARD NAVIGATION (Arrow Keys)
   // ============================================
   document.addEventListener("keydown", (e) => {
+
+    if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") {
+      return;
+    }
+
+    // Jangan ganggu panah kiri/kanan saat user sedang mengetik
+    // di input/textarea di bagian lain halaman.
+    const activeTag = document.activeElement?.tagName;
+
+    if (
+      activeTag === "INPUT" ||
+      activeTag === "TEXTAREA" ||
+      document.activeElement?.isContentEditable
+    ) {
+      return;
+    }
+
+    // Cuma aktif kalau fokus memang sedang di dalam services-expand
+    // (misal user habis klik/tab ke salah satu panel).
+    if (!servicesExpand || !servicesExpand.contains(document.activeElement)) {
+      return;
+    }
+
     const activePanel = document.querySelector(".service-panel.active");
 
-    if (!activePanel) return;
+    if (!activePanel) {
+      return;
+    }
 
     const activeIndex = Array.from(panels).indexOf(activePanel);
 
+    e.preventDefault();
+
     if (e.key === "ArrowRight") {
-      e.preventDefault();
       const nextIndex = (activeIndex + 1) % panels.length;
-      panels[nextIndex].click();
-    } else if (e.key === "ArrowLeft") {
-      e.preventDefault();
+      activatePanel(panels[nextIndex]);
+    } else {
       const prevIndex = (activeIndex - 1 + panels.length) % panels.length;
-      panels[prevIndex].click();
+      activatePanel(panels[prevIndex]);
     }
+
   });
 
   // ============================================

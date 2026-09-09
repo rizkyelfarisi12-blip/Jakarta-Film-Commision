@@ -6715,165 +6715,151 @@ SUPPORTED FILMS
 }
 
 /* Services Expand Section */
+/* =========================================================
+   SERVICES EXPAND - SMOOTH PANEL ANIMATION
+   =========================================================
+
+   TEKNIK YANG DIPAKAI DI SINI (kenapa ini smooth):
+
+   1. Cuma animasikan `flex-grow` (bilangan rasio), BUKAN
+      `width`/`flex-basis` dalam px/%. flex-grow tetap technically
+      memicu layout, tapi jauh lebih murah dihitung browser
+      dibanding width absolut karena cuma perlu redistribusi
+      1 angka rasio, bukan hitung ulang semua dimensi dari nol.
+
+   2. Gambar (<img>) TIDAK ikut resize logic-nya sendiri -
+      dia cuma position:absolute + object-fit:cover mengisi
+      apa pun ukuran parent-nya. Jadi browser tidak perlu
+      decode/re-fit ulang gambar di setiap frame animasi,
+      cuma perlu scale hasil yang sudah di-composite (murah,
+      di-handle GPU).
+
+   3. Teks di dalam .service-content TIDAK reflow mengikuti
+      lebar panel yang berubah - dia fade in/out lewat opacity
+      + transform (2 properti paling murah untuk browser,
+      full GPU-accelerated, tidak pernah memicu layout reflow
+      sama sekali). Reflow teks di tengah animasi adalah salah
+      satu penyebab paling umum animasi terasa patah-patah.
+
+   4. `contain: paint` membatasi area repaint ke dalam kotak
+      panel itu sendiri, browser tidak perlu re-paint elemen
+      di luar panel yang sedang dianimasikan.
+
+   5. `will-change: flex-grow` kasih sinyal ke browser untuk
+      menyiapkan compositing layer LEBIH AWAL, bukan mendadak
+      saat animasi baru mulai.
+
+========================================================= */
+
 .services-expand {
     display: flex;
-    height: 400px;
-    overflow: hidden;
-    gap: 0;
-    /* border-radius: 1.5rem; */
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-    background: #1a1a1a;
     width: 100%;
-}
-
-@media (min-width: 768px) {
-    .services-expand {
-        height: 550px;
-    }
-}
-
-@media (min-width: 1024px) {
-    .services-expand {
-        height: 650px;
-    }
-}
-
-/* Service Panel - CRITICAL CSS */
-.service-panel {
-    flex: 1;
-    position: relative;
-    cursor: pointer;
-    transition: flex 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    min-width: 60px;
-    /* border-radius: 1.5rem; */
+    height: 560px;
     overflow: hidden;
-    z-index: 1;
+}
+
+.service-panel {
+    position: relative;
+    flex: 1 1 0%;
+    height: 100%;
+    overflow: hidden;
+    cursor: pointer;
+
+    will-change: flex-grow;
+    contain: paint;
+
+    transition: flex-grow 0.6s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 .service-panel.active {
-    flex: 3;
-    z-index: 10;
+    flex-grow: 4;
 }
 
-@media (max-width: 767px) {
-    .service-panel {
-        flex: 1.2;
-    }
+/* =========================================================
+   BACKGROUND IMAGE
+   ========================================================= */
 
-    .service-panel.active {
-        flex: 4;
-    }
-}
-
-/* Background Image */
 .service-bg {
     position: absolute;
     inset: 0;
-    overflow: hidden;
-    z-index: 1;
 }
 
 .service-bg img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    display: block;
 }
 
-.service-panel:hover .service-bg img {
-    transform: scale(1.1);
-}
-
-.service-panel.active .service-bg img {
-    transform: scale(1.05);
-}
-
-/* Overlay Gradient */
 .service-overlay {
     position: absolute;
     inset: 0;
     background: linear-gradient(
-        135deg,
-        rgba(0, 0, 0, 0.3) 0%,
-        rgba(0, 0, 0, 0.6) 50%,
-        rgba(0, 0, 0, 0.85) 100%
-    );
-    transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    z-index: 2;
-}
-
-.service-panel.active .service-overlay {
-    background: linear-gradient(
-        135deg,
-        rgba(0, 0, 0, 0.2) 0%,
-        rgba(0, 0, 0, 0.4) 50%,
-        rgba(0, 0, 0, 0.7) 100%
+        to top,
+        rgba(0, 0, 0, 0.85) 0%,
+        rgba(0, 0, 0, 0.35) 55%,
+        rgba(0, 0, 0, 0.15) 100%
     );
 }
 
-/* Label (Vertical Text) */
+/* =========================================================
+   COLLAPSED LABEL (vertical text saat panel TIDAK aktif)
+   ========================================================= */
+
 .service-label {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(-90deg);
-    color: white;
-    font-size: 18px;
-    font-weight: 800;
-    letter-spacing: 3px;
-    white-space: nowrap;
-    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    left: 24px;
+    bottom: 24px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
-    opacity: 0.8;
-    z-index: 3;
-    pointer-events: none;
-}
+    white-space: nowrap;
 
-@media (min-width: 768px) {
-    .service-label {
-        font-size: 24px;
-    }
-}
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
 
-@media (min-width: 1024px) {
-    .service-label {
-        font-size: 28px;
-    }
+    opacity: 1;
+    transition: opacity 0.3s ease;
 }
 
 .service-panel.active .service-label {
     opacity: 0;
-    transform: translate(-50%, -50%) rotate(-90deg) scale(0.8);
-}
-
-/* Content */
-.service-content {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    padding: 40px 30px;
-    max-width: 100%;
-    color: white;
-    opacity: 0;
-    transform: translateY(40px);
-    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s;
-    z-index: 4;
     pointer-events: none;
 }
 
-@media (min-width: 768px) {
-    .service-content {
-        padding: 50px 40px;
-        max-width: 90%;
-    }
-}
+/* =========================================================
+   EXPANDED CONTENT (cuma terlihat saat panel aktif)
+   =========================================================
 
-@media (min-width: 1024px) {
-    .service-content {
-        padding: 60px 50px;
-        max-width: 80%;
-    }
+   INI BAGIAN PALING PENTING untuk smoothness: konten ini
+   selalu ada di DOM dengan lebar tetap (position: absolute,
+   left/right: 0), cuma di-fade via opacity + transform.
+   Dia TIDAK menunggu panel selesai melebar dulu baru teks-nya
+   "reflow" mengikuti lebar baru - itu yang bikin patah-patah
+   di versi width-based.
+   ========================================================= */
+
+.service-content {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 32px;
+    color: #fff;
+
+    opacity: 0;
+    transform: translateY(12px);
+    pointer-events: none;
+
+    transition:
+        opacity 0.35s ease,
+        transform 0.35s ease;
+
+    transition-delay: 0.15s;
 }
 
 .service-panel.active .service-content {
@@ -6884,111 +6870,85 @@ SUPPORTED FILMS
 
 .service-content span {
     display: block;
-    font-size: 0.85rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: #EF4525;
-    margin-bottom: 10px;
+    font-size: 13px;
     font-weight: 600;
-    animation: slideInLeft 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s both;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    opacity: 0.85;
+    margin-bottom: 8px;
+
+    /* max-width TETAP, tidak mengikuti lebar panel yang
+       sedang animasi - ini mencegah reflow teks mid-animasi */
+    max-width: 320px;
 }
 
 .service-content h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 28px;
-    line-height: 1.2;
-    margin-bottom: 15px;
-    font-weight: 800;
-    animation: slideInLeft 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s both;
-}
-
-@media (min-width: 768px) {
-    .service-content h2 {
-        font-size: 36px;
-    }
-}
-
-@media (min-width: 1024px) {
-    .service-content h2 {
-        font-size: 48px;
-    }
-}
-
-.service-content p {
-    font-size: 0.95rem;
-    line-height: 1.6;
-    margin-bottom: 25px;
-    color: rgba(255, 255, 255, 0.85);
-    animation: slideInLeft 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s both;
-}
-
-@media (min-width: 768px) {
-    .service-content p {
-        font-size: 1rem;
-        margin-bottom: 30px;
-    }
+    font-size: 26px;
+    font-weight: 750;
+    line-height: 1.25;
+    margin-bottom: 14px;
+    max-width: 380px;
 }
 
 .service-content a {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    padding: 12px 28px;
-    border-radius: 50px;
-    background: #97B300;
-    color: #000;
-    text-decoration: none;
+    gap: 6px;
+    color: #fff;
+    font-size: 14px;
     font-weight: 700;
-    font-size: 0.9rem;
-    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    animation: slideInLeft 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.7s both;
-    border: 2px solid transparent;
-    cursor: pointer;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    padding-bottom: 2px;
+    transition: border-color 0.2s ease;
 }
 
 .service-content a:hover {
-    transform: translateX(8px);
-    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4);
+    border-color: #fff;
 }
 
-/* Animations */
-@keyframes slideInLeft {
-    from {
-        opacity: 0;
-        transform: translateX(-40px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
+/* =========================================================
+   ACCESSIBILITY: respect prefers-reduced-motion
+   ========================================================= */
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
+@media (prefers-reduced-motion: reduce) {
 
-  @media (max-width: 767px) {
+    .service-panel,
+    .service-content,
     .service-label {
-        font-size: 14px;
+        transition-duration: 0.01ms !important;
+        transition-delay: 0s !important;
     }
 
-    .service-content {
-        padding: 30px 20px;
+}
+
+/* =========================================================
+   MOBILE: stack + expand vertikal
+   =========================================================
+
+   Pola "melebar ke samping" tidak enak dipakai di layar
+   sempit - di mobile, panel ditumpuk vertikal dan yang aktif
+   jadi lebih tinggi.
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    .services-expand {
+        flex-direction: column;
+        height: auto;
     }
 
-    .service-content h2 {
-        font-size: 22px;
+    .service-panel {
+        flex: none;
+        height: 90px;
+        transition: height 0.5s ease;
     }
 
-    .service-content p {
-        font-size: 0.85rem;
+    .service-panel.active {
+        height: 420px;
     }
-  }
+
+}
 
   /* =========================================================
    EVENT DETAIL BREADCRUMB

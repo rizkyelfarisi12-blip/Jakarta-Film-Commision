@@ -4,4 +4,4 @@ Allow: /
 Disallow: /admin/
 Disallow: /api/
 
-Sitemap: https://jfc.co.id/sitemap.php
+Sitemap: https://www.jfc.co.id/sitemap.php

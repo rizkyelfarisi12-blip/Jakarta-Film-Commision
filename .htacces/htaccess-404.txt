@@ -1,0 +1,26 @@
+# =========================================================
+# JAKARTA FILM COMMISSION
+# CUSTOM ERROR PAGES
+# =========================================================
+#
+# PENTING: path di bawah ini HARUS path absolut dari web
+# root Apache, BUKAN relatif terhadap folder tempat file
+# yang diminta berada.
+#
+# Karena project ini di XAMPP ada di dalam subfolder
+# (htdocs/jfc/), path-nya harus menyertakan "/jfc":
+#
+#   /jfc/404.html
+#
+# BUKAN cuma:
+#
+#   /404.html
+#
+# (yang itu akan mencari file di htdocs/404.html, bukan
+# htdocs/jfc/404.html - salah folder).
+#
+# Kalau nanti sudah pindah ke domain sendiri (bukan lagi
+# subfolder /jfc/), ganti jadi cukup "/404.html".
+# =========================================================
+
+ErrorDocument 404 /jfc/404.html
