@@ -39,14 +39,17 @@ function initializePressReleaseForm() {
   }
   renderArticleBlocks();
 }
+
 function getValue(id) {
   const e = document.getElementById(id);
   return e ? e.value || "" : "";
 }
+
 function setValue(id, v) {
   const e = document.getElementById(id);
   if (e) e.value = v ?? "";
 }
+
 function escapeHtml(v) {
   return String(v ?? "")
     .replace(/&/g, "&amp;")
@@ -55,27 +58,100 @@ function escapeHtml(v) {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
 }
+
 function escapeAttribute(v) {
   return escapeHtml(v);
 }
+
 function resolveImagePath(path) {
   if (!path) return "";
-  let v = String(path).trim().replace(/\\/g, "/");
-  if (/^https?:\/\//i.test(v) || v.startsWith("/jfc/")) return v;
-  if (v.startsWith("jfc/")) return "/" + v;
-  if (v.startsWith("uploads/")) return "/jfc/" + v;
-  if (v.startsWith("/uploads/")) return "/jfc" + v;
-  if (v.startsWith("assets/")) return "/jfc/" + v;
-  if (v.startsWith("/assets/")) return "/jfc" + v;
-  return v;
+
+  let v = String(path)
+    .trim()
+    .replace(/\\/g, "/");
+
+  /*
+  |--------------------------------------------------------------------------
+  | ABSOLUTE URL
+  |--------------------------------------------------------------------------
+  */
+
+  if (/^https?:\/\//i.test(v)) {
+
+    try {
+      const url = new URL(v);
+
+      // Hapus /jfc dari pathname jika masih ada
+      url.pathname = url.pathname.replace(/^\/jfc(?=\/|$)/i, "");
+
+      return url.toString();
+
+    } catch (e) {
+      // fallback jika URL tidak valid
+      v = v.replace(/^https?:\/\/([^/]+)\/jfc\//i, "https://$1/");
+      return v;
+    }
+  }
+
+
+  /*
+  |--------------------------------------------------------------------------
+  | REMOVE OLD /jfc PREFIX
+  |--------------------------------------------------------------------------
+  */
+
+  v = v.replace(/^\/jfc\//i, "/");
+  v = v.replace(/^jfc\//i, "");
+
+
+  /*
+  |--------------------------------------------------------------------------
+  | UPLOADS
+  |--------------------------------------------------------------------------
+  */
+
+  if (v.startsWith("/uploads/")) {
+    return v;
+  }
+
+  if (v.startsWith("uploads/")) {
+    return "/" + v;
+  }
+
+
+  /*
+  |--------------------------------------------------------------------------
+  | ASSETS
+  |--------------------------------------------------------------------------
+  */
+
+  if (v.startsWith("/assets/")) {
+    return v;
+  }
+
+  if (v.startsWith("assets/")) {
+    return "/" + v;
+  }
+
+
+  /*
+  |--------------------------------------------------------------------------
+  | FALLBACK
+  |--------------------------------------------------------------------------
+  */
+
+  return "/" + v.replace(/^\/+/, "");
 }
+
 function createBlockId() {
   return "article-block-" + Date.now() + "-" + ++articleBlockCounter;
 }
+
 function setPageTitle(t) {
   const e = document.getElementById("pageTitle");
   if (e) e.textContent = t;
 }
+
 function generateSlug(t) {
   return String(t || "")
     .toLowerCase()
@@ -88,6 +164,7 @@ function generateSlug(t) {
     .replace(/-+/g, "-")
     .replace(/^-+|-+$/g, "");
 }
+
 function setupTitleSlug() {
   const t = document.getElementById("title"),
     s = document.getElementById("slug");
@@ -100,6 +177,7 @@ function setupTitleSlug() {
     if (!isEditMode || !s.value) s.value = generateSlug(t.value);
   }
 }
+
 function setupCategory() {
   const c = document.getElementById("category"),
     g = document.getElementById("categoryNameGroup"),
@@ -116,6 +194,7 @@ function setupCategory() {
   c.addEventListener("change", u);
   u();
 }
+
 function setupLocationDefault() {
   const l = document.getElementById("location");
   if (l)
@@ -622,78 +701,111 @@ async function handleArticleImageSelect(input, b, w) {
 }
 
 function validateForm() {
-
   const title = getValue("title").trim(),
-
-  cat = getValue("category").trim(),
-
+    cat = getValue("category").trim(),
     cn = getValue("category_name").trim(),
-
     desc = getValue("description").trim(),
-
+    publishedDate = getValue("date").trim(),
     status = getValue("status").trim(),
-
     loc = getValue("location").trim(),
-
     cover = getValue("existingCoverImage").trim();
 
-  if (!title) return { valid: false, message: "Title is required." };
+  if (!title) {
+    return {
+      valid: false,
+      message: "Title is required.",
+    };
+  }
 
-  if (!cat) return { valid: false, message: "Please select a category." };
+  if (!cat) {
+    return {
+      valid: false,
+      message: "Please select a category.",
+    };
+  }
 
-  if (cat === "Others" && !cn)
-    return { valid: false, message: "Please enter the custom category name." };
+  if (cat === "Others" && !cn) {
+    return {
+      valid: false,
+      message: "Please enter the custom category name.",
+    };
+  }
 
-  if (!desc) return { valid: false, message: "Short description is required." };
+  if (!desc) {
+    return {
+      valid: false,
+      message: "Short description is required.",
+    };
+  }
+
+  if (!publishedDate) {
+    return {
+      valid: false,
+      message: "Published date is required. Please select a date.",
+    };
+  }
 
   if (!loc) {
     const e = document.getElementById("location");
 
-    if (e) e.value = "Jakarta";
+    if (e) {
+      e.value = "Jakarta";
+    }
   }
 
-  if (!cover)
+  if (!cover) {
     return {
       valid: false,
       message: "Cover image is required. Please upload a cover image first.",
     };
+  }
 
-  if (!["draft", "published"].includes(status))
-    return { valid: false, message: "Invalid status." };
+  if (!["draft", "published"].includes(status)) {
+    return {
+      valid: false,
+      message: "Invalid status.",
+    };
+  }
 
-  if (!articleBlocks.length)
+  if (!articleBlocks.length) {
     return {
       valid: false,
       message: "Please add at least one paragraph to the article.",
     };
+  }
 
   if (
     !articleBlocks.some(
       (b) => b.type === "paragraph" && stripHtml(b.content).trim(),
     )
-  )
+  ) {
     return {
       valid: false,
       message: "At least one paragraph with content is required.",
     };
+  }
 
   for (let i = 0; i < articleBlocks.length; i++) {
-
     const b = articleBlocks[i];
 
-    if (b.type === "paragraph" && !stripHtml(b.content).trim())
-      return { valid: false, message: `Paragraph ${i + 1} is empty.` };
+    if (b.type === "paragraph" && !stripHtml(b.content).trim()) {
+      return {
+        valid: false,
+        message: `Paragraph ${i + 1} is empty.`,
+      };
+    }
 
-    if (b.type === "image" && !b.src)
+    if (b.type === "image" && !b.src) {
       return {
         valid: false,
         message: `Article image ${i + 1} has not finished uploading.`,
       };
-
+    }
   }
 
-  return { valid: true };
-
+  return {
+    valid: true,
+  };
 }
 
 function stripHtml(html) {

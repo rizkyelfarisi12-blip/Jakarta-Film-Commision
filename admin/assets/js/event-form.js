@@ -1189,14 +1189,24 @@ function stripHtmlText(html) {
 ========================================================= */
 function resolveImagePath(path) {
   if (!path) return "";
+
   let v = String(path).trim().replace(/\\/g, "/");
-  if (/^https?:\/\//i.test(v) || v.startsWith("/jfc/")) return v;
-  if (v.startsWith("jfc/")) return "/" + v;
-  if (v.startsWith("uploads/")) return "/jfc/" + v;
-  if (v.startsWith("/uploads/")) return "/jfc" + v;
-  if (v.startsWith("assets/")) return "/jfc/" + v;
-  if (v.startsWith("/assets/")) return "/jfc" + v;
-  return (ROOT_PATH || "") + "/" + v.replace(/^\/+/, "");
+
+  // Absolute URL
+  if (/^https?:\/\//i.test(v)) {
+    return v;
+  }
+
+  // Production root
+  if (v.startsWith("/uploads/") || v.startsWith("/assets/")) {
+    return v;
+  }
+
+  if (v.startsWith("uploads/") || v.startsWith("assets/")) {
+    return "/" + v;
+  }
+
+  return "/" + v.replace(/^\/+/, "");
 }
 
 /* =========================================================

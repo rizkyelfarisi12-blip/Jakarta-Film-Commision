@@ -282,6 +282,15 @@
 
     const ITEMS_PER_PAGE = 5;
 
+    /*
+    | Batas maksimal karakter judul di card list. CSS
+    | line-clamp (lihat catatan CSS yang saya kirim terpisah)
+    | jadi lapisan kedua - dua-duanya sama-sama menjaga supaya
+    | "Read Full Announcement" tidak pernah tertutup judul
+    | yang kepanjangan, baik dari sisi data maupun tampilan.
+    */
+    const TITLE_MAX_LENGTH = 35;
+
 
     /* ========================================================
        STATE
@@ -322,12 +331,6 @@
     const loadMoreWrapper =
       document.getElementById(
         "loadMoreWrapper"
-      );
-
-
-    const pressLoading =
-      document.getElementById(
-        "pressLoading"
       );
 
 
@@ -551,16 +554,10 @@
         );
 
 
-      visibleItems.forEach(
-        item => {
-
-          pressContainer.innerHTML +=
-            createPressCard(
-              item
-            );
-
-        }
-      );
+      pressContainer.innerHTML =
+        visibleItems
+          .map(createPressCard)
+          .join("");
 
 
       /*
@@ -569,20 +566,10 @@
       |--------------------------------------------------------------------------
       */
 
-      if (
-        filtered.length >
-        visibleCount
-      ) {
-
-        loadMoreWrapper.style.display =
-          "flex";
-
-      } else {
-
-        loadMoreWrapper.style.display =
-          "none";
-
-      }
+      loadMoreWrapper.style.display =
+        filtered.length > visibleCount
+          ? "flex"
+          : "none";
 
     }
 
@@ -627,7 +614,6 @@
       */
 
       const image =
-        item.image ||
         normalizeImagePath(
           item.cover_image
         );
@@ -637,12 +623,21 @@
       |--------------------------------------------------------------------------
       | TITLE
       |--------------------------------------------------------------------------
+      |
+      | Dibatasi TITLE_MAX_LENGTH karakter supaya panjang card
+      | tetap konsisten dan "Read Full Announcement" tidak
+      | pernah kekubur. CSS line-clamp jadi lapisan kedua.
+      |
+      |--------------------------------------------------------------------------
       */
 
       const title =
         escapeHtml(
-          item.title ||
-          "Untitled Press Release"
+          limitText(
+            item.title ||
+            "Untitled Press Release",
+            TITLE_MAX_LENGTH
+          )
         );
 
 
@@ -666,11 +661,21 @@
       |--------------------------------------------------------------------------
       | DATE
       |--------------------------------------------------------------------------
+      |
+      | FIX: sebelumnya pakai item.date yang TIDAK PERNAH ADA
+      | di response API (yang benar published_date) - jadi
+      | tanggal di card kemungkinan besar selalu kosong.
+      | Sekarang pakai urutan fallback yang sama seperti
+      | getPressTimestamp() supaya konsisten.
+      |
+      |--------------------------------------------------------------------------
       */
 
       const date =
         formatDate(
-          item.date
+          item.published_date ||
+          item.date ||
+          item.created_at
         );
 
 
@@ -876,255 +881,35 @@
 
     }
 
-    /* ========================================================
-       LOAD MORE
-    ======================================================== */
-    loadMoreBtn.addEventListener(
-      "click",
-      () => {
-
-        visibleCount +=
-          ITEMS_PER_PAGE;
-
-        renderPress();
-
-      }
-    );
-
 
     /* ========================================================
-       FILTER
+       LOADING / EMPTY / ERROR STATES
     ======================================================== */
-    document.addEventListener(
-      "click",
-      event => {
 
-        const button =
-          event.target.closest(
-            ".press-filter"
-          );
+    function setListState(
+      html
+    ) {
 
-        if (
-          !button
-        ) {
-          return;
-        }
+      pressContainer.innerHTML =
+        `<div class="press-list-state">${html}</div>`;
 
-        // Active
-        document
-          .querySelectorAll(
-            ".press-filter"
-          )
-          .forEach(
-            btn =>
-              btn.classList.remove(
-                "active"
-              )
-          );
+      loadMoreWrapper.style.display =
+        "none";
 
-        button.classList.add(
-          "active"
-        );
+    }
 
-        // Filter
-        currentFilter =
-          button.dataset.filter ||
-          "all";
-
-        // Reset
-        visibleCount =
-          ITEMS_PER_PAGE;
-
-        // Render
-        renderPress();
-
-      }
-    );
-
-    /* ========================================================
-       SORT DROPDOWN
-    ======================================================== */
-    sortTrigger.addEventListener(
-      "click",
-      event => {
-
-        event.stopPropagation();
-
-        sortMenu.classList.toggle(
-          "active"
-        );
-
-      }
-    );
-
-    /* ========================================================
-       SORT OPTION
-    ======================================================== */
-    document.addEventListener(
-      "click",
-      event => {
-
-        const option =
-          event.target.closest(
-            ".sort-option"
-          );
-
-        if (
-          !option
-        ) {
-
-          return;
-
-        }
-
-        // Active
-        document
-          .querySelectorAll(
-            ".sort-option"
-          )
-          .forEach(
-            btn =>
-              btn.classList.remove(
-                "active"
-              )
-          );
-
-        option.classList.add(
-          "active"
-        );
-
-        // Sort
-        currentSort =
-          option.dataset.sort ||
-          "newest";
-
-        // Trigger
-        sortTrigger.innerHTML = `
-
-          Sort:
-          ${escapeHtml(
-          option.textContent.trim()
-        )}
-
-          <span>+</span>
-
-        `;
-
-        // Close
-        sortMenu.classList.remove(
-          "active"
-        );
-
-        // Reset
-        visibleCount =
-          ITEMS_PER_PAGE;
-
-        // Render
-        renderPress();
-
-      }
-    );
-
-    /* ========================================================
-       CLOSE SORT
-    ======================================================== */
-    document.addEventListener(
-      "click",
-      event => {
-
-        if (
-          !event.target.closest(
-            ".press-sort-dropdown"
-          )
-        ) {
-
-          sortMenu.classList.remove(
-            "active"
-          );
-
-        }
-
-      }
-    );
-
-    /* ========================================================
-       LOADING
-    ======================================================== */
     function showLoading() {
-
-      pressContainer.innerHTML = `
-
-        <div
-          class="press-loading"
-          style="
-            width:100%;
-            padding:60px 20px;
-            text-align:center;
-          ">
-
-          Loading Press Releases...
-
-        </div>
-
-      `;
-
-
-      loadMoreWrapper.style.display =
-        "none";
-
+      setListState("Loading Press Releases...");
     }
 
-    /* ========================================================
-       EMPTY
-    ======================================================== */
     function showEmpty() {
-
-      pressContainer.innerHTML = `
-
-        <div
-          class="press-empty"
-          style="
-            width:100%;
-            padding:60px 20px;
-            text-align:center;
-          ">
-
-          No press releases found.
-
-        </div>
-
-      `;
-
-      loadMoreWrapper.style.display =
-        "none";
-
+      setListState("No press releases found.");
     }
 
-    /* ========================================================
-       ERROR
-    ======================================================== */
     function showError() {
-
-      pressContainer.innerHTML = `
-
-        <div
-          class="press-error"
-          style="
-            width:100%;
-            padding:60px 20px;
-            text-align:center;
-          ">
-
-          Unable to load press releases.
-
-        </div>
-
-      `;
-
-      loadMoreWrapper.style.display =
-        "none";
-
+      setListState("Unable to load press releases.");
     }
+
 
     /* ========================================================
        HTML ESCAPE
@@ -1172,6 +957,126 @@
       );
 
     }
+
+
+    /* ========================================================
+       EVENT LISTENERS (digabung dalam satu delegated handler)
+    ======================================================== */
+
+    loadMoreBtn.addEventListener(
+      "click",
+      () => {
+
+        visibleCount +=
+          ITEMS_PER_PAGE;
+
+        renderPress();
+
+      }
+    );
+
+
+    sortTrigger.addEventListener(
+      "click",
+      event => {
+
+        event.stopPropagation();
+
+        sortMenu.classList.toggle(
+          "active"
+        );
+
+      }
+    );
+
+
+    document.addEventListener(
+      "click",
+      event => {
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | FILTER BUTTON
+        |--------------------------------------------------------------------------
+        */
+
+        const filterButton =
+          event.target.closest(".press-filter");
+
+        if (filterButton) {
+
+          document
+            .querySelectorAll(".press-filter")
+            .forEach(btn => btn.classList.remove("active"));
+
+          filterButton.classList.add("active");
+
+          currentFilter =
+            filterButton.dataset.filter || "all";
+
+          visibleCount =
+            ITEMS_PER_PAGE;
+
+          renderPress();
+
+          return;
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | SORT OPTION
+        |--------------------------------------------------------------------------
+        */
+
+        const sortOption =
+          event.target.closest(".sort-option");
+
+        if (sortOption) {
+
+          document
+            .querySelectorAll(".sort-option")
+            .forEach(btn => btn.classList.remove("active"));
+
+          sortOption.classList.add("active");
+
+          currentSort =
+            sortOption.dataset.sort || "newest";
+
+          sortTrigger.innerHTML = `
+            Sort: ${escapeHtml(sortOption.textContent.trim())}
+            <span>+</span>
+          `;
+
+          sortMenu.classList.remove("active");
+
+          visibleCount =
+            ITEMS_PER_PAGE;
+
+          renderPress();
+
+          return;
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | CLICK OUTSIDE SORT DROPDOWN
+        |--------------------------------------------------------------------------
+        */
+
+        if (!event.target.closest(".press-sort-dropdown")) {
+
+          sortMenu.classList.remove("active");
+
+        }
+
+      }
+    );
+
 
     /* ========================================================
        START

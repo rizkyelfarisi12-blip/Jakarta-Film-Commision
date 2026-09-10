@@ -756,37 +756,63 @@ function truncateWords(text, maxWords = 16) {
    diberi nama berbeda supaya tidak bentrok kalau
    press-release.js ikut ter-load di halaman yang sama.
 ========================================================= */
-
 function normalizePressReleaseImage(path) {
-  let value = String(path || "").trim();
 
-  if (!value) {
-    return "";
-  }
+    let value = String(path || "").trim();
 
-  value = value.replace(/\\/g, "/");
+    if (!value) {
+        return "";
+    }
 
-  if (/^https?:\/\//i.test(value)) {
-    return value;
-  }
+    // Normalisasi slash
+    value = value.replace(/\\/g, "/");
 
-  if (value.startsWith("/jfc/")) {
-    return value;
-  }
+    // Jika sudah absolute URL
+    if (/^https?:\/\//i.test(value)) {
 
-  value = value.replace(/^\/+/, "");
+        try {
 
-  if (value.startsWith("uploads/press-release/")) {
-    return "/jfc/" + value;
-  }
+            const url = new URL(value);
 
-  if (value.startsWith("assets/uploads/press-release/")) {
-    return "/jfc/" + value;
-  }
+            // Hapus base path lama /jfc
+            url.pathname = url.pathname.replace(/^\/jfc(?=\/|$)/i, "");
 
-  return "/jfc/" + value;
+            return url.toString();
+
+        } catch (error) {
+
+            return value.replace(
+                /^https?:\/\/([^/]+)\/jfc\//i,
+                "https://$1/"
+            );
+
+        }
+    }
+
+    // Hapus /jfc lama
+    value = value.replace(/^\/jfc(?=\/|$)/i, "");
+
+    // Hapus slash awal
+    value = value.replace(/^\/+/, "");
+
+    // uploads/press-release/...
+    if (value.startsWith("uploads/press-release/")) {
+        return "/" + value;
+    }
+
+    // assets/uploads/press-release/...
+    if (value.startsWith("assets/uploads/press-release/")) {
+        return "/" + value;
+    }
+
+    // assets/...
+    if (value.startsWith("assets/")) {
+        return "/" + value;
+    }
+
+    // Fallback
+    return "/" + value;
 }
-
 /* =========================================================
    PRESS RELEASE DATE FORMAT
 

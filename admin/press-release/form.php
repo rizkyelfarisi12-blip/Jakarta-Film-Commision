@@ -23,9 +23,7 @@ include "../includes/header.php";
                  PAGE HEADER
             ====================================================== -->
             <header class="page-header">
-
                 <div>
-
                     <a href="index.php" class="back-link">
                         <i class="ri-arrow-left-line"></i>
                         Back to Press Releases
@@ -36,7 +34,6 @@ include "../includes/header.php";
                     </h1>
 
                 </div>
-
 
                 <div class="page-actions">
 
@@ -52,7 +49,6 @@ include "../includes/header.php";
                 </div>
 
             </header>
-
 
             <!-- =====================================================
                  FORM
@@ -149,11 +145,9 @@ include "../includes/header.php";
 
                                 </div>
 
-
                                 <!-- =====================================
                                      CUSTOM CATEGORY
                                 ====================================== -->
-
                                 <div class="form-group" id="categoryNameGroup" style="display:none;">
 
                                     <label for="category_name">
@@ -168,7 +162,6 @@ include "../includes/header.php";
                                     </small>
 
                                 </div>
-
 
                                 <!-- =====================================
                                      DATE
@@ -187,11 +180,9 @@ include "../includes/header.php";
 
                                 </div>
 
-
                                 <!-- =====================================
                                      LOCATION
                                 ====================================== -->
-
                                 <div class="form-group">
 
                                     <label for="location">
@@ -225,56 +216,41 @@ include "../includes/header.php";
 
                                 </div>
 
-
                             </div>
 
                         </section>
 
-
                         <!-- =================================================
                              ARTICLE CONTENT
                         ================================================== -->
-
                         <section class="admin-card">
 
                             <div class="card-header">
 
                                 <div>
-
                                     <h2>
                                         Article Content
                                     </h2>
-
                                     <p class="dashboard-section-description">
                                         Build the main content of the press release using paragraphs and images.
                                     </p>
-
                                 </div>
-
 
                                 <div class="article-add-buttons">
 
                                     <button type="button" class="btn btn-secondary" id="addParagraphBtn">
-
                                         <i class="ri-text"></i>
-
                                         Paragraph
-
                                     </button>
 
-
                                     <button type="button" class="btn btn-secondary" id="addImageBtn">
-
                                         <i class="ri-image-line"></i>
-
                                         Image
-
                                     </button>
 
                                 </div>
 
                             </div>
-
 
                             <!-- ARTICLE BLOCKS -->
                             <div id="articleContent">
@@ -291,7 +267,6 @@ include "../includes/header.php";
 
                         </section>
 
-
                         <!-- =================================================
                              SEO
                         ================================================== -->
@@ -302,9 +277,7 @@ include "../includes/header.php";
                                 SEO Settings
                             </h2>
 
-
                             <!-- META TITLE -->
-
                             <div class="form-group">
 
                                 <label for="meta_title">
@@ -319,7 +292,6 @@ include "../includes/header.php";
                                 </small>
 
                             </div>
-
 
                             <!-- META DESCRIPTION -->
 
@@ -336,27 +308,21 @@ include "../includes/header.php";
 
                         </section>
 
-
                     </div>
-
 
                     <!-- =================================================
                          SIDEBAR
                     ================================================== -->
-
                     <aside class="form-sidebar">
-
 
                         <!-- =============================================
                              PUBLISH
                         ============================================== -->
-
                         <section class="admin-card">
 
                             <h3>
                                 Publish
                             </h3>
-
 
                             <div class="form-group">
 
@@ -380,17 +346,14 @@ include "../includes/header.php";
 
                         </section>
 
-
                         <!-- =============================================
                              COVER IMAGE
                         ============================================== -->
-
                         <section class="admin-card">
 
                             <h3>
                                 Cover Image
                             </h3>
-
 
                             <div class="upload-box">
 
@@ -398,28 +361,20 @@ include "../includes/header.php";
 
                                     <img src="<?= $assetPath ?>assets/icon/image-upload.png" class="upload-icon"
                                         alt="Upload" onerror="this.style.display='none';">
-
-
                                     <h4>
                                         Upload Cover Image
                                     </h4>
-
-
                                     <p>
                                         JPG, PNG or WEBP
                                     </p>
-
-
                                     <p>
                                         Recommended 16:9
                                     </p>
 
                                 </label>
 
-
                                 <input type="file" id="coverImage" name="cover_image"
                                     accept="image/jpeg,image/png,image/webp" hidden>
-
 
                                 <img id="imagePreview" src="" alt="Cover Preview">
 

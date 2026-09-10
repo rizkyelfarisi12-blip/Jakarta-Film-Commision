@@ -7,53 +7,23 @@
 /* ============================================================
    CONFIGURATION
    ============================================================ */
-
-const PRESS_RELEASE_API = "/jfc/api/press-release/get-press.php";
-
-const PRESS_RELEASE_DETAIL_API = "/jfc/api/press-release/get-press-detail.php";
-
+const PRESS_RELEASE_API = "/api/press-release/get-press.php";
+const PRESS_RELEASE_UPLOAD_PATH = "/uploads/press-release";
 /*
 |--------------------------------------------------------------------------
 | IMAGE BASE PATH
 |--------------------------------------------------------------------------
-|
-| Database menyimpan:
-|
-| uploads/press-release/example.webp
-|
-| Browser membutuhkan:
-|
-| /jfc/uploads/press-release/example.webp
-|
-|--------------------------------------------------------------------------
 */
 
-const PRESS_RELEASE_IMAGE_BASE = "/jfc/";
-
-/* ============================================================
-   PRESS DATA
-   ============================================================ */
+const PRESS_RELEASE_IMAGE_BASE = "/";
 
 /*
 |--------------------------------------------------------------------------
 | Global data
 |--------------------------------------------------------------------------
-|
-| Array ini menggantikan:
-|
-| assets/data/press-release-data.js
-|
-| Untuk sementara struktur data frontend dinormalisasi
-| agar HTML lama tetap dapat digunakan.
-|
-|--------------------------------------------------------------------------
 */
 
 let pressData = [];
-
-/* ============================================================
-   API HELPER
-   ============================================================ */
 
 /*
 |--------------------------------------------------------------------------
@@ -150,10 +120,6 @@ async function fetchPressReleases(options = {}) {
   }
 }
 
-/* ============================================================
-   FETCH PRESS RELEASE DETAIL
-   ============================================================ */
-
 /*
 |--------------------------------------------------------------------------
 | GET DETAIL BY SLUG
@@ -234,10 +200,6 @@ async function fetchPressReleaseBySlug(slug) {
   }
 }
 
-/* ============================================================
-   NORMALIZE PRESS RELEASE
-   ============================================================ */
-
 /*
 |--------------------------------------------------------------------------
 | NORMALIZE DATABASE DATA
@@ -302,17 +264,6 @@ function normalizePressRelease(item) {
     |--------------------------------------------------------------------------
     | CONTENT
     |--------------------------------------------------------------------------
-    |
-    | get-press.php lama Anda mengembalikan content sebagai STRING.
-    |
-    | get-press-detail.php mengembalikan:
-    |
-    | content
-    | content_data
-    |
-    | Karena itu kita support keduanya.
-    |
-    |--------------------------------------------------------------------------
     */
 
   let content = [];
@@ -350,34 +301,23 @@ function normalizePressRelease(item) {
     */
 
   return {
-    /*
-        | Database identity
-        */
 
+    // Database Identity
     id: Number(item.id) || 0,
 
     slug: item.slug || generateSlug(item.title || ""),
 
-    /*
-        | Basic information
-        */
-
+    // Basic Information
     title: item.title || "",
 
     description: item.description || "",
-
-    /*
-        | Image
-        */
-
+  
+    // Image
     image: image,
 
     cover_image: item.cover_image || "",
 
-    /*
-        | Category
-        */
-
+    // Category
     category: category,
 
     category_name: item.category_name || "",
@@ -386,46 +326,28 @@ function normalizePressRelease(item) {
 
     category_filter: item.category_filter || category,
 
-    /*
-        | Date
-        */
-
+    // Date
     date: date,
 
     published_date: item.published_date || null,
 
-    /*
-        | Location
-        */
-
+    // Location
     location: item.location || "",
 
-    /*
-        | Status
-        */
-
+    // Status
     status: item.status || "",
 
-    /*
-        | Content
-        */
-
+    // Content
     content: content,
 
     raw_content: item.content || "",
 
-    /*
-        | SEO
-        */
-
+    // SEO
     meta_title: item.meta_title || "",
 
     meta_description: item.meta_description || "",
 
-    /*
-        | Database timestamps
-        */
-
+    // Database timestamps
     created_at: item.created_at || null,
 
     updated_at: item.updated_at || null,
@@ -435,14 +357,7 @@ function normalizePressRelease(item) {
 /* ============================================================
    IMAGE PATH
    ============================================================ */
-
-/*
-|--------------------------------------------------------------------------
-| NORMALIZE IMAGE PATH
-|--------------------------------------------------------------------------
-*/
-
-function normalizeImagePath(path) {
+   function normalizeImagePath(path) {
   if (!path) {
     return "";
   }
@@ -453,60 +368,30 @@ function normalizeImagePath(path) {
     return "";
   }
 
-  /*
-    |--------------------------------------------------------------------------
-    | Backslash
-    |--------------------------------------------------------------------------
-    */
-
+  // Normalize Windows path
   imagePath = imagePath.replace(/\\/g, "/");
 
-  /*
-    |--------------------------------------------------------------------------
-    | Already absolute URL
-    |--------------------------------------------------------------------------
-    */
-
+  // Already absolute URL
   if (/^https?:\/\//i.test(imagePath)) {
     return imagePath;
   }
 
-  /*
-    |--------------------------------------------------------------------------
-    | Already starts with /jfc/
-    |--------------------------------------------------------------------------
-    */
+  // Remove old /jfc prefix
+  imagePath = imagePath.replace(/^\/jfc\//i, "/");
+  imagePath = imagePath.replace(/^jfc\//i, "");
 
-  if (imagePath.indexOf("/jfc/") === 0) {
+  // Already root-relative
+  if (imagePath.startsWith("/")) {
     return imagePath;
   }
 
-  /*
-    |--------------------------------------------------------------------------
-    | Remove leading slash
-    |--------------------------------------------------------------------------
-    */
-
-  imagePath = imagePath.replace(/^\/+/, "");
-
-  /*
-    |--------------------------------------------------------------------------
-    | Return application path
-    |--------------------------------------------------------------------------
-    */
-
-  return PRESS_RELEASE_IMAGE_BASE + imagePath;
+  // Relative path
+  return "/" + imagePath;
 }
 
 /* ============================================================
    FORMAT DATE
    ============================================================ */
-
-/*
-|--------------------------------------------------------------------------
-| FORMAT DATE
-|--------------------------------------------------------------------------
-*/
 
 function formatDate(date) {
   if (!date) {
@@ -531,21 +416,6 @@ function formatDate(date) {
 /* ============================================================
    CATEGORY COLOR CLASS
    ============================================================ */
-
-/*
-|--------------------------------------------------------------------------
-| CATEGORY CLASS
-|--------------------------------------------------------------------------
-|
-| Database categories:
-|
-| Official Release
-| Program Update
-| Industry News
-| Others
-|
-|--------------------------------------------------------------------------
-*/
 
 function getCategoryClass(category) {
   const value = String(category || "")
@@ -574,12 +444,6 @@ function getCategoryClass(category) {
    GET LATEST PRESS
    ============================================================ */
 
-/*
-|--------------------------------------------------------------------------
-| GET LATEST RELEASE
-|--------------------------------------------------------------------------
-*/
-
 function getLatestPress(limit = 3, excludeSlug = null) {
   return [...pressData]
 
@@ -606,12 +470,6 @@ function getLatestPress(limit = 3, excludeSlug = null) {
    CALCULATE READ TIME
    ============================================================ */
 
-/*
-|--------------------------------------------------------------------------
-| CALCULATE READ TIME
-|--------------------------------------------------------------------------
-*/
-
 function calculateReadTime(content) {
   if (!Array.isArray(content) || content.length === 0) {
     return "1 min read";
@@ -624,21 +482,12 @@ function calculateReadTime(content) {
       return;
     }
 
-    /*
-            |--------------------------------------------------------------------------
-            | Paragraph
-            |--------------------------------------------------------------------------
-            */
-
+    // Paragraph
     if (block.type === "paragraph") {
       text += " " + stripHtml(block.content || "");
     } else if (typeof block.content === "string") {
 
-    /*
-            |--------------------------------------------------------------------------
-            | Other text blocks
-            |--------------------------------------------------------------------------
-            */
+      // Other text bloc
       text += " " + stripHtml(block.content);
     }
   });
@@ -653,12 +502,6 @@ function calculateReadTime(content) {
 /* ============================================================
    STRIP HTML
    ============================================================ */
-
-/*
-|--------------------------------------------------------------------------
-| STRIP HTML
-|--------------------------------------------------------------------------
-*/
 
 function stripHtml(html) {
   if (!html) {
@@ -675,12 +518,6 @@ function stripHtml(html) {
 /* ============================================================
    LIMIT TEXT
    ============================================================ */
-
-/*
-|--------------------------------------------------------------------------
-| LIMIT TEXT
-|--------------------------------------------------------------------------
-*/
 
 function limitText(text, maxLength = 180) {
   if (!text) {
@@ -700,19 +537,6 @@ function limitText(text, maxLength = 180) {
    GENERATE SLUG
    ============================================================ */
 
-/*
-|--------------------------------------------------------------------------
-| GENERATE SLUG
-|--------------------------------------------------------------------------
-|
-| Digunakan sebagai fallback saja.
-|
-| URL detail utama tetap menggunakan slug
-| dari database.
-|
-|--------------------------------------------------------------------------
-*/
-
 function generateSlug(text) {
   if (!text) {
     return "";
@@ -729,18 +553,6 @@ function generateSlug(text) {
 /* ============================================================
    INITIAL LOAD HELPER
    ============================================================ */
-
-/*
-|--------------------------------------------------------------------------
-| LOAD PRESS RELEASE DATA
-|--------------------------------------------------------------------------
-|
-| Fungsi ini dapat dipanggil dari:
-|
-| press-release-list.html
-|
-|--------------------------------------------------------------------------
-*/
 
 async function loadPressReleases() {
   try {
@@ -763,17 +575,6 @@ async function loadPressReleases() {
 /* ============================================================
    EXPORT / GLOBAL
    ============================================================ */
-
-/*
-|--------------------------------------------------------------------------
-| Browser global
-|--------------------------------------------------------------------------
-|
-| Tidak menggunakan ES Module agar kompatibel dengan HTML
-| Anda yang sekarang.
-|
-|--------------------------------------------------------------------------
-*/
 
 window.pressData = pressData;
 

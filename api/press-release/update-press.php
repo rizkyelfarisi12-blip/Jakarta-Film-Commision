@@ -606,43 +606,19 @@ $coverImage =
 
 /*
 |--------------------------------------------------------------------------
-| REMOVE ROOT URL IF SENT
+| NORMALIZE ROOT PATH
 |--------------------------------------------------------------------------
 |
-| Accept:
+| Production website is running from the domain root:
 |
-| /jfc/uploads/press-release/file.webp
+| https://www.jfc.co.id/
 |
-| or:
+| Database stores only:
 |
 | uploads/press-release/file.webp
 |
-|--------------------------------------------------------------------------
-*/
-
-$rootPrefix =
-    "/jfc/";
-
-
-if (
-    strpos(
-        $coverImage,
-        $rootPrefix
-    ) === 0
-) {
-
-    $coverImage =
-        substr(
-            $coverImage,
-            strlen($rootPrefix)
-        );
-
-}
-
-
-/*
-|--------------------------------------------------------------------------
-| REMOVE LEADING SLASH
+| Remove obsolete /jfc/ prefix if an older client sends it.
+|
 |--------------------------------------------------------------------------
 */
 
@@ -651,6 +627,22 @@ $coverImage =
         $coverImage,
         "/"
     );
+
+
+if (
+    strpos(
+        $coverImage,
+        "jfc/uploads/press-release/"
+    ) === 0
+) {
+
+    $coverImage =
+        substr(
+            $coverImage,
+            strlen("jfc/")
+        );
+
+}
 
 
 /*
@@ -965,16 +957,93 @@ foreach (
 
         /*
         |------------------------------------------------------------------
-        | Normalize image path
+        | NORMALIZE ARTICLE IMAGE PATH
+        |------------------------------------------------------------------
+        |
+        | Database must store:
+        |
+        | uploads/press-release/file.webp
+        |
+        | Never:
+        |
+        | /jfc/uploads/press-release/file.webp
+        |
         |------------------------------------------------------------------
         */
 
-        $contentData[$index]["src"] =
+        $imageSrc =
             str_replace(
                 "\\",
                 "/",
                 $imageSrc
             );
+
+
+        $imageSrc =
+            ltrim(
+                $imageSrc,
+                "/"
+            );
+
+
+        if (
+            strpos(
+                $imageSrc,
+                "jfc/uploads/press-release/"
+            ) === 0
+        ) {
+
+            $imageSrc =
+                substr(
+                    $imageSrc,
+                    strlen("jfc/")
+                );
+
+        }
+
+
+        if (
+            strpos(
+                $imageSrc,
+                "uploads/press-release/"
+            ) !== 0
+        ) {
+
+            http_response_code(422);
+
+            response(
+                false,
+                "Invalid article image path."
+            );
+
+        }
+
+
+        /*
+        |------------------------------------------------------------------
+        | PREVENT PATH TRAVERSAL
+        |------------------------------------------------------------------
+        */
+
+        if (
+            strpos(
+                $imageSrc,
+                ".."
+            ) !== false
+        ) {
+
+            http_response_code(422);
+
+            response(
+                false,
+                "Invalid article image path."
+            );
+
+        }
+
+
+        $contentData[$index]["src"] =
+            $imageSrc;
 
 
         continue;

@@ -84,10 +84,7 @@ try {
     /* =====================================================
        FEATURED EVENT
     ===================================================== */
-
-    $today =
-        date("Y-m-d");
-
+    $today = date("Y-m-d");
 
     $featuredQuery = mysqli_query(
         $conn,
@@ -117,13 +114,11 @@ try {
 
             AND (
                 featured_start IS NULL
-                OR featured_start = ''
                 OR featured_start <= '$today'
             )
 
             AND (
                 featured_until IS NULL
-                OR featured_until = ''
                 OR featured_until >= '$today'
             )
 

@@ -2,13 +2,11 @@
 
 header("Content-Type: application/json; charset=UTF-8");
 
-
 /*
 |--------------------------------------------------------------------------
 | RESPONSE HELPER
 |--------------------------------------------------------------------------
 */
-
 function response(
     bool $success,
     string $message = "",
@@ -36,7 +34,6 @@ function response(
         "data" => $data
     ];
 
-
     if (
         isset($data["file"]) &&
         is_array($data["file"])
@@ -46,7 +43,6 @@ function response(
             $data["file"];
 
     }
-
 
     echo json_encode(
         $response,
@@ -78,7 +74,6 @@ if (
 
 }
 
-
 /*
 |--------------------------------------------------------------------------
 | UPLOAD CONFIGURATION
@@ -87,7 +82,6 @@ if (
 
 $maxFileSize =
     5 * 1024 * 1024;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -125,7 +119,6 @@ if (
 
 }
 
-
 $file =
     $_FILES["image"];
 
@@ -149,7 +142,6 @@ if (
     $errorMessage =
         "Image upload failed.";
 
-
     switch ($uploadError) {
 
         case UPLOAD_ERR_INI_SIZE:
@@ -169,14 +161,12 @@ if (
 
             break;
 
-
         case UPLOAD_ERR_NO_FILE:
 
             $errorMessage =
                 "No image file was uploaded.";
 
             break;
-
 
         case UPLOAD_ERR_NO_TMP_DIR:
 
@@ -185,14 +175,12 @@ if (
 
             break;
 
-
         case UPLOAD_ERR_CANT_WRITE:
 
             $errorMessage =
                 "Failed to write uploaded image.";
 
             break;
-
 
         case UPLOAD_ERR_EXTENSION:
 
@@ -427,32 +415,6 @@ if (
 |--------------------------------------------------------------------------
 | ROOT DIRECTORY
 |--------------------------------------------------------------------------
-|
-| Struktur project:
-|
-| /jfc
-| ├── api
-| │   └── press-release
-| │       └── upload-press-image.php
-| │
-| ├── uploads
-| │   └── press-release
-| │
-| └── ...
-|
-| Dari:
-|
-| /jfc/api/press-release/
-|
-| naik dua level:
-|
-| ../../
-|
-| menjadi:
-|
-| /jfc/
-|
-|--------------------------------------------------------------------------
 */
 
 $uploadDirectory =
@@ -604,12 +566,6 @@ if (
 |--------------------------------------------------------------------------
 | PUBLIC PATH
 |--------------------------------------------------------------------------
-|
-| Path yang disimpan ke database:
-|
-| uploads/press-release/filename.webp
-|
-|--------------------------------------------------------------------------
 */
 
 $publicPath =
@@ -621,18 +577,41 @@ $publicPath =
 |--------------------------------------------------------------------------
 | PUBLIC URL
 |--------------------------------------------------------------------------
-|
-| Karena project berada di /jfc:
-|
-| /jfc/uploads/press-release/filename.webp
-|
-|--------------------------------------------------------------------------
 */
 
-$publicUrl =
-    "/jfc/" .
-    $publicPath;
+$scriptName =
+    $_SERVER["SCRIPT_NAME"] ?? "";
 
+$apiPosition =
+    strpos($scriptName, "/api/");
+
+$basePath = "";
+
+if ($apiPosition !== false) {
+
+    $basePath =
+        substr(
+            $scriptName,
+            0,
+            $apiPosition
+        );
+
+}
+
+$basePath =
+    rtrim(
+        $basePath,
+        "/"
+    );
+
+$publicUrl =
+    $basePath .
+    "/" .
+    ltrim(
+        $publicPath,
+        "/"
+    );
+    
 
 /*
 |--------------------------------------------------------------------------
@@ -672,18 +651,6 @@ $fileInformation = [
 /*
 |--------------------------------------------------------------------------
 | RESPONSE
-|--------------------------------------------------------------------------
-|
-| Kita mengembalikan file di dua tempat:
-|
-| result.file
-|
-| dan:
-|
-| result.data.file
-|
-| sehingga kompatibel dengan JS lama maupun JS baru.
-|
 |--------------------------------------------------------------------------
 */
 

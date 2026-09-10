@@ -412,42 +412,18 @@ $coverImage =
         $coverImage
     );
 
-
 /*
 |--------------------------------------------------------------------------
-| REMOVE ROOT URL IF SENT
-|--------------------------------------------------------------------------
-|
-| Accept:
-|
-| /jfc/uploads/press-release/file.webp
-|
-| or:
-|
-| uploads/press-release/file.webp
-|
+| NORMALIZE COVER IMAGE PATH
 |--------------------------------------------------------------------------
 */
 
-$rootPrefix =
-    "/jfc/";
-
-
-if (
-    strpos(
-        $coverImage,
-        $rootPrefix
-    ) === 0
-) {
-
-    $coverImage =
-        substr(
-            $coverImage,
-            strlen($rootPrefix)
-        );
-
-}
-
+$coverImage =
+    str_replace(
+        "\\",
+        "/",
+        $coverImage
+    );
 
 /*
 |--------------------------------------------------------------------------
@@ -460,7 +436,6 @@ $coverImage =
         $coverImage,
         "/"
     );
-
 
 /*
 |--------------------------------------------------------------------------
