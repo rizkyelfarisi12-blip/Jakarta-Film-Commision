@@ -9,50 +9,26 @@
    ============================================================ */
 const PRESS_RELEASE_API = "/api/press-release/get-press.php";
 const PRESS_RELEASE_UPLOAD_PATH = "/uploads/press-release";
-/*
-|--------------------------------------------------------------------------
-| IMAGE BASE PATH
-|--------------------------------------------------------------------------
-*/
 
+// IMAGE BASE PATH
 const PRESS_RELEASE_IMAGE_BASE = "/";
 
-/*
-|--------------------------------------------------------------------------
-| Global data
-|--------------------------------------------------------------------------
-*/
-
+// Global data
 let pressData = [];
 
-/*
-|--------------------------------------------------------------------------
-| FETCH PRESS RELEASE LIST
-|--------------------------------------------------------------------------
-*/
-
+// FETCH PRESS RELEASE LIST
 async function fetchPressReleases(options = {}) {
   const { status = "published" } = options;
 
   try {
     let url = PRESS_RELEASE_API;
 
-    /*
-        |--------------------------------------------------------------------------
-        | STATUS
-        |--------------------------------------------------------------------------
-        */
-
+    // Status
     if (status !== "") {
       url += "?status=" + encodeURIComponent(status);
     }
 
-    /*
-        |--------------------------------------------------------------------------
-        | REQUEST
-        |--------------------------------------------------------------------------
-        */
-
+    // Request
     const response = await fetch(url, {
       method: "GET",
       headers: {
@@ -61,30 +37,16 @@ async function fetchPressReleases(options = {}) {
       cache: "no-store",
     });
 
-    /*
-        |--------------------------------------------------------------------------
-        | HTTP ERROR
-        |--------------------------------------------------------------------------
-        */
-
+    // HTTP Error
     if (!response.ok) {
       throw new Error("HTTP " + response.status + " - " + response.statusText);
     }
 
-    /*
-        |--------------------------------------------------------------------------
-        | JSON
-        |--------------------------------------------------------------------------
-        */
-
+    // JSON
     const result = await response.json();
 
-    /*
-        |--------------------------------------------------------------------------
-        | API ERROR
-        |--------------------------------------------------------------------------
-        */
-
+ 
+    // API Error
     if (!result.success) {
       throw new Error(result.message || "Failed to retrieve press releases.");
     }
