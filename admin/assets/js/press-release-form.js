@@ -294,6 +294,7 @@ function addParagraphBlock(value = "") {
 }
 
 function addImageBlock(data = {}) {
+
   const b = {
     id: createBlockId(),
     type: "image",
@@ -316,53 +317,75 @@ function addImageBlock(data = {}) {
 }
 
 function renderArticleBlocks() {
+
   const c = document.getElementById("articleContent"),
     e = document.getElementById("articleEmptyState");
-  if (!c) return;
-  c.innerHTML = "";
-  if (!articleBlocks.length) {
-    if (e) e.style.display = "block";
-    return;
-  }
-  if (e) e.style.display = "none";
-  articleBlocks.forEach((b, i) => {
-    const x =
-      b.type === "paragraph"
-        ? createParagraphElement(b, i)
-        : b.type === "image"
-          ? createImageElement(b, i)
-          : null;
+
+    if (!c) return;
+    c.innerHTML = "";
+
+    if (!articleBlocks.length) {
+      if (e) e.style.display = "block";
+      return;
+    }
+
+    if (e) e.style.display = "none";
+      articleBlocks.forEach((b, i) => {
+
+      const x =
+        b.type === "paragraph"
+          ? createParagraphElement(b, i)
+          : b.type === "image"
+            ? createImageElement(b, i)
+            : null;
+
     if (x) c.appendChild(x);
+
   });
 }
+
 function createParagraphElement(b, index) {
+
   const w = document.createElement("div");
+
   w.className = "article-block article-paragraph-block";
+
   w.dataset.blockId = b.id;
+
   w.innerHTML = `<div class="article-block-header"><div class="article-block-title"><i class="ri-text"></i><span>Paragraph</span></div><div class="article-block-actions"><button type="button" class="article-block-remove" title="Remove paragraph" data-action="remove"><i class="ri-delete-bin-line"></i></button></div></div><div class="article-block-body"><div class="article-richtext-editor"><div class="article-richtext-toolbar"><button type="button" class="richtext-btn" data-command="bold" title="Bold"><i class="ri-bold"></i></button><button type="button" class="richtext-btn" data-command="italic" title="Italic"><i class="ri-italic"></i></button><button type="button" class="richtext-btn" data-command="underline" title="Underline"><i class="ri-underline"></i></button><span class="richtext-toolbar-divider"></span><button type="button" class="richtext-btn" data-command="createLink" title="Insert Link"><i class="ri-link"></i></button><button type="button" class="richtext-btn" data-command="unlink" title="Remove Link"><i class="ri-link-unlink"></i></button></div><div class="article-richtext-input" contenteditable="true" data-placeholder="Write your paragraph..."></div></div></div>`;
+
   const ed = w.querySelector(".article-richtext-input");
+
   ed.innerHTML = b.content || "";
+
   ed.addEventListener("input", () => (b.content = ed.innerHTML));
+
   ed.addEventListener("paste", handleRichTextPaste);
+
   ["focus", "click"].forEach((ev) =>
     ed.addEventListener(ev, () => {
       currentRichTextEditor = ed;
       updateRichTextToolbarState(ed);
     }),
   );
+
   ["keyup", "mouseup"].forEach((ev) =>
     ed.addEventListener(ev, () => updateRichTextToolbarState(ed)),
   );
+
   w.querySelectorAll(".richtext-btn").forEach((btn) => {
     btn.addEventListener("mousedown", (e) => e.preventDefault());
     btn.addEventListener("click", () =>
       handleRichTextCommand(btn.dataset.command, ed),
     );
   });
+
   const r = w.querySelector('[data-action="remove"]');
   if (r) r.addEventListener("click", () => removeArticleBlock(index));
   return w;
+
 }
+
 function createImageElement(b, index) {
  
   const w = document.createElement("div");
@@ -588,13 +611,17 @@ function removeArticleBlock(i) {
 }
 
 function focusLastParagraph() {
+
   setTimeout(() => {
     const e = document.querySelectorAll(".article-richtext-input");
+
     if (e.length) {
       currentRichTextEditor = e[e.length - 1];
       currentRichTextEditor.focus();
     }
+
   }, 50);
+
 }
 
 function handleRichTextCommand(cmd, ed) {
@@ -659,6 +686,7 @@ function updateRichTextToolbarState(ed) {
   const w = ed?.closest(".article-richtext-editor");
 
   if (!w) return;
+
   w.querySelectorAll(".richtext-btn[data-command]").forEach((btn) => {
     let a = false,
       c = btn.dataset.command;
@@ -678,41 +706,59 @@ function updateRichTextToolbarState(ed) {
 }
 
 function isSelectionInsideLink(ed) {
+
   const s = getSelection();
+
   if (!s?.rangeCount) return false;
   let n = s.anchorNode;
+
   while (n && n !== ed) {
     if (n.nodeType === Node.ELEMENT_NODE && n.tagName === "A") return true;
     n = n.parentNode;
   }
+
   return false;
+
 }
 
 function setupRichTextModal() {}
 
 function openRichTextLinkModal(ed) {
+
   currentRichTextEditor = ed;
+
   saveRichTextSelection(ed);
+
   document.getElementById("richTextLinkModalOverlay")?.remove();
+
   const s = getSelection();
+
   const text = s?.toString().trim() || "";
+
   let url = "",
     blank = true,
     n = s?.anchorNode;
-  while (n && n !== ed) {
-    if (n.nodeType === Node.ELEMENT_NODE && n.tagName === "A") {
-      url = n.getAttribute("href") || "";
-      blank = n.getAttribute("target") === "_blank";
-      break;
+
+    while (n && n !== ed) {
+
+      if (n.nodeType === Node.ELEMENT_NODE && n.tagName === "A") {
+        url = n.getAttribute("href") || "";
+        blank = n.getAttribute("target") === "_blank";
+        break;
+      }
+      n = n.parentNode;
     }
-    n = n.parentNode;
-  }
 
   const o = document.createElement("div");
+
   o.id = "richTextLinkModalOverlay";
+
   o.className = "richtext-link-modal-overlay";
+
   o.innerHTML = `<div class="richtext-link-modal" role="dialog" aria-modal="true"><div class="richtext-link-modal-header"><div class="richtext-link-modal-icon"><i class="ri-link"></i></div><div class="richtext-link-modal-heading"><h3>Insert Link</h3><p>Add a link to the selected text.</p></div><button type="button" class="richtext-link-modal-close" id="richTextLinkClose"><i class="ri-close-line"></i></button></div><div class="richtext-link-modal-body"><div class="form-group"><label>Selected Text</label><input type="text" id="richTextLinkText" value="${escapeAttribute(text)}" readonly></div><div class="form-group"><label for="richTextLinkUrl">URL</label><input type="url" id="richTextLinkUrl" placeholder="https://example.com" value="${escapeAttribute(url)}" autocomplete="off"></div><label class="richtext-link-checkbox"><input type="checkbox" id="richTextLinkNewTab" ${blank ? "checked" : ""}><span class="richtext-link-checkbox-box"><i class="ri-check-line"></i></span> Open link in a new tab</label></div><div class="richtext-link-modal-footer"><button type="button" class="btn btn-secondary" id="richTextLinkCancel">Cancel</button><button type="button" class="btn btn-primary" id="richTextLinkApply"><i class="ri-link"></i> Apply Link</button></div></div>`;
+
   document.body.appendChild(o);
+
   requestAnimationFrame(() => o.classList.add("show"));
 
   const ui = (id) => document.getElementById(id),
@@ -860,14 +906,22 @@ async function handleArticleImageSelect(input, b, w) {
 }
 
 function validateForm() {
+
   const title = getValue("title").trim(),
-    cat = getValue("category").trim(),
-    cn = getValue("category_name").trim(),
-    desc = getValue("description").trim(),
-    publishedDate = getValue("date").trim(),
-    status = getValue("status").trim(),
-    loc = getValue("location").trim(),
-    cover = getValue("existingCoverImage").trim();
+
+  cat = getValue("category").trim(),
+
+  cn = getValue("category_name").trim(),
+
+  desc = getValue("description").trim(),
+
+  publishedDate = getValue("date").trim(),
+
+  status = getValue("status").trim(),
+
+  loc = getValue("location").trim(),
+
+  cover = getValue("existingCoverImage").trim();
 
   if (!title) {
     return {
@@ -1284,8 +1338,13 @@ function parseArticleContent(content) {
 }
 
 window.savePressRelease = savePressRelease;
+
 window.addParagraphBlock = addParagraphBlock;
+
 window.addImageBlock = addImageBlock;
+
 window.uploadPressReleaseImage = uploadPressReleaseImage;
+
 window.loadPressRelease = loadPressRelease;
+
 window.collectFormData = collectFormData;
