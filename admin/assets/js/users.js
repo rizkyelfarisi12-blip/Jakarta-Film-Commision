@@ -255,12 +255,12 @@ function renderTable(data) {
 
   if (!Array.isArray(data) || data.length === 0) {
     tbody.innerHTML = `
-            <tr>
-                <td colspan="5" style="text-align:center;padding:40px;">
-                    No users found.
-                </td>
-            </tr>
-        `;
+      <tr>
+        <td colspan="5" style="text-align:center;padding:40px;">
+          No users found.
+        </td>
+      </tr>
+    `;
 
     return;
   }
@@ -268,100 +268,83 @@ function renderTable(data) {
   data.forEach((user) => {
     const isActive = user.status === "active";
 
-    /*
-        |--------------------------------------------------------------------------
-        | Super Admin aktif tidak boleh dinonaktifkan lewat toggle
-        | (dicegah juga di backend, tapi kita disable di UI biar jelas).
-        |--------------------------------------------------------------------------
-        */
-
     const lockToggle = user.role === "super_admin" && isActive;
 
     tbody.innerHTML += `
 
-            <tr>
+      <tr>
 
-                <td>
+        <td>
+          <div style="display:flex;align-items:center;gap:12px;">
 
-                    <div style="display:flex;align-items:center;gap:12px;">
+            <div class="user-avatar-initials">
+              ${escapeHtml(getInitials(user.name))}
+            </div>
 
-                        <div class="user-avatar-initials">
-                            ${escapeHtml(getInitials(user.name))}
-                        </div>
+            <div>
 
-                        <div>
+              <strong style="display:block;">
+                ${escapeHtml(user.name || "-")}
+              </strong>
 
-                            <strong style="display:block;">
-                                ${escapeHtml(user.name || "-")}
-                            </strong>
+              <span style="display:block;font-size:12px;color:#999e99;">
+                @${escapeHtml(user.username || "-")}
+                ${user.email ? " &middot; " + escapeHtml(user.email) : ""}
+              </span>
 
-                            <span style="display:block;font-size:12px;color:#999e99;">
-                                @${escapeHtml(user.username || "-")}
-                                ${user.email ? " &middot; " + escapeHtml(user.email) : ""}
-                            </span>
+            </div>
 
-                        </div>
+          </div>
+        </td>
 
-                    </div>
+        <td>
+          <span class="${getRoleClass(user.role)}">
+            ${escapeHtml(getRoleLabel(user.role))}
+          </span>
+        </td>
 
-                </td>
+          <td>
+            <label class="switch"
+            title="${lockToggle ? 
+            "The only Super Admin cannot be deactivated" : isActive ? 
+            "Click to deactivate" : "Click to activate"}">
 
+              <input
+                type="checkbox"
+                ${isActive ? "checked" : ""}
+                ${lockToggle ? "disabled" : ""}
+                onchange="handleStatusToggle(${user.id}, this)">
 
-                <td>
-                    <span class="${getRoleClass(user.role)}">
-                        ${escapeHtml(getRoleLabel(user.role))}
-                    </span>
-                </td>
+              <span class="slider"></span>
 
+            </label>
+          </td>
 
-                <td>
+          <td>
+              ${formatUserDate(user.last_login)}
+          </td>
 
-                    <label
-                        class="switch"
-                        title="${lockToggle ? "The only Super Admin cannot be deactivated" : isActive ? "Click to deactivate" : "Click to activate"}"
-                    >
+          <td>
+            <div class="table-action">
 
-                        <input
-                            type="checkbox"
-                            ${isActive ? "checked" : ""}
-                            ${lockToggle ? "disabled" : ""}
-                            onchange="handleStatusToggle(${user.id}, this)">
+              <a href="form.php?id=${user.id}" class="table-btn edit">
+                  Edit
+              </a>
 
-                        <span class="slider"></span>
+              <button
+              class="table-btn delete"
+              onclick="deleteUser(${user.id})">
 
-                    </label>
+                Delete
 
-                </td>
+              </button>
 
+            </div>
+          </td>
 
-                <td>
-                    ${formatUserDate(user.last_login)}
-                </td>
+      </tr>
 
-
-                <td>
-
-                    <div class="table-action">
-
-                        <a href="form.php?id=${user.id}" class="table-btn edit">
-                            Edit
-                        </a>
-
-                        <button
-                            class="table-btn delete"
-                            onclick="deleteUser(${user.id})">
-
-                            Delete
-
-                        </button>
-
-                    </div>
-
-                </td>
-
-            </tr>
-
-        `;
+    `;
   });
 }
 

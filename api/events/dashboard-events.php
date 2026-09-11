@@ -4,21 +4,12 @@ require_once __DIR__ . "/../db.php";
 
 header("Content-Type: application/json; charset=UTF-8");
 
-
-/* =========================================================
-   ERROR HANDLER
-========================================================= */
-
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 
 try {
 
-
-    /* =====================================================
-       LATEST EVENTS
-    ===================================================== */
-
+    // Latest event
     $latestQuery = mysqli_query(
         $conn,
         "
@@ -58,11 +49,7 @@ try {
 
     }
 
-
-    /* =====================================================
-       TOTAL PUBLISHED EVENTS
-    ===================================================== */
-
+    // Total Published event
     $totalQuery = mysqli_query(
         $conn,
         "
@@ -72,18 +59,13 @@ try {
         "
     );
 
-
     $totalRow =
         mysqli_fetch_assoc($totalQuery);
-
 
     $totalEvents =
         (int)($totalRow["total"] ?? 0);
 
-
-    /* =====================================================
-       FEATURED EVENT
-    ===================================================== */
+    // Featured Event
     $today = date("Y-m-d");
 
     $featuredQuery = mysqli_query(
@@ -140,11 +122,7 @@ try {
 
     }
 
-
-    /* =====================================================
-       RESPONSE
-    ===================================================== */
-
+    // Respon
     echo json_encode([
 
         "success" => true,

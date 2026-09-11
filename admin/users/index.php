@@ -14,7 +14,6 @@ include "../includes/header.php";
 
     <?php include "../includes/sidebar.php"; ?>
 
-
     <main class="main-content">
 
         <header class="dashboard-header">
@@ -30,7 +29,6 @@ include "../includes/header.php";
             </a>
 
         </header>
-
 
         <section class="dashboard-stats">
 
@@ -57,11 +55,9 @@ include "../includes/header.php";
 
         </section>
 
-
         <section class="dashboard-card">
 
             <div class="card-header">
-
                 <div class="event-table-tools">
 
                     <input
@@ -100,12 +96,9 @@ include "../includes/header.php";
                     </select>
 
                 </div>
-
             </div>
 
-
             <div class="table-responsive">
-
                 <table class="admin-table">
 
                     <thead>
@@ -121,17 +114,14 @@ include "../includes/header.php";
                     </thead>
 
                     <tbody id="userTable">
-
                         <tr>
                             <td colspan="5" style="text-align:center;">
                                 Loading Users...
                             </td>
                         </tr>
-
                     </tbody>
 
                 </table>
-
             </div>
 
         </section>
@@ -140,12 +130,6 @@ include "../includes/header.php";
 
 </div>
 
-
-<!-- =========================================================
-     JAVASCRIPT
-========================================================= -->
-
 <script src="../assets/js/users.js"></script>
-
 
 <?php include "../includes/footer.php"; ?>

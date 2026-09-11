@@ -229,10 +229,10 @@ async function saveEvent() {
         const type = block.dataset.type;
 
         /*
-                |--------------------------------------------------------------------------
-                | PARAGRAPH (rich text)
-                |--------------------------------------------------------------------------
-                */
+        |--------------------------------------------------------------------------
+        | PARAGRAPH (rich text)
+        |--------------------------------------------------------------------------
+        */
         if (type === "paragraph") {
           const editor = block.querySelector(".article-richtext-input");
 
@@ -250,10 +250,10 @@ async function saveEvent() {
         }
 
         /*
-                |--------------------------------------------------------------------------
-                | IMAGE
-                |--------------------------------------------------------------------------
-                */
+        |--------------------------------------------------------------------------
+        | IMAGE
+        |--------------------------------------------------------------------------
+        */
         if (type === "image") {
           const src = block.querySelector(".article-image-src")?.value.trim();
 
@@ -275,8 +275,8 @@ async function saveEvent() {
       });
 
     /* =========================
-           PAYLOAD
-        ========================= */
+        PAYLOAD
+    ========================= */
 
     const payload = {
       id: id,
@@ -519,15 +519,15 @@ function addScheduleRow(time = "", title = "", description = "") {
 
 <div class="schedule-top">
 
-    <input
-        type="time"
-        class="schedule-time"
-        value="${time}">
+  <input
+    type="time"
+    class="schedule-time"
+    value="${time}">
 
-    <input
-        class="schedule-title"
-        placeholder="Activity Title"
-        value="${title}">
+  <input
+    class="schedule-title"
+    placeholder="Activity Title"
+    value="${title}">
 
 </div>
 
@@ -537,14 +537,14 @@ function addScheduleRow(time = "", title = "", description = "") {
 
 <div class="schedule-footer">
 
-    <button
-        type="button"
-        class="delete-schedule"
-        onclick="this.closest('.schedule-item').remove()">
+  <button
+    type="button"
+    class="delete-schedule"
+    onclick="this.closest('.schedule-item').remove()">
 
-        Delete
+    Delete
 
-    </button>
+  </button>
 
 </div>
 
@@ -569,64 +569,63 @@ function addParagraph(text = "") {
 
     <div class="article-block-header">
 
-        <div class="article-block-title">
-            <i class="ri-text"></i>
-            <span>Paragraph</span>
-        </div>
+      <div class="article-block-title">
+        <i class="ri-text"></i>
+        <span>Paragraph</span>
+      </div>
 
-        <div class="article-block-actions">
+      <div class="article-block-actions">
 
-            <button
-                type="button"
-                class="article-block-remove"
-                title="Remove paragraph"
-                onclick="this.closest('.article-block').remove()"
-            >
-                <i class="ri-delete-bin-line"></i>
-            </button>
+        <button
+        type="button"
+        class="article-block-remove"
+        title="Remove paragraph"
+        onclick="this.closest('.article-block').remove()">
 
-        </div>
+          <i class="ri-delete-bin-line"></i>
+
+        </button>
+
+      </div>
 
     </div>
 
     <div class="article-block-body">
+      <div class="article-richtext-editor">
 
-        <div class="article-richtext-editor">
+        <div class="article-richtext-toolbar">
 
-            <div class="article-richtext-toolbar">
+          <button type="button" class="richtext-btn" data-command="bold" title="Bold">
+            <i class="ri-bold"></i>
+          </button>
 
-                <button type="button" class="richtext-btn" data-command="bold" title="Bold">
-                    <i class="ri-bold"></i>
-                </button>
+          <button type="button" class="richtext-btn" data-command="italic" title="Italic">
+            <i class="ri-italic"></i>
+          </button>
 
-                <button type="button" class="richtext-btn" data-command="italic" title="Italic">
-                    <i class="ri-italic"></i>
-                </button>
+          <button type="button" class="richtext-btn" data-command="underline" title="Underline">
+            <i class="ri-underline"></i>
+          </button>
 
-                <button type="button" class="richtext-btn" data-command="underline" title="Underline">
-                    <i class="ri-underline"></i>
-                </button>
+          <span class="richtext-toolbar-divider"></span>
 
-                <span class="richtext-toolbar-divider"></span>
+          <button type="button" class="richtext-btn" data-command="createLink" title="Insert Link">
+            <i class="ri-link"></i>
+          </button>
 
-                <button type="button" class="richtext-btn" data-command="createLink" title="Insert Link">
-                    <i class="ri-link"></i>
-                </button>
-
-                <button type="button" class="richtext-btn" data-command="unlink" title="Remove Link">
-                    <i class="ri-link-unlink"></i>
-                </button>
-
-            </div>
-
-            <div
-                class="article-richtext-input"
-                contenteditable="true"
-                data-placeholder="Write your paragraph..."
-            ></div>
+          <button type="button" class="richtext-btn" data-command="unlink" title="Remove Link">
+            <i class="ri-link-unlink"></i>
+          </button>
 
         </div>
 
+        <div
+          class="article-richtext-input"
+          contenteditable="true"
+          data-placeholder="Write your paragraph...">
+        </div>
+
+      </div>
     </div>
 
     `;
@@ -785,52 +784,52 @@ function openRichTextLinkModal(editor) {
   overlay.className = "richtext-link-modal-overlay";
 
   overlay.innerHTML = `
-        <div class="richtext-link-modal" role="dialog" aria-modal="true">
+    <div class="richtext-link-modal" role="dialog" aria-modal="true">
 
-            <div class="richtext-link-modal-header">
+      <div class="richtext-link-modal-header">
 
-                <div class="richtext-link-modal-icon">
-                    <i class="ri-link"></i>
-                </div>
+          <div class="richtext-link-modal-icon">
+              <i class="ri-link"></i>
+          </div>
 
-                <div class="richtext-link-modal-heading">
-                    <h3>Insert Link</h3>
-                    <p>Add a link to the selected text.</p>
-                </div>
+          <div class="richtext-link-modal-heading">
+              <h3>Insert Link</h3>
+              <p>Add a link to the selected text.</p>
+          </div>
 
-                <button type="button" class="richtext-link-modal-close" id="richTextLinkClose">
-                    <i class="ri-close-line"></i>
-                </button>
+          <button type="button" class="richtext-link-modal-close" id="richTextLinkClose">
+              <i class="ri-close-line"></i>
+          </button>
 
-            </div>
+      </div>
 
-            <div class="richtext-link-modal-body">
+      <div class="richtext-link-modal-body">
 
-                <div class="form-group">
-                    <label>Selected Text</label>
-                    <input type="text" id="richTextLinkText" value="${escapeAttribute(selectedText)}" readonly>
-                </div>
+          <div class="form-group">
+              <label>Selected Text</label>
+              <input type="text" id="richTextLinkText" value="${escapeAttribute(selectedText)}" readonly>
+          </div>
 
-                <div class="form-group">
-                    <label for="richTextLinkUrl">URL</label>
-                    <input type="url" id="richTextLinkUrl" placeholder="https://example.com" value="${escapeAttribute(url)}" autocomplete="off">
-                </div>
+          <div class="form-group">
+              <label for="richTextLinkUrl">URL</label>
+              <input type="url" id="richTextLinkUrl" placeholder="https://example.com" value="${escapeAttribute(url)}" autocomplete="off">
+          </div>
 
-                <label class="richtext-link-checkbox">
-                    <input type="checkbox" id="richTextLinkNewTab" ${openInNewTab ? "checked" : ""}>
-                    <span class="richtext-link-checkbox-box"><i class="ri-check-line"></i></span>
-                    Open link in a new tab
-                </label>
+          <label class="richtext-link-checkbox">
+              <input type="checkbox" id="richTextLinkNewTab" ${openInNewTab ? "checked" : ""}>
+              <span class="richtext-link-checkbox-box"><i class="ri-check-line"></i></span>
+              Open link in a new tab
+          </label>
 
-            </div>
+      </div>
 
-            <div class="richtext-link-modal-footer">
-                <button type="button" class="btn btn-secondary" id="richTextLinkCancel">Cancel</button>
-                <button type="button" class="btn btn-primary" id="richTextLinkApply"><i class="ri-link"></i> Apply Link</button>
-            </div>
+      <div class="richtext-link-modal-footer">
+          <button type="button" class="btn btn-secondary" id="richTextLinkCancel">Cancel</button>
+          <button type="button" class="btn btn-primary" id="richTextLinkApply"><i class="ri-link"></i> Apply Link</button>
+      </div>
 
-        </div>
-    `;
+    </div>
+  `;
 
   document.body.appendChild(overlay);
 
@@ -1112,18 +1111,18 @@ async function uploadArticleImage(input, item) {
     }
 
     /*
-        |--------------------------------------------------------------------------
-        | SAVE PATH
-        |--------------------------------------------------------------------------
-        */
+    |--------------------------------------------------------------------------
+    | SAVE PATH
+    |--------------------------------------------------------------------------
+    */
 
     item.querySelector(".article-image-src").value = result.path;
 
     /*
-        |--------------------------------------------------------------------------
-        | PREVIEW
-        |--------------------------------------------------------------------------
-        */
+    |--------------------------------------------------------------------------
+    | PREVIEW
+    |--------------------------------------------------------------------------
+    */
     const preview = item.querySelector(".article-image-preview");
 
     const placeholder = item.querySelector(".article-upload-placeholder");
@@ -1256,8 +1255,8 @@ document
     if (!file) return;
 
     /* =========================
-           LOCAL PREVIEW
-           ========================= */
+    LOCAL PREVIEW
+    ========================= */
 
     const preview = document.getElementById("imagePreview");
 
@@ -1268,8 +1267,8 @@ document
     preview.style.display = "block";
 
     /* =========================
-           UPLOAD
-           ========================= */
+    UPLOAD
+    ========================= */
 
     const formData = new FormData();
 
@@ -1289,28 +1288,29 @@ document
 
       if (result.success) {
         /*
-                |----------------------------------------------------------
-                | SAVE IMAGE PATH
-                |----------------------------------------------------------
-                */
+        |----------------------------------------------------------
+        | SAVE IMAGE PATH
+        |----------------------------------------------------------
+        */
 
         document.getElementById("image").value = result.path;
 
         /*
-                |----------------------------------------------------------
-                | USE SERVER IMAGE PATH
-                |----------------------------------------------------------
-                */
+        |----------------------------------------------------------
+        | USE SERVER IMAGE PATH
+        |----------------------------------------------------------
+        */
 
         preview.src = resolveImagePath(result.path);
 
         preview.style.display = "block";
       } else {
+
         /*
-                |----------------------------------------------------------
-                | REMOVE PREVIEW IF UPLOAD FAILED
-                |----------------------------------------------------------
-                */
+        |----------------------------------------------------------
+        | REMOVE PREVIEW IF UPLOAD FAILED
+        |----------------------------------------------------------
+        */
 
         preview.src = "";
 

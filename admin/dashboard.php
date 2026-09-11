@@ -68,7 +68,6 @@ include 'includes/header.php';
     <!-- =========================================
         EVENT DASHBOARD
     ========================================= -->
-
     <section class="dashboard-event-grid">
 
         <!-- LATEST EVENTS -->
@@ -89,9 +88,7 @@ include 'includes/header.php';
 
             </div>
 
-            <div
-                id="latestEvents"
-                class="latest-events">
+            <div id="latestEvents" class="latest-events">
 
                 <div class="dashboard-loading">
                     Loading events...
@@ -115,9 +112,7 @@ include 'includes/header.php';
 
             </div>
 
-            <div
-                id="featuredEvent"
-                class="featured-event">
+            <div id="featuredEvent" class="featured-event">
 
                 <div class="dashboard-loading">
                     Loading featured event...

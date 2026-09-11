@@ -18,58 +18,54 @@
 
     <div class="login-card">
 
-        <img
-            src="assets/icon/JFC Logo 2BW.png"
-            class="login-logo">
-
+        <img src="assets/icon/JFC Logo 2BW.png" class="login-logo">
         <h1>Jakarta Film Commission</h1>
-
         <p>Administration Panel</p>
 
         <?php
 
-        /*
-        |--------------------------------------------------------------------------
-        | ERROR MESSAGE
-        |--------------------------------------------------------------------------
-        |
-        | login-process.php redirect ke sini dengan ?error=... kalau
-        | gagal. Sebelumnya tidak pernah ditampilkan ke user.
-        |
-        |--------------------------------------------------------------------------
-        */
+            /*
+            |--------------------------------------------------------------------------
+            | ERROR MESSAGE
+            |--------------------------------------------------------------------------
+            |
+            | login-process.php redirect ke sini dengan ?error=... kalau
+            | gagal. Sebelumnya tidak pernah ditampilkan ke user.
+            |
+            |--------------------------------------------------------------------------
+            */
 
-        $error =
-            $_GET["error"] ?? "";
+            $error =
+                $_GET["error"] ?? "";
 
-        $errorMessages = [
+            $errorMessages = [
 
-            "empty" =>
-                "Please enter both username and password.",
+                "empty" =>
+                    "Please enter both username and password.",
 
-            "invalid" =>
-                "Invalid username or password.",
+                "invalid" =>
+                    "Invalid username or password.",
 
-            "inactive" =>
-                "This account is inactive. Please contact a Super Admin.",
+                "inactive" =>
+                    "This account is inactive. Please contact a Super Admin.",
 
-            "system" =>
-                "A system error occurred. Please try again.",
+                "system" =>
+                    "A system error occurred. Please try again.",
 
-            "locked" =>
-                "Too many failed attempts. Please try again in " .
-                (int) ($_GET["minutes"] ?? 15) .
-                " minute(s)."
+                "locked" =>
+                    "Too many failed attempts. Please try again in " .
+                    (int) ($_GET["minutes"] ?? 15) .
+                    " minute(s)."
 
-        ];
+            ];
 
-        if ($error !== "" && isset($errorMessages[$error])) {
+            if ($error !== "" && isset($errorMessages[$error])) {
 
-            echo '<div class="login-error">' .
-                htmlspecialchars($errorMessages[$error], ENT_QUOTES) .
-                '</div>';
+                echo '<div class="login-error">' .
+                    htmlspecialchars($errorMessages[$error], ENT_QUOTES) .
+                    '</div>';
 
-        }
+            }
 
         ?>
 
@@ -90,9 +86,7 @@
                 required>
 
             <button type="submit">
-
                 Login
-
             </button>
 
         </form>

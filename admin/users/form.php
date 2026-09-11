@@ -14,11 +14,8 @@ include "../includes/header.php";
 
     <?php include "../includes/sidebar.php"; ?>
 
-
     <main class="main-content">
-
         <div class="admin-form-page">
-
 
             <header class="page-header">
 
@@ -62,19 +59,14 @@ include "../includes/header.php";
 
                 <input type="hidden" id="userId">
 
-
                 <div class="form-layout">
-
 
                     <div class="form-main">
 
-
                         <section class="admin-card">
-
                             <h2>
                                 Account Information
                             </h2>
-
                             <div class="form-grid">
 
                                 <div class="form-group">
@@ -108,16 +100,12 @@ include "../includes/header.php";
                                 </div>
 
                             </div>
-
                         </section>
 
-
                         <section class="admin-card">
-
                             <h2>
                                 Password
                             </h2>
-
                             <div class="form-grid">
 
                                 <div class="form-group">
@@ -142,16 +130,11 @@ include "../includes/header.php";
                                 </div>
 
                             </div>
-
                         </section>
-
 
                     </div>
 
-
                     <aside class="form-sidebar">
-
-
                         <section class="admin-card">
 
                             <h3>
@@ -163,12 +146,10 @@ include "../includes/header.php";
                                 <label for="role">Role</label>
 
                                 <select id="role">
-
                                     <option value="content_admin">Content Admin</option>
                                     <option value="communication_admin">Communication Admin</option>
                                     <option value="membership_admin">Membership Admin</option>
                                     <option value="super_admin">Super Admin</option>
-
                                 </select>
 
                                 <small id="roleHint">
@@ -179,13 +160,10 @@ include "../includes/header.php";
 
                         </section>
 
-
                         <section class="admin-card">
-
                             <h3>
                                 Status
                             </h3>
-
                             <div class="form-group" style="flex-direction:row; align-items:center; justify-content:space-between;">
 
                                 <label for="status" style="margin:0;">
@@ -208,23 +186,15 @@ include "../includes/header.php";
 
                     </aside>
 
-
                 </div>
 
             </form>
 
         </div>
-
     </main>
 
 </div>
 
-
-<!-- =========================================================
-     JAVASCRIPT
-========================================================= -->
-
 <script src="../assets/js/user-form.js"></script>
-
 
 <?php include "../includes/footer.php"; ?>

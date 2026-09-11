@@ -1,53 +1,85 @@
 /* JAKARTA FILM COMMISSION - PRESS RELEASE FORM - FINAL VERSION */
+
 window.JFC_PRESS_RELEASE_API = window.JFC_PRESS_RELEASE_API || "../../api";
+
 window.JFC_PRESS_RELEASE_UPLOAD_API =
   window.JFC_PRESS_RELEASE_UPLOAD_API ||
   window.JFC_PRESS_RELEASE_API + "/press-release/upload-press-image.php";
+
 window.JFC_PRESS_RELEASE_CREATE_API =
   window.JFC_PRESS_RELEASE_CREATE_API ||
   window.JFC_PRESS_RELEASE_API + "/press-release/create-press.php";
+
 window.JFC_PRESS_RELEASE_UPDATE_API =
   window.JFC_PRESS_RELEASE_UPDATE_API ||
   window.JFC_PRESS_RELEASE_API + "/press-release/update-press.php";
+
 window.JFC_PRESS_RELEASE_GET_API =
   window.JFC_PRESS_RELEASE_GET_API ||
   window.JFC_PRESS_RELEASE_API + "/press-release/get-press.php";
+
 let articleBlocks = [],
+
   articleBlockCounter = 0,
+
   pressReleaseData = null,
+
   isEditMode = false,
+
   currentRichTextEditor = null,
+
   currentRichTextRange = null;
+
 document.addEventListener("DOMContentLoaded", initializePressReleaseForm);
+
 function initializePressReleaseForm() {
+
   const p = new URLSearchParams(location.search),
     id = p.get("id");
+
   isEditMode = !!id;
+
   setupTitleSlug();
+
   setupCategory();
+
   setupCoverImage();
+
   setupArticleButtons();
+
   setupSaveButton();
+
   setupRichTextModal();
+
   setupFormSubmitProtection();
+
   setupLocationDefault();
+
   if (isEditMode) loadPressRelease(id);
+
   else {
     setPageTitle("New Press Release");
     const l = document.getElementById("location");
     if (l && !l.value.trim()) l.value = "Jakarta";
   }
+
   renderArticleBlocks();
 }
 
 function getValue(id) {
+
   const e = document.getElementById(id);
+
   return e ? e.value || "" : "";
+
 }
 
 function setValue(id, v) {
+
   const e = document.getElementById(id);
+
   if (e) e.value = v ?? "";
+
 }
 
 function escapeHtml(v) {
@@ -144,12 +176,17 @@ function resolveImagePath(path) {
 }
 
 function createBlockId() {
+
   return "article-block-" + Date.now() + "-" + ++articleBlockCounter;
+
 }
 
 function setPageTitle(t) {
+
   const e = document.getElementById("pageTitle");
+  
   if (e) e.textContent = t;
+
 }
 
 function generateSlug(t) {
@@ -166,9 +203,12 @@ function generateSlug(t) {
 }
 
 function setupTitleSlug() {
+
   const t = document.getElementById("title"),
     s = document.getElementById("slug");
+
   if (!t) return;
+
   if (s) {
     s.readOnly = true;
     s.setAttribute("readonly", "readonly");
@@ -176,58 +216,83 @@ function setupTitleSlug() {
     t.addEventListener("input", () => (s.value = generateSlug(t.value)));
     if (!isEditMode || !s.value) s.value = generateSlug(t.value);
   }
+
 }
 
 function setupCategory() {
+
   const c = document.getElementById("category"),
     g = document.getElementById("categoryNameGroup"),
     n = document.getElementById("category_name");
+
   if (!c) return;
+
   const u = () => {
+
     if (c.value === "Others") {
       if (g) g.style.display = "";
+
     } else {
+
       if (g) g.style.display = "none";
       if (n) n.value = "";
+
     }
+
   };
+
   c.addEventListener("change", u);
   u();
+
 }
 
 function setupLocationDefault() {
+
   const l = document.getElementById("location");
+
   if (l)
     l.addEventListener("blur", () => {
+
       if (!l.value.trim()) l.value = "Jakarta";
+
     });
+
 }
 function setupArticleButtons() {
+
   const p = document.getElementById("addParagraphBtn"),
     i = document.getElementById("addImageBtn");
+
   if (p) p.addEventListener("click", () => addParagraphBlock());
+
   if (i) i.addEventListener("click", () => addImageBlock());
+
 }
-/* =========================================================
-   PASTE SANITIZER
-   (memaksa paste sebagai plain text agar style asing
-   dari Word/Google Docs/halaman lain tidak ikut masuk)
-========================================================= */
+
+// PASTE SANITIZER
 function handleRichTextPaste(e) {
+
   e.preventDefault();
   const clipboardData = e.clipboardData || window.clipboardData;
   const text = clipboardData ? clipboardData.getData("text/plain") : "";
   document.execCommand("insertText", false, text);
+
 }
+
 function addParagraphBlock(value = "") {
+
   articleBlocks.push({
     id: createBlockId(),
     type: "paragraph",
     content: value,
   });
+
   renderArticleBlocks();
+
   focusLastParagraph();
+
 }
+
 function addImageBlock(data = {}) {
   const b = {
     id: createBlockId(),
@@ -238,13 +303,18 @@ function addImageBlock(data = {}) {
     file: null,
     uploaded: !!(data.src || data.url || data.image),
   };
+
   articleBlocks.push(b);
   renderArticleBlocks();
+
   setTimeout(() => {
+
     const i = document.querySelector(`[data-image-input="${b.id}"]`);
     if (i) i.click();
   }, 100);
+
 }
+
 function renderArticleBlocks() {
   const c = document.getElementById("articleContent"),
     e = document.getElementById("articleEmptyState");
@@ -294,10 +364,15 @@ function createParagraphElement(b, index) {
   return w;
 }
 function createImageElement(b, index) {
+ 
   const w = document.createElement("div");
+ 
   w.className = "article-block article-image-block";
+ 
   w.dataset.blockId = b.id;
+ 
   w.innerHTML = `<div class="article-block-header"><div class="article-block-title"><i class="ri-image-line"></i><span>Image</span></div><div class="article-block-actions"><button type="button" class="article-block-remove" title="Remove image" data-action="remove"><i class="ri-delete-bin-line"></i></button></div></div><div class="article-block-body"><div class="article-image-editor"><div class="article-image-upload"><label class="article-upload-area" for=""><div class="article-upload-placeholder"><i class="ri-image-add-line"></i><strong>Upload Article Image</strong><span>JPG, PNG or WEBP</span><small>Maximum 5 MB · Recommended 16:9</small></div><img class="article-image-preview" src="" alt="Article Image Preview"></label><input type="file" class="article-image-input" accept="image/jpeg,image/png,image/webp" hidden><button type="button" class="btn btn-secondary article-change-image-btn"><i class="ri-image-edit-line"></i> Choose Image</button></div><div class="article-image-fields"><div class="form-group"><label>Caption</label><input type="text" class="article-image-caption" placeholder="Enter image caption..."><small>Optional caption displayed below the image.</small></div><div class="form-group"><label>Alternative Text</label><input type="text" class="article-image-alt" placeholder="Describe the image..."><small>Used for accessibility and SEO.</small></div></div></div></div>`;
+ 
   const area = w.querySelector(".article-upload-area"),
     input = w.querySelector(".article-image-input"),
     preview = w.querySelector(".article-image-preview"),
@@ -306,10 +381,12 @@ function createImageElement(b, index) {
     alt = w.querySelector(".article-image-alt"),
     change = w.querySelector(".article-change-image-btn"),
     remove = w.querySelector('[data-action="remove"]');
+
   const iid = "article-image-input-" + b.id;
   input.id = iid;
   area.setAttribute("for", iid);
   input.dataset.imageInput = b.id;
+  
   if (b.src) {
     preview.src = resolveImagePath(b.src);
     preview.style.display = "block";
@@ -318,22 +395,33 @@ function createImageElement(b, index) {
     preview.style.display = "none";
     ph.style.display = "flex";
   }
+
   cap.value = b.caption || "";
+
   alt.value = b.alt || "";
+
   change.addEventListener("click", (e) => {
     e.preventDefault();
     input.click();
   });
+
   area.addEventListener("click", (e) => {
     e.preventDefault();
     input.click();
   });
+
   input.addEventListener("change", () => handleArticleImageSelect(input, b, w));
+
   cap.addEventListener("input", () => (b.caption = cap.value));
+
   alt.addEventListener("input", () => (b.alt = alt.value));
+
   remove.addEventListener("click", () => removeArticleBlock(index));
+
   return w;
+
 }
+
 function previewFile(file, preview, placeholder) {
   if (!file || !preview) return;
   const r = new FileReader();
@@ -344,71 +432,96 @@ function previewFile(file, preview, placeholder) {
   };
   r.readAsDataURL(file);
 }
+
 function showImageUploadingState(w, loading) {
   const b = w?.querySelector(".article-change-image-btn");
+
   if (!b) return;
   b.disabled = loading;
   b.innerHTML = loading
     ? `<i class="ri-loader-4-line ri-spin"></i> Uploading...`
     : `<i class="ri-image-edit-line"></i> Choose Image`;
+
 }
+
 async function uploadPressReleaseImage(file, type = "article") {
+
   if (!file) throw Error("No image file selected.");
   const endpoint = window.JFC_PRESS_RELEASE_UPLOAD_API;
+
   if (!endpoint) throw Error("Upload API URL is not available.");
   const fd = new FormData();
+
   fd.append("image", file);
+  
   fd.append("type", type);
+
   let response;
-  try {
-    response = await fetch(endpoint, { method: "POST", body: fd });
-  } catch (e) {
-    throw Error("Unable to connect to the image upload server.");
-  }
+    try {
+      response = await fetch(endpoint, { method: "POST", body: fd });
+    } catch (e) {
+      throw Error("Unable to connect to the image upload server.");
+    }
+
   let result;
-  try {
-    result = await response.json();
-  } catch (e) {
-    throw Error(`Server returned HTTP ${response.status}.`);
-  }
-  if (!response.ok)
-    throw Error(
-      result?.message ||
-        result?.error ||
-        `Server returned HTTP ${response.status}.`,
-    );
-  if (!result?.success)
-    throw Error(result?.message || result?.error || "Failed to upload image.");
-  const f = result.file || result.data?.file || result.data;
-  if (!f)
-    throw Error(
-      "Upload succeeded but the server did not return file information.",
-    );
+    try {
+      result = await response.json();
+    } catch (e) {
+      throw Error(`Server returned HTTP ${response.status}.`);
+    }
+
+    if (!response.ok)
+      throw Error(
+        result?.message ||
+          result?.error ||
+          `Server returned HTTP ${response.status}.`,
+      );
+
+      if (!result?.success)
+      throw Error(result?.message || result?.error || "Failed to upload image.");
+    const f = result.file || result.data?.file || result.data;
+
+    if (!f)
+      throw Error(
+        "Upload succeeded but the server did not return file information.",
+      );
+
   const u = f.url || f.path || f.src;
-  if (!u) throw Error("Upload succeeded but image URL was not returned.");
+    if (!u) throw Error("Upload succeeded but image URL was not returned.");
+
   const n = String(u).trim().replace(/\\/g, "/");
+
   return { ...f, url: n, path: n };
+
 }
 function setupCoverImage() {
+
   const input = document.getElementById("coverImage"),
     preview = document.getElementById("imagePreview"),
     existing = document.getElementById("existingCoverImage");
+
   if (!input) return;
+
   input.addEventListener("change", async function () {
     const file = this.files?.[0];
+
     if (!file) return;
     const types = ["image/jpeg", "image/png", "image/webp"];
+
     if (!types.includes(file.type)) {
       alert("Only JPG, PNG and WEBP images are allowed.");
       this.value = "";
       return;
     }
+
     if (file.size > 5 * 1024 * 1024) {
       alert("Image size must not exceed 5 MB.");
       this.value = "";
       return;
     }
+
     this._selectedFile = file;
+
     if (preview) {
       const r = new FileReader();
       r.onload = (e) => {
@@ -417,43 +530,61 @@ function setupCoverImage() {
       };
       r.readAsDataURL(file);
     }
+
     try {
       setCoverUploadingState(true);
+
       const u = await uploadPressReleaseImage(file, "cover"),
         p = u.url || u.path;
+
       if (!p) throw Error("Uploaded cover image path is missing.");
+
       if (existing) existing.value = p;
       input.dataset.uploadedPath = p;
+
       if (preview) {
         preview.src = resolveImagePath(p);
         preview.style.display = "block";
       }
+
     } catch (e) {
       alert(e.message || "Failed to upload cover image.");
       this.value = "";
       this._selectedFile = null;
       this.dataset.uploadedPath = "";
-      if (existing) existing.value = "";
+
+    if (existing) existing.value = "";
+
     } finally {
       setCoverUploadingState(false);
     }
+
   });
+
 }
 
 function setCoverUploadingState(loading) {
+
   const a = document.querySelector(".upload-area"),
     h = a?.querySelector("h4");
+
   if (!h) return;
+
   h.innerHTML = loading
     ? `<i class="ri-loader-4-line ri-spin"></i> Uploading...`
     : "Upload Cover Image";
+
 }
 
 function removeArticleBlock(i) {
+
   if (i < 0 || i >= articleBlocks.length) return;
+
   if (!confirm("Remove this article block?")) return;
   articleBlocks.splice(i, 1);
+
   renderArticleBlocks();
+
 }
 
 function focusLastParagraph() {
@@ -467,55 +598,83 @@ function focusLastParagraph() {
 }
 
 function handleRichTextCommand(cmd, ed) {
+
   if (!ed) return;
   currentRichTextEditor = ed;
   saveRichTextSelection(ed);
+
   if (cmd === "createLink") {
     openRichTextLinkModal(ed);
     return;
   }
+
   ed.focus();
+
   document.execCommand(cmd, false, null);
+
   syncCurrentEditor(ed);
+
   updateRichTextToolbarState(ed);
+
 }
 
 function saveRichTextSelection(ed) {
+
   const s = getSelection();
+
   if (s?.rangeCount && ed.contains(s.getRangeAt(0).commonAncestorContainer))
     currentRichTextRange = s.getRangeAt(0).cloneRange();
+
 }
 
 function restoreRichTextSelection(ed) {
+
   if (!currentRichTextRange) {
     ed.focus();
     return;
   }
+
   const s = getSelection();
+
   s.removeAllRanges();
+
   s.addRange(currentRichTextRange);
+
   ed.focus();
+
 }
 
 function syncCurrentEditor(ed) {
+
   const w = ed?.closest(".article-block");
+
   const b = w && articleBlocks.find((x) => x.id === w.dataset.blockId);
+
   if (b) b.content = ed.innerHTML;
+
 }
 
 function updateRichTextToolbarState(ed) {
+
   const w = ed?.closest(".article-richtext-editor");
+
   if (!w) return;
   w.querySelectorAll(".richtext-btn[data-command]").forEach((btn) => {
     let a = false,
       c = btn.dataset.command;
-    if (["bold", "italic", "underline"].includes(c))
-      try {
-        a = document.queryCommandState(c);
-      } catch (e) {}
-    if (c === "createLink") a = isSelectionInsideLink(ed);
+
+      if (["bold", "italic", "underline"].includes(c))
+
+        try {
+          a = document.queryCommandState(c);
+        } catch (e) {}
+    
+      if (c === "createLink") a = isSelectionInsideLink(ed);
+    
     btn.classList.toggle("active", a);
+
   });
+
 }
 
 function isSelectionInsideLink(ed) {

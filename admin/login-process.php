@@ -20,12 +20,6 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 |--------------------------------------------------------------------------
 | RATE LIMIT
 |--------------------------------------------------------------------------
-|
-| Proteksi dasar dari brute-force: kunci sementara setelah
-| beberapa kali gagal berturut-turut. Disimpan di session
-| supaya tidak perlu tabel tambahan.
-|
-|--------------------------------------------------------------------------
 */
 
 $maxAttempts = 5;
@@ -169,13 +163,6 @@ if (!$admin) {
 /*
 |--------------------------------------------------------------------------
 | VERIFY PASSWORD
-|--------------------------------------------------------------------------
-|
-| Dicek SEBELUM status, supaya pesan error untuk username
-| valid tapi password salah tetap generik ("invalid") dan
-| tidak membocorkan apakah akun tersebut aktif/nonaktif ke
-| orang yang tidak tahu passwordnya.
-|
 |--------------------------------------------------------------------------
 */
 if (

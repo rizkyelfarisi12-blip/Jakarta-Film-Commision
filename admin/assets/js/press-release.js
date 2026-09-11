@@ -424,144 +424,94 @@ function createPressReleaseRow(item) {
   if (hasValidId) {
     actionHtml = `
 
-            <div class="action-group">
+      <div class="action-group">
 
-                <a
-                    href="form.php?id=${id}"
-                    class="table-btn edit"
-                >
+        <a href="form.php?id=${id}" class="table-btn edit">
+            Edit
+        </a>
 
-                    Edit
+        <button
+        type="button"
+        class="table-btn delete"
+        onclick="deletePressRelease(${id})">
 
-                </a>
+            Delete
 
+        </button>
 
-                <button
-                    type="button"
-                    class="table-btn delete"
-                    onclick="deletePressRelease(${id})"
-                >
+      </div>
 
-                    Delete
-
-                </button>
-
-            </div>
-
-        `;
+    `;
   } else {
-    /*
-        |-----------------------------------------------------
-        | INVALID DATABASE ID
-        |-----------------------------------------------------
-        */
-
+    
+    // INVALID DATABASE ID
     actionHtml = `
 
-            <span
-                style="
-                    color:#999;
-                    font-size:13px;
-                "
-            >
+      <span
+      style="
+        color:#999;
+        font-size:13px;
+      ">
 
-                Invalid ID
+        Invalid ID
 
-            </span>
+      </span>
 
-        `;
+    `;
 
     console.error("INVALID PRESS RELEASE ID:", item);
   }
 
-  /*
-    |---------------------------------------------------------
-    | RETURN ROW
-    |---------------------------------------------------------
-    */
-
+  //RETURN ROW
   return `
 
-        <tr
-            data-id="${hasValidId ? id : ""}"
-            data-status="${escapeAttribute(status)}"
-            data-category="${escapeAttribute(
-              item.category_filter || item.category || "Others",
-            )}"
-        >
+    <tr
+    data-id="${hasValidId ? id : ""}"
+    data-status="${escapeAttribute(status)}"
+    data-category="${escapeAttribute(
+      item.category_filter || item.category || "Others",
+    )}">
 
+      <!-- IMAGE -->
+      <td>
 
-            <!-- IMAGE -->
+        ${imageHtml}
 
-            <td>
+      </td>
 
-                ${imageHtml}
+      <!-- TITLE -->
+      <td>
+        <span class="event-table-title">
+          ${title}
+        </span>
+      </td>
 
-            </td>
+      <!-- CATEGORY -->
+      <td>
+        <span class="press-badge ${categorySlug}">
+          ${category}
+        </span>
+      </td>
 
+      <!-- DATE -->
+      <td>
+        ${escapeHtml(date)}
+      </td>
 
-            <!-- TITLE -->
+      <!-- STATUS -->
+      <td>
+        <span class="status-badge ${statusClass}">
+          ${statusLabel}
+        </span>
+      </td>
 
-            <td>
+      <!-- ACTION -->
+      <td>
+        ${actionHtml}
+      </td>
 
-                <span class="event-table-title">
-
-                    ${title}
-
-                </span>
-
-            </td>
-
-
-            <!-- CATEGORY -->
-
-            <td>
-
-                <span class="press-badge ${categorySlug}">
-
-                    ${category}
-
-                </span>
-
-            </td>
-
-
-            <!-- DATE -->
-
-            <td>
-
-                ${escapeHtml(date)}
-
-            </td>
-
-
-            <!-- STATUS -->
-
-            <td>
-
-                <span
-                    class="status-badge ${statusClass}"
-                >
-
-                    ${statusLabel}
-
-                </span>
-
-            </td>
-
-
-            <!-- ACTION -->
-
-            <td>
-
-                ${actionHtml}
-
-            </td>
-
-
-        </tr>
-
-    `;
+    </tr>
+  `;
 }
 
 /* =========================================================
@@ -592,18 +542,7 @@ function getCategoryDisplay(item) {
   return category || "Others";
 }
 
-/* =========================================================
-   CATEGORY COLOR CLASS
-
-   Dipetakan manual (bukan slugify otomatis) supaya cocok
-   dengan class warna yang sama dipakai di tampilan user:
-
-   Industry News    -> .industry
-   Official Release -> .official-release
-   Program Update   -> .program
-   Others           -> .others
-========================================================= */
-
+//CATEGORY COLOR CLASS
 function getPressReleaseCategoryClass(category) {
   const normalized = String(category || "")
     .toLowerCase()
@@ -639,14 +578,10 @@ function createCoverImageHtml(item, title) {
 
   if (!coverImage) {
     return `
-
-            <div class="table-thumb-placeholder">
-
-                No Image
-
-            </div>
-
-        `;
+      <div class="table-thumb-placeholder">
+        No Image
+      </div>
+    `;
   }
 
   /*
@@ -654,34 +589,26 @@ function createCoverImageHtml(item, title) {
     | NORMALIZE PATH
     |---------------------------------------------------------
     */
-
   const imageUrl = normalizeImageUrl(coverImage);
 
   return `
 
-        <img
-            src="${escapeAttribute(imageUrl)}"
-            alt="${escapeAttribute(title)}"
-            class="table-thumb"
-            loading="lazy"
-            onerror="
-                this.style.display='none';
-                if (this.nextElementSibling) {
-                    this.nextElementSibling.style.display='flex';
-                }
-            "
-        >
+    <img
+    src="${escapeAttribute(imageUrl)}"
+    alt="${escapeAttribute(title)}"
+    class="table-thumb"
+    loading="lazy"
+    onerror="
+      this.style.display='none';
+      if (this.nextElementSibling) {
+          this.nextElementSibling.style.display='flex';
+      }">
 
-        <div
-            class="table-thumb-placeholder"
-            style="display:none;"
-        >
+    <div class="table-thumb-placeholder" style="display:none;">
+        No Image
+    </div>
 
-            No Image
-
-        </div>
-
-    `;
+  `;
 }
 
 /* =========================================================

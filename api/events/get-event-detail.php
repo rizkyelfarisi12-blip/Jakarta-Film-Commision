@@ -9,13 +9,6 @@ header("Content-Type: application/json; charset=UTF-8");
 |--------------------------------------------------------------------------
 | GET BY ID
 |--------------------------------------------------------------------------
-|
-| Digunakan oleh ADMIN.
-|
-| Admin tetap boleh membuka:
-| - draft
-| - published
-|
 */
 
 if (isset($_GET["id"])) {
