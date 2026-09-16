@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, follow">
+
+<title>Page Not Found | Jakarta Film Commission</title>
+
+<link rel="icon" type="image/png" href="/jfc/assets/icon/JakartaFilmCommissionLogo-9.ico">
+
+<!--
+    PENTING: path di bawah ini SENGAJA absolut (diawali /jfc/),
+    BUKAN relatif (assets/css/...). Kalau relatif, CSS/gambar
+    tidak akan muncul saat halaman ini dipanggil dari URL rusak
+    yang ada di dalam subfolder (misal /jfc/events/slug-salah),
+    karena browser me-resolve path relatif berdasarkan URL asli
+    yang salah tadi, bukan berdasarkan lokasi file 404.html ini.
+-->
+<link rel="stylesheet" href="/jfc/assets/css/custom.css">
+
+<style>
+    .notfound{
+
+    min-height:100vh;
+
+    background:url(
+    '/jfc/assets/images/cinema-bg.jpg'
+    ) center center/cover;
+
+    position:relative;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+}
+
+.overlay{
+
+    position:absolute;
+    inset:0;
+
+    background:
+    rgba(0,0,0,.75);
+
+}
+
+.content{
+
+    position:relative;
+    z-index:2;
+
+    text-align:center;
+    color:white;
+    padding:20px;
+
+}
+
+.content h1{
+
+    font-size:180px;
+    margin:0;
+    line-height:1;
+
+}
+
+.content h2{
+
+    font-size:42px;
+
+}
+
+.content p{
+
+    max-width:500px;
+    margin:20px auto 0;
+
+    opacity:.8;
+
+}
+
+.content .notfound-actions{
+
+    display:flex;
+    gap:14px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin-top:30px;
+
+}
+
+.content a{
+
+    display:inline-block;
+
+    padding:14px 30px;
+
+    text-decoration:none;
+    border-radius:50px;
+
+}
+
+.content a.primary{
+
+    background:#fff;
+    color:#000;
+
+}
+
+.content a.secondary{
+
+    background:transparent;
+    color:#fff;
+    border:1px solid rgba(255,255,255,.4);
+
+}
+
+@media (max-width: 600px){
+
+    .content h1{
+        font-size:100px;
+    }
+
+    .content h2{
+        font-size:28px;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="notfound">
+
+    <div class="overlay"></div>
+
+    <div class="content">
+
+        <h1>404</h1>
+
+        <h2>Scene Not Found</h2>
+
+        <p>
+            The location you're looking for
+            is no longer in production.
+        </p>
+
+        <div class="notfound-actions">
+
+            <a href="/jfc/index.html" class="primary">
+                Back To Homepage
+            </a>
+
+            <a href="/jfc/events.html" class="secondary">
+                Browse Events
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

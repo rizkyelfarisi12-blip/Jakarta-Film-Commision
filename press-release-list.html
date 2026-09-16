@@ -1,310 +1,1090 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Jakarta Film Commission</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>
+    Press Release | Jakarta Film Commission
+  </title>
+
+
+  <link rel="icon" type="image/png" href="assets/icon/JakartaFilmCommissionLogo-9.ico">
+
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
- <!-- internal resources -->
- <link rel="stylesheet" href="assets/css/custom.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
 
+
+  <!-- INTERNAL RESOURCES -->
+
+  <link rel="stylesheet" href="assets/css/custom.css">
 
 </head>
 
+
 <body>
-  
-  <!-- NAVBAR -->
+
+
+  <!-- =========================================================
+       LOADER
+  ========================================================== -->
+
+  <div id="loader-container"></div>
+
+
+  <!-- =========================================================
+       HAMBURGER MENU
+  ========================================================== -->
+
+  <div class="menu-overlay" id="menuOverlay"></div>
+
+
+  <!-- =========================================================
+       WHATSAPP
+  ========================================================== -->
+
+  <!--
+  <div id="whatsapp-container"></div>
+  -->
+
+
+  <!-- =========================================================
+       NAVBAR
+  ========================================================== -->
+
   <div id="navbar"></div>
 
-  <!-- HERO -->
-    <section class="press-release-hero">
+
+  <!-- =========================================================
+       HERO
+  ========================================================== -->
+
+  <section class="press-release-hero">
+
 
     <div class="press-release-bg">
-        <img src="gallery/cover/camera-take-person.webp" alt="">
+
+      <img src="gallery/cover/camera-take-person.webp" alt="Press Release">
+
     </div>
+
 
     <div class="press-release-overlay"></div>
 
+
     <div class="container">
 
-        <div class="press-release-hero-content">
+      <div class="press-release-hero-content">
+
 
         <span class="press-release-label">
-            Communications & Press
+
+          Communications & Press
+
         </span>
 
+
         <h1>
-            Press Releases
+
+          Press Releases
+
         </h1>
 
-        </div>
+
+      </div>
 
     </div>
 
-    </section>
 
-    <!-- =========================
-PRESS RELEASE LIST
-========================= -->
-<section class="section">
+  </section>
 
-  <div class="container">
 
-    <!-- FILTER -->
-    <div class="press-filter-wrapper">
+  <!-- =========================================================
+       PRESS RELEASE LIST
+  ========================================================== -->
 
-      <div class="press-filters">
+  <section class="section" style="background-color:#F8F0DF;">
 
-        <button class="press-filter active" data-filter="all">
-          All Announcements
-        </button>
+    <div class="container">
 
-        <button class="press-filter" data-filter="official">
-          Official Release
-        </button>
 
-        <button class="press-filter" data-filter="program">
-          Program Update
-        </button>
+      <!-- =====================================================
+           FILTER
+      ====================================================== -->
 
-        <button class="press-filter" data-filter="industry">
-          Industry News
+      <div class="press-filter-wrapper">
+
+
+        <div class="press-filters">
+
+
+          <!-- ALL -->
+
+          <button class="press-filter filter-all active" data-filter="all" type="button">
+
+            All Announcements
+
+          </button>
+
+
+          <!-- OFFICIAL -->
+
+          <button class="press-filter filter-official" data-filter="official-release" type="button">
+
+            Official Release
+
+          </button>
+
+
+          <!-- PROGRAM -->
+
+          <button class="press-filter filter-program" data-filter="program-update" type="button">
+
+            Program Update
+
+          </button>
+
+
+          <!-- INDUSTRY -->
+
+          <button class="press-filter filter-industry" data-filter="industry-news" type="button">
+
+            Industry News
+
+          </button>
+
+          <!-- Others -->
+
+          <button class="press-filter filter-others" data-filter="others" type="button">
+
+            Others
+
+          </button>
+
+
+        </div>
+
+
+        <!-- ===================================================
+             SORT
+        ==================================================== -->
+
+        <div class="press-sort-dropdown">
+
+
+          <button class="press-sort-trigger" id="sortTrigger" type="button">
+
+            Sort: Newest
+
+            <span>+</span>
+
+          </button>
+
+
+          <div class="press-sort-menu" id="sortMenu">
+
+
+            <button class="sort-option active" data-sort="newest" type="button">
+
+              Newest
+
+            </button>
+
+
+            <button class="sort-option" data-sort="oldest" type="button">
+
+              Oldest
+
+            </button>
+
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+
+      <!-- =====================================================
+           LIST
+      ====================================================== -->
+
+      <div class="press-list" id="pressContainer">
+
+        <!-- Loading state -->
+
+        <div class="press-loading" id="pressLoading">
+
+          Loading Press Releases...
+
+        </div>
+
+
+      </div>
+
+
+      <!-- =====================================================
+           LOAD MORE
+      ====================================================== -->
+
+      <div class="film-button-wrap" id="loadMoreWrapper">
+
+        <button class="film-button" id="loadMoreBtn" type="button">
+
+          Load More Updates
+
         </button>
 
       </div>
 
-    <div class="press-sort-dropdown">
-
-    <button class="press-sort-trigger" id="sortTrigger">
-        Sort: Newest
-        <span>+</span>
-    </button>
-
-    <div class="press-sort-menu" id="sortMenu">
-
-        <button class="sort-option active" data-sort="newest">
-        Newest
-        </button>
-
-        <button class="sort-option" data-sort="oldest">
-        Oldest
-        </button>
 
     </div>
 
-    </div>
+  </section>
 
-    </div>
 
-    <!-- LIST -->
-    <div class="press-list" id="pressContainer"></div>
+  <!-- =========================================================
+       FOOTER
+  ========================================================== -->
 
-    <!-- LOAD MORE -->
-    <div class="film-button-wrap">
-      <button class="film-button" id="loadMoreBtn">
-        Load More Updates
-      </button>
-    </div>
-
-  </div>
-
-</section>
-
-  <!-- FOOTER -->
   <div id="footer"></div>
- 
-</body>
 
-<!-- JAVASCRIPT -->
+
+  <!-- =========================================================
+       JAVASCRIPT
+  ========================================================== -->
+
   <script src="assets/js/components.js"></script>
+
   <script src="assets/js/custom.js"></script>
-  <script src="assets/data/press-release-data.js"></script>
 
-<script>
+  <script src="assets/js/press-release.js"></script>
 
-let visibleCount = 5;
-let currentFilter = "all";
-let currentSort = "newest";
 
-function loadPressReleases(){
+  <!-- =========================================================
+       PAGE SCRIPT
+  ========================================================== -->
 
-  renderPress();
+  <script>
 
-}
 
-function renderPress(){
+    /* ========================================================
+       CONFIGURATION
+    ========================================================= */
 
-  const container =
-    document.getElementById("pressContainer");
+    const ITEMS_PER_PAGE = 5;
 
-  const loadBtn =
-    document.getElementById("loadMoreBtn");
+    /*
+    | Batas maksimal karakter judul di card list. CSS
+    | line-clamp (lihat catatan CSS yang saya kirim terpisah)
+    | jadi lapisan kedua - dua-duanya sama-sama menjaga supaya
+    | "Read Full Announcement" tidak pernah tertutup judul
+    | yang kepanjangan, baik dari sisi data maupun tampilan.
+    */
+    const TITLE_MAX_LENGTH = 35;
 
-  container.innerHTML = "";
 
-  let filtered = [...pressData];
+    /* ========================================================
+       STATE
+    ======================================================== */
 
-  // FILTER
-  if(currentFilter !== "all"){
+    let visibleCount =
+      ITEMS_PER_PAGE;
 
-    filtered = filtered.filter(item =>
-      item.category.toLowerCase().includes(currentFilter)
+
+    let currentFilter =
+      "all";
+
+
+    let currentSort =
+      "newest";
+
+
+    let allPressReleases =
+      [];
+
+
+    /* ========================================================
+       DOM
+    ======================================================== */
+
+    const pressContainer =
+      document.getElementById(
+        "pressContainer"
+      );
+
+
+    const loadMoreBtn =
+      document.getElementById(
+        "loadMoreBtn"
+      );
+
+
+    const loadMoreWrapper =
+      document.getElementById(
+        "loadMoreWrapper"
+      );
+
+
+    const sortTrigger =
+      document.getElementById(
+        "sortTrigger"
+      );
+
+
+    const sortMenu =
+      document.getElementById(
+        "sortMenu"
+      );
+
+
+    /* ========================================================
+       LOAD DATA
+    ======================================================== */
+
+    async function loadPressReleasesFromDatabase() {
+
+      try {
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | SHOW LOADING
+        |--------------------------------------------------------------------------
+        */
+
+        showLoading();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | FETCH
+        |--------------------------------------------------------------------------
+        */
+
+        const data =
+          await fetchPressReleases(
+            {
+              status: "published"
+            }
+          );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | SAVE DATA
+        |--------------------------------------------------------------------------
+        */
+
+        allPressReleases =
+          Array.isArray(data)
+            ? data
+            : [];
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | RESET
+        |--------------------------------------------------------------------------
+        */
+
+        visibleCount =
+          ITEMS_PER_PAGE;
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | RENDER
+        |--------------------------------------------------------------------------
+        */
+
+        renderPress();
+
+
+      } catch (error) {
+
+
+        console.error(
+          "Press Release:",
+          error
+        );
+
+
+        showError();
+
+
+      }
+
+    }
+
+
+    /* ========================================================
+       RENDER
+    ======================================================== */
+
+    function renderPress() {
+
+
+      /*
+      |--------------------------------------------------------------------------
+      | CLEAR
+      |--------------------------------------------------------------------------
+      */
+
+      pressContainer.innerHTML =
+        "";
+
+
+      /*
+      |--------------------------------------------------------------------------
+      | FILTER
+      |--------------------------------------------------------------------------
+      */
+
+      let filtered =
+        [...allPressReleases];
+
+
+      if (
+        currentFilter !== "all"
+      ) {
+
+
+        filtered =
+          filtered.filter(
+            item => {
+
+
+              const category =
+                String(
+                  item.category_filter ||
+                  item.category ||
+                  ""
+                )
+                  .trim()
+                  .toLowerCase();
+
+
+              return (
+                normalizeCategory(
+                  category
+                ) ===
+                currentFilter
+              );
+
+            }
+          );
+
+      }
+
+
+      /*
+      |--------------------------------------------------------------------------
+      | SORT
+      |--------------------------------------------------------------------------
+      */
+
+      filtered.sort(
+        (a, b) => {
+
+
+          const dateA =
+            getPressTimestamp(
+              a
+            );
+
+
+          const dateB =
+            getPressTimestamp(
+              b
+            );
+
+
+          if (
+            currentSort ===
+            "newest"
+          ) {
+
+            return dateB - dateA;
+
+          }
+
+
+          return dateA - dateB;
+
+        }
+      );
+
+
+      /*
+      |--------------------------------------------------------------------------
+      | EMPTY
+      |--------------------------------------------------------------------------
+      */
+
+      if (
+        filtered.length === 0
+      ) {
+
+        showEmpty();
+
+        return;
+
+      }
+
+
+      /*
+      |--------------------------------------------------------------------------
+      | RENDER ITEMS
+      |--------------------------------------------------------------------------
+      */
+
+      const visibleItems =
+        filtered.slice(
+          0,
+          visibleCount
+        );
+
+
+      pressContainer.innerHTML =
+        visibleItems
+          .map(createPressCard)
+          .join("");
+
+
+      /*
+      |--------------------------------------------------------------------------
+      | LOAD MORE BUTTON
+      |--------------------------------------------------------------------------
+      */
+
+      loadMoreWrapper.style.display =
+        filtered.length > visibleCount
+          ? "flex"
+          : "none";
+
+    }
+
+
+    /* ========================================================
+       CREATE CARD
+    ======================================================== */
+
+    function createPressCard(
+      item
+    ) {
+
+
+      /*
+      |--------------------------------------------------------------------------
+      | CATEGORY
+      |--------------------------------------------------------------------------
+      */
+
+      const category =
+        item.category_display ||
+        item.category ||
+        "Others";
+
+
+      /*
+      |--------------------------------------------------------------------------
+      | CATEGORY CLASS
+      |--------------------------------------------------------------------------
+      */
+
+      const categoryClass =
+        getCategoryClass(
+          item.category
+        );
+
+
+      /*
+      |--------------------------------------------------------------------------
+      | IMAGE
+      |--------------------------------------------------------------------------
+      */
+
+      const image =
+        normalizeImagePath(
+          item.cover_image
+        );
+
+
+      /*
+      |--------------------------------------------------------------------------
+      | TITLE
+      |--------------------------------------------------------------------------
+      |
+      | Dibatasi TITLE_MAX_LENGTH karakter supaya panjang card
+      | tetap konsisten dan "Read Full Announcement" tidak
+      | pernah kekubur. CSS line-clamp jadi lapisan kedua.
+      |
+      |--------------------------------------------------------------------------
+      */
+
+      const title =
+        escapeHtml(
+          limitText(
+            item.title ||
+            "Untitled Press Release",
+            TITLE_MAX_LENGTH
+          )
+        );
+
+
+      /*
+      |--------------------------------------------------------------------------
+      | DESCRIPTION
+      |--------------------------------------------------------------------------
+      */
+
+      const description =
+        escapeHtml(
+          limitText(
+            item.description ||
+            "",
+            180
+          )
+        );
+
+
+      /*
+      |--------------------------------------------------------------------------
+      | DATE
+      |--------------------------------------------------------------------------
+      |
+      | FIX: sebelumnya pakai item.date yang TIDAK PERNAH ADA
+      | di response API (yang benar published_date) - jadi
+      | tanggal di card kemungkinan besar selalu kosong.
+      | Sekarang pakai urutan fallback yang sama seperti
+      | getPressTimestamp() supaya konsisten.
+      |
+      |--------------------------------------------------------------------------
+      */
+
+      const date =
+        formatDate(
+          item.published_date ||
+          item.date ||
+          item.created_at
+        );
+
+
+      /*
+      |--------------------------------------------------------------------------
+      | SLUG
+      |--------------------------------------------------------------------------
+      */
+
+      const slug =
+        item.slug ||
+        generateSlug(
+          item.title ||
+          ""
+        );
+
+
+      /*
+      |--------------------------------------------------------------------------
+      | DETAIL URL
+      |--------------------------------------------------------------------------
+      */
+
+      const detailUrl =
+        "press-release.html?slug=" +
+        encodeURIComponent(
+          slug
+        );
+
+
+      /*
+      |--------------------------------------------------------------------------
+      | RETURN CARD
+      |--------------------------------------------------------------------------
+      */
+
+      return `
+
+        <article
+          class="press-list-card ${categoryClass}"
+        >
+
+          <div class="press-list-image">
+
+            <img
+              src="${escapeAttribute(image)}"
+              alt="${escapeAttribute(
+        item.title ||
+        "Press Release"
+      )}"
+              loading="lazy"
+            >
+
+          </div>
+
+
+          <div class="press-list-content">
+
+
+            <div class="press-list-top">
+
+
+              <span
+                class="press-list-category"
+              >
+
+                ${escapeHtml(category)}
+
+              </span>
+
+
+              <span
+                class="press-list-date"
+              >
+
+                ${date}
+
+              </span>
+
+
+            </div>
+
+
+            <h2
+              class="press-list-title"
+            >
+
+              ${title}
+
+            </h2>
+
+
+            <p
+              class="press-list-desc"
+            >
+
+              ${description}
+
+            </p>
+
+
+            <a
+              href="${escapeAttribute(
+        detailUrl
+      )}"
+              class="press-list-link"
+            >
+
+              Read Full Announcement →
+
+            </a>
+
+
+          </div>
+
+
+        </article>
+
+      `;
+
+    }
+
+
+    /* ========================================================
+       CATEGORY NORMALIZATION
+    ======================================================== */
+
+    function normalizeCategory(
+      category
+    ) {
+
+
+      const value =
+        String(
+          category ||
+          ""
+        )
+          .trim()
+          .toLowerCase();
+
+
+      switch (
+      value
+      ) {
+
+
+        case "official release":
+
+          return "official-release";
+
+
+        case "program update":
+
+          return "program-update";
+
+
+        case "industry news":
+
+          return "industry-news";
+
+
+        case "others":
+
+          return "others";
+
+
+        default:
+
+          return value
+            .replace(
+              /\s+/g,
+              "-"
+            );
+
+      }
+
+    }
+
+
+    /* ========================================================
+       DATE TIMESTAMP
+    ======================================================== */
+    function getPressTimestamp(
+      item
+    ) {
+
+      const value =
+        item.published_date ||
+        item.date ||
+        item.created_at ||
+        "";
+
+      const timestamp =
+        new Date(
+          value
+        ).getTime();
+
+      return Number.isNaN(
+        timestamp
+      )
+        ? 0
+        : timestamp;
+
+    }
+
+
+    /* ========================================================
+       LOADING / EMPTY / ERROR STATES
+    ======================================================== */
+
+    function setListState(
+      html
+    ) {
+
+      pressContainer.innerHTML =
+        `<div class="press-list-state">${html}</div>`;
+
+      loadMoreWrapper.style.display =
+        "none";
+
+    }
+
+    function showLoading() {
+      setListState("Loading Press Releases...");
+    }
+
+    function showEmpty() {
+      setListState("No press releases found.");
+    }
+
+    function showError() {
+      setListState("Unable to load press releases.");
+    }
+
+
+    /* ========================================================
+       HTML ESCAPE
+    ======================================================== */
+    function escapeHtml(
+      value
+    ) {
+
+      return String(
+        value ??
+        ""
+      )
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+        .replace(
+          /</g,
+          "&lt;"
+        )
+        .replace(
+          />/g,
+          "&gt;"
+        )
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+        .replace(
+          /'/g,
+          "&#039;"
+        );
+
+    }
+
+    /* ========================================================
+       ATTRIBUTE ESCAPE
+    ======================================================== */
+    function escapeAttribute(
+      value
+    ) {
+
+      return escapeHtml(
+        value
+      );
+
+    }
+
+
+    /* ========================================================
+       EVENT LISTENERS (digabung dalam satu delegated handler)
+    ======================================================== */
+
+    loadMoreBtn.addEventListener(
+      "click",
+      () => {
+
+        visibleCount +=
+          ITEMS_PER_PAGE;
+
+        renderPress();
+
+      }
     );
 
-  }
 
-  // SORT
-  filtered.sort((a,b)=>{
+    sortTrigger.addEventListener(
+      "click",
+      event => {
 
-    const dateA = new Date(a.date);
-    const dateB = new Date(b.date);
+        event.stopPropagation();
 
-    return currentSort === "newest"
-      ? dateB - dateA
-      : dateA - dateB;
+        sortMenu.classList.toggle(
+          "active"
+        );
 
-  });
-
-  // RENDER
-  filtered.slice(0, visibleCount).forEach(item => {
-
-    container.innerHTML += `
-
-      <article class="press-item">
-
-        <div class="press-top">
-
-          <span class="press-category">
-            ${item.category}
-          </span>
-
-          <span class="press-date">
-            ${item.date}
-          </span>
-
-        </div>
-
-        <h2>${item.title}</h2>
-
-        <p>${item.description}</p>
-
-        <a href="press-release.html?slug=${generateSlug(item.title)}" class="press-link">
-          Read Full Announcement →
-        </a>
-
-      </article>
-
-    `;
-
-  });
-
-  // HIDE LOAD MORE IF NOT NEEDED
-  if(filtered.length <= visibleCount){
-
-    loadBtn.style.display = "none";
-
-  }else{
-
-    loadBtn.style.display = "inline-flex";
-
-  }
-
-}
-
-function generateSlug(title){
-
-  return title
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9\s-]/g, "")
-    .replace(/\s+/g, "-");
-
-}
-
-document
-.getElementById("loadMoreBtn")
-.addEventListener("click", () => {
-
-  visibleCount += 5;
-
-  renderPress();
-
-});
-
-loadPressReleases();
-
-/* FILTER BUTTON */
-
-document.addEventListener("click", e => {
-
-  if(e.target.classList.contains("press-filter")){
-
-    document
-      .querySelectorAll(".press-filter")
-      .forEach(btn => btn.classList.remove("active"));
-
-    e.target.classList.add("active");
-
-    currentFilter = e.target.dataset.filter;
-
-    visibleCount = 5;
-
-    renderPress();
-
-  }
-
-});
+      }
+    );
 
 
-/* SORT DROPDOWN */
-
-const sortTrigger =
-  document.getElementById("sortTrigger");
-
-const sortMenu =
-  document.getElementById("sortMenu");
+    document.addEventListener(
+      "click",
+      event => {
 
 
-/* OPEN DROPDOWN */
-sortTrigger.addEventListener("click", () => {
-  sortMenu.classList.toggle("active");
-});
+        /*
+        |--------------------------------------------------------------------------
+        | FILTER BUTTON
+        |--------------------------------------------------------------------------
+        */
+
+        const filterButton =
+          event.target.closest(".press-filter");
+
+        if (filterButton) {
+
+          document
+            .querySelectorAll(".press-filter")
+            .forEach(btn => btn.classList.remove("active"));
+
+          filterButton.classList.add("active");
+
+          currentFilter =
+            filterButton.dataset.filter || "all";
+
+          visibleCount =
+            ITEMS_PER_PAGE;
+
+          renderPress();
+
+          return;
+
+        }
 
 
-/* SORT OPTION */
-document.addEventListener("click", e => {
-  if(e.target.classList.contains("sort-option")){
-    document
-      .querySelectorAll(".sort-option")
-      .forEach(btn => btn.classList.remove("active"));
-    e.target.classList.add("active");
+        /*
+        |--------------------------------------------------------------------------
+        | SORT OPTION
+        |--------------------------------------------------------------------------
+        */
 
-    currentSort = e.target.dataset.sort;
+        const sortOption =
+          event.target.closest(".sort-option");
 
-    sortTrigger.innerHTML = `
-      Sort: ${e.target.textContent}
-      <span>+</span>
-    `;
+        if (sortOption) {
 
-    sortMenu.classList.remove("active");
-    visibleCount = 5;
-    renderPress();
-  }
-});
+          document
+            .querySelectorAll(".sort-option")
+            .forEach(btn => btn.classList.remove("active"));
+
+          sortOption.classList.add("active");
+
+          currentSort =
+            sortOption.dataset.sort || "newest";
+
+          sortTrigger.innerHTML = `
+            Sort: ${escapeHtml(sortOption.textContent.trim())}
+            <span>+</span>
+          `;
+
+          sortMenu.classList.remove("active");
+
+          visibleCount =
+            ITEMS_PER_PAGE;
+
+          renderPress();
+
+          return;
+
+        }
 
 
-/* CLOSE DROPDOWN */
-document.addEventListener("click", e => {
-  if(!e.target.closest(".press-sort-dropdown")){
+        /*
+        |--------------------------------------------------------------------------
+        | CLICK OUTSIDE SORT DROPDOWN
+        |--------------------------------------------------------------------------
+        */
 
-    sortMenu.classList.remove("active");
+        if (!event.target.closest(".press-sort-dropdown")) {
 
-  }
-});
+          sortMenu.classList.remove("active");
 
-</script>
- 
+        }
+
+      }
+    );
+
+
+    /* ========================================================
+       START
+    ======================================================== */
+    loadPressReleasesFromDatabase();
+
+  </script>
+
+</body>
+
 </html>
