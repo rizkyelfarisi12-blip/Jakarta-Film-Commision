@@ -19,9 +19,6 @@ accordionItems.forEach((item) => {
 
 /* =========================
 LIMIT TEXT
-========================= */
-function limitText(text, limit = 120) {
-  if (!text) return "";
 
   text = text.trim();
 
@@ -38,22 +35,6 @@ function limitText(text, limit = 120) {
 
 /* =========================
 AUTO SLUG
-========================= */
-function generateSlug(title) {
-  return title
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9\s-]/g, "")
-    .replace(/\s+/g, "-");
-}
-
-//======================= HERO SLIDER SCRIPT=======================
-const slides = document.querySelectorAll(".hero-slide");
-const dots = document.querySelectorAll(".dot");
-const nextBtn = document.querySelector(".next");
-const prevBtn = document.querySelector(".prev");
-
-let currentSlide = 0;
 
 function showSlide(index) {
   slides.forEach((slide) => {
