@@ -35,21 +35,6 @@ function response(
 |--------------------------------------------------------------------------
 | GET LATEST EVENTS
 |--------------------------------------------------------------------------
-|
-| Digunakan oleh Dashboard Admin.
-|
-| Berbeda dengan get-events.php:
-|
-| get-events.php
-|   -> hanya published
-|   -> untuk website publik
-|
-| get-latest-events.php
-|   -> semua status
-|   -> Dashboard Admin
-|   -> hanya 3 event terbaru
-|
-|--------------------------------------------------------------------------
 */
 
 

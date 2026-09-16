@@ -34,11 +34,6 @@ if (isset($_GET["id"])) {
 |--------------------------------------------------------------------------
 | GET BY SLUG
 |--------------------------------------------------------------------------
-|
-| Digunakan oleh PUBLIC WEBSITE.
-|
-| Hanya event published yang boleh ditampilkan.
-|
 */
 
 elseif (isset($_GET["slug"])) {
