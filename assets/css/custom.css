@@ -4245,20 +4245,6 @@ RICH TEXT INLINE ELEMENTS
 
 /* =========================================================
    FOOTER
-========================================================= */
-
-.event-card-footer{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:flex-end;
-
-    margin-top:auto;
-
-    padding-top:28px;
-
 }
 
 
@@ -4511,35 +4497,6 @@ RICH TEXT INLINE ELEMENTS
 
 /* =========================================================
    HOVER
-========================================================= */
-
-.filter-btn:hover{
-
-    transform:
-        translateY(-2px);
-
-}
-
-
-/* =========================================================
-   ACTIVE
-========================================================= */
-
-.filter-btn.active{
-
-    box-shadow:
-        0 8px 20px
-        rgba(0,0,0,.08);
-
-}
-
-
-/* =========================================================
-   LOAD MORE
-========================================================= */
-
-.events-load{
-
     display:flex;
 
     justify-content:center;
@@ -4919,7 +4876,6 @@ RICH TEXT INLINE ELEMENTS
 
 /* =========================================================
    EVENT DETAIL HERO
-========================================================= */
 
 .event-detail-hero{
     position:relative;
@@ -5172,7 +5128,6 @@ RICH TEXT INLINE ELEMENTS
 
 /* =========================================================
    MAP BUTTON
-========================================================= */
 
 .event-detail-map{
 
@@ -5284,7 +5239,7 @@ RICH TEXT INLINE ELEMENTS
 
     max-width:850px;
 
-    color:#fff;
+    color:#F8F1E0;
 
     font-size:clamp(
         54px,
@@ -5728,7 +5683,6 @@ RICH TEXT INLINE ELEMENTS
 
 /* =========================================================
    MOBILE
-========================================================= */
 
 @media(max-width:480px){
 
@@ -8005,12 +7959,6 @@ Membership
 
 /* =========================================================
    HERO
-========================================================= */
-.membership-hero {
-    padding: 100px 20px 70px;
-    background: linear-gradient(180deg, #fff8f2 0%, #ffffff 100%);
-    text-align: center;
-}
 
 .membership-hero-content {
     max-width: 760px;
@@ -8190,7 +8138,6 @@ Membership
 
 /* =========================================================
    HOW TO JOIN - STEPS
-========================================================= */
 
 .steps-grid {
     display: grid;
@@ -8550,3 +8497,122 @@ Membership
     }
 
 }
+
+/* FINAL OVERRIDE: CINEMATIC THEME + FAST ACCORDION */
+body{
+  background:
+    radial-gradient(circle at 12% 8%, rgba(238,56,49,.20), transparent 340px),
+    radial-gradient(circle at 88% 16%, rgba(60,203,218,.18), transparent 360px),
+    radial-gradient(circle at 50% 100%, rgba(237,155,51,.12), transparent 420px),
+    linear-gradient(135deg, #212322 0%, #292b2a 48%, #171918 100%);
+  color:#F8F1E0;
+}
+
+.section,
+.core-services-section,
+footer{
+  background:
+    radial-gradient(circle at 0% 10%, rgba(238,56,49,.08), transparent 320px),
+    radial-gradient(circle at 100% 0%, rgba(60,203,218,.07), transparent 320px),
+    linear-gradient(180deg, rgba(33,35,34,.96), rgba(33,35,34,1));
+  color:#F8F1E0;
+}
+
+.core-services-left,
+.core-services-right,
+.press-card,
+.film-card{
+  background:
+    linear-gradient(145deg, rgba(248,241,224,.08), rgba(221,229,237,.025) 42%, rgba(60,203,218,.035)),
+    linear-gradient(180deg, rgba(33,35,34,.98), rgba(24,26,25,.98));
+  border-color:rgba(221,229,237,.14);
+  color:#F8F1E0;
+}
+
+.hero-overlay{
+  background:
+    linear-gradient(110deg, rgba(33,35,34,.88), rgba(33,35,34,.46) 48%, rgba(238,56,49,.24)),
+    linear-gradient(to top, #212322 0%, transparent 44%);
+}
+
+.hero-text h1,
+.section-title,
+.core-services-heading,
+.accordion-header,
+.press-card h3,
+.film-title,
+.stat-item h4{
+  color:#F8F1E0;
+}
+
+.section-subtitle,
+.core-services-desc,
+.accordion-content p,
+.press-card p,
+.film-meta,
+.stat-item p{
+  color:rgba(248,241,224,.68);
+}
+
+.hero-arrow{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+  z-index:80;
+  border:1px solid rgba(248,241,224,.20);
+  background:
+    linear-gradient(135deg, rgba(248,241,224,.16), rgba(60,203,218,.08)),
+    rgba(33,35,34,.72);
+  color:#F8F1E0;
+  box-shadow:0 14px 36px rgba(0,0,0,.24);
+  backdrop-filter:blur(8px);
+}
+
+.hero-arrow:hover{
+  background:linear-gradient(135deg, #EE3831, #ED9B33);
+  color:#F8F1E0;
+}
+
+.core-services-left::before,
+.core-services-right::before{
+  display:none;
+}
+
+.accordion-item{
+  contain:layout;
+  padding-left:24px;
+  border-top-color:rgba(33,35,34,.12);
+}
+
+.accordion-header{
+  padding:22px 0 22px 14px;
+}
+
+.accordion-content{
+  display:grid;
+  grid-template-rows:0fr;
+  max-height:none;
+  transition:grid-template-rows .22s ease;
+}
+
+.accordion-content p{
+  overflow:hidden;
+  padding-left:14px;
+}
+
+.accordion-item.active .accordion-content{
+  max-height:none;
+  grid-template-rows:1fr;
+}
+
+.accordion-item::before{
+  width:3px;
+  transition:transform .22s ease;
+}
+
+
+
+
