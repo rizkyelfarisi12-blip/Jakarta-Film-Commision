@@ -1,7 +1,7 @@
 /* =========================================================
    JAKARTA FILM COMMISSION
-   PRESS RELEASE MANAGEMENT
-   FINAL VERSION
+   PRESS RELEASE MANAGEMENT (ADMIN)
+   FIXED VERSION - AUTO DETECT BASE PATH (LOCAL & SERVER)
 ========================================================= */
 
 /* =========================================================
@@ -11,11 +11,45 @@
 let pressReleaseData = [];
 
 /* =========================================================
+   AUTO-DETECT BASE PATH
+   =========================================================
+   Sebelumnya PRESS_RELEASE_API di-hardcode absolute dari root
+   domain ("/api/press-release"). Itu cocok kalau admin panel
+   ada di root domain server (https://jfc.co.id/admin/...),
+   tapi RUSAK kalau diakses di local lewat subfolder, misalnya:
+
+     http://localhost/jfc/admin/press-release/index.php
+
+   karena browser akan meminta http://localhost/api/... (tanpa
+   /jfc/), bukan http://localhost/jfc/api/...
+
+   Fix: deteksi otomatis folder tempat file JS ini di-load lewat
+   document.currentScript.src, lalu semua path API/gambar dibangun
+   relatif terhadap folder root project (bukan folder /admin/),
+   karena /api/ dan /uploads/ ada di root, sejajar dengan /admin/.
+   Otomatis benar baik di local (subfolder) maupun di server
+   (root domain) tanpa perlu diubah manual setiap kali pindah
+   environment.
+========================================================= */
+const ADMIN_SITE_BASE_URL = (function () {
+  const scriptEl = document.currentScript;
+
+  if (scriptEl && scriptEl.src) {
+    // Buang bagian "admin/assets/js/press-release.js" dari URL
+    // supaya tersisa base path project (root, sejajar /api/ /uploads/)
+    return scriptEl.src.replace(/admin\/assets\/js\/press-release\.js.*$/, "");
+  }
+
+  // Fallback kalau currentScript tidak tersedia
+  return window.location.origin + "/";
+})();
+
+/* =========================================================
    CONFIGURATION
 ========================================================= */
-const PRESS_RELEASE_API = "/api/press-release";
+const PRESS_RELEASE_API = ADMIN_SITE_BASE_URL + "api/press-release";
 
-const PRESS_RELEASE_UPLOAD_PATH = "/uploads/press-release";
+const PRESS_RELEASE_UPLOAD_PATH = ADMIN_SITE_BASE_URL + "uploads/press-release";
 
 /* =========================================================
    INIT
@@ -613,6 +647,12 @@ function createCoverImageHtml(item, title) {
 
 /* =========================================================
    NORMALIZE IMAGE URL
+   =========================================================
+   Sebelumnya fungsi ini selalu memaksa hasil jadi absolute
+   dari ROOT DOMAIN ("/" + value). Sekarang path digabung
+   dengan ADMIN_SITE_BASE_URL yang sudah otomatis menyesuaikan
+   lokasi project (root domain di server, atau subfolder di
+   local).
 ========================================================= */
 function normalizeImageUrl(path) {
     let value = String(path || "").trim();
@@ -673,31 +713,16 @@ function normalizeImageUrl(path) {
 
     /*
     |--------------------------------------------------------------------------
-    | PRESS RELEASE UPLOAD
+    | PRESS RELEASE UPLOAD / ASSETS PATH / FALLBACK
+    |--------------------------------------------------------------------------
+    |
+    | Semua kasus sekarang cukup ditempel ke ADMIN_SITE_BASE_URL
+    | yang sudah otomatis mengandung subfolder (local) atau root
+    | domain (server).
     |--------------------------------------------------------------------------
     */
 
-    if (value.startsWith("uploads/press-release/")) {
-        return "/" + value;
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | LEGACY ASSETS PATH
-    |--------------------------------------------------------------------------
-    */
-
-    if (value.startsWith("assets/uploads/press-release/")) {
-        return "/" + value;
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | FALLBACK
-    |--------------------------------------------------------------------------
-    */
-
-    return "/" + value;
+    return ADMIN_SITE_BASE_URL + value;
 }
 
 /* =========================================================

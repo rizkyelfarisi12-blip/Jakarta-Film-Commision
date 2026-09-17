@@ -374,22 +374,6 @@
 
         }
 
-        /* =========================================================
-           RICH TEXT SANITIZER
-
-           Paragraph content dari admin form disimpan sebagai HTML
-           (hasil rich-text editor). Fungsi ini membersihkan HTML
-           tersebut sebelum ditampilkan:
-
-           - Hanya tag <b> <strong> <i> <em> <u> <a> <br> yang
-             dipertahankan.
-           - Semua atribut dibuang, kecuali href/target/rel pada
-             <a> (dan hanya jika href berupa http/https).
-           - Ini juga membersihkan konten lama yang mungkin masih
-             menyimpan inline style berantakan dari hasil paste
-             Word/Google Docs sebelum paste-sanitizer dipasang di
-             admin.
-        ========================================================= */
         const RICHTEXT_ALLOWED_TAGS = new Set([
             "B", "STRONG", "I", "EM", "U", "A", "BR"
         ]);

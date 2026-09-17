@@ -2,16 +2,53 @@
    JAKARTA FILM COMMISSION
    PRESS RELEASE
    USER UI / DATABASE API
+   FIXED VERSION - AUTO DETECT BASE PATH (LOCAL & SERVER)
    ============================================================ */
+
+/* ============================================================
+   AUTO-DETECT BASE PATH
+   ============================================================
+   Sebelumnya PRESS_RELEASE_API di-hardcode absolute dari root
+   domain ("/api/press-release/get-press.php"). Itu cocok kalau
+   website ada di root domain server (https://jfc.co.id/...),
+   tapi RUSAK kalau diakses di local lewat subfolder, misalnya:
+
+     http://localhost/jfc/press-release-list.html
+
+   karena browser akan meminta http://localhost/api/... (tanpa
+   /jfc/), bukan http://localhost/jfc/api/...
+
+   Fix: deteksi otomatis folder tempat file JS ini di-load lewat
+   document.currentScript.src, lalu semua path API/gambar dibangun
+   relatif terhadap folder itu. Otomatis benar baik di local
+   (subfolder) maupun di server (root domain) tanpa perlu diubah
+   manual setiap kali pindah environment.
+   ============================================================ */
+const SITE_BASE_URL = (function () {
+  const scriptEl = document.currentScript;
+
+  if (scriptEl && scriptEl.src) {
+    // Ambil semua bagian URL SEBELUM "assets/js/press-release.js"
+    return scriptEl.src.replace(/assets\/js\/press-release\.js.*$/, "");
+  }
+
+  // Fallback kalau currentScript tidak tersedia (misal script
+  // dimuat secara dinamis). Asumsikan root domain.
+  return window.location.origin + "/";
+})();
 
 /* ============================================================
    CONFIGURATION
    ============================================================ */
-const PRESS_RELEASE_API = "/api/press-release/get-press.php";
-const PRESS_RELEASE_UPLOAD_PATH = "/uploads/press-release";
+const PRESS_RELEASE_API = SITE_BASE_URL + "api/press-release/get-press.php";
+
+const PRESS_RELEASE_DETAIL_API =
+  SITE_BASE_URL + "api/press-release/get-press-detail.php";
+
+const PRESS_RELEASE_UPLOAD_PATH = SITE_BASE_URL + "uploads/press-release";
 
 // IMAGE BASE PATH
-const PRESS_RELEASE_IMAGE_BASE = "/";
+const PRESS_RELEASE_IMAGE_BASE = SITE_BASE_URL;
 
 // Global data
 let pressData = [];
@@ -318,8 +355,13 @@ function normalizePressRelease(item) {
 
 /* ============================================================
    IMAGE PATH
+   ============================================================
+   Sebelumnya fungsi ini selalu memaksa hasil jadi absolute dari
+   ROOT DOMAIN ("/" + imagePath). Sekarang path digabung dengan
+   SITE_BASE_URL yang sudah otomatis menyesuaikan lokasi project
+   (root domain di server, atau subfolder di local).
    ============================================================ */
-   function normalizeImagePath(path) {
+function normalizeImagePath(path) {
   if (!path) {
     return "";
   }
@@ -338,17 +380,16 @@ function normalizePressRelease(item) {
     return imagePath;
   }
 
-  // Remove old /jfc prefix
+  // Remove old /jfc prefix (legacy)
   imagePath = imagePath.replace(/^\/jfc\//i, "/");
   imagePath = imagePath.replace(/^jfc\//i, "");
 
-  // Already root-relative
-  if (imagePath.startsWith("/")) {
-    return imagePath;
-  }
+  // Buang leading slash apa pun supaya tidak dobel saat digabung
+  // dengan SITE_BASE_URL
+  imagePath = imagePath.replace(/^\/+/, "");
 
-  // Relative path
-  return "/" + imagePath;
+  // Gabungkan dengan base path yang terdeteksi otomatis
+  return SITE_BASE_URL + imagePath;
 }
 
 /* ============================================================

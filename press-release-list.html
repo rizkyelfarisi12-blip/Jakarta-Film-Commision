@@ -30,265 +30,145 @@
 
 <body>
 
-
-  <!-- =========================================================
-       LOADER
-  ========================================================== -->
-
+  <!-- Loader -->
   <div id="loader-container"></div>
 
-
-  <!-- =========================================================
-       HAMBURGER MENU
-  ========================================================== -->
-
+  <!-- Hamburger Menu -->
   <div class="menu-overlay" id="menuOverlay"></div>
 
-
-  <!-- =========================================================
-       WHATSAPP
-  ========================================================== -->
-
-  <!--
-  <div id="whatsapp-container"></div>
-  -->
-
-
-  <!-- =========================================================
-       NAVBAR
-  ========================================================== -->
-
+  <!-- Navbar -->
   <div id="navbar"></div>
-
-
-  <!-- =========================================================
-       HERO
-  ========================================================== -->
 
   <section class="press-release-hero">
 
-
     <div class="press-release-bg">
-
       <img src="gallery/cover/camera-take-person.webp" alt="Press Release">
-
     </div>
-
 
     <div class="press-release-overlay"></div>
 
-
     <div class="container">
-
       <div class="press-release-hero-content">
 
-
         <span class="press-release-label">
-
           Communications & Press
-
         </span>
 
-
         <h1>
-
           Press Releases
-
         </h1>
 
-
       </div>
-
     </div>
 
-
   </section>
-
 
   <!-- =========================================================
        PRESS RELEASE LIST
   ========================================================== -->
-
   <section class="section" style="background-color:#F8F0DF;">
 
     <div class="container">
-
-
-      <!-- =====================================================
-           FILTER
-      ====================================================== -->
-
       <div class="press-filter-wrapper">
-
 
         <div class="press-filters">
 
-
           <!-- ALL -->
-
           <button class="press-filter filter-all active" data-filter="all" type="button">
-
             All Announcements
-
           </button>
-
 
           <!-- OFFICIAL -->
-
           <button class="press-filter filter-official" data-filter="official-release" type="button">
-
             Official Release
-
           </button>
-
 
           <!-- PROGRAM -->
-
           <button class="press-filter filter-program" data-filter="program-update" type="button">
-
             Program Update
-
           </button>
 
-
           <!-- INDUSTRY -->
-
           <button class="press-filter filter-industry" data-filter="industry-news" type="button">
-
             Industry News
-
           </button>
 
           <!-- Others -->
-
           <button class="press-filter filter-others" data-filter="others" type="button">
-
             Others
-
           </button>
 
-
         </div>
-
 
         <!-- ===================================================
              SORT
         ==================================================== -->
-
         <div class="press-sort-dropdown">
 
-
           <button class="press-sort-trigger" id="sortTrigger" type="button">
-
             Sort: Newest
-
             <span>+</span>
-
           </button>
-
 
           <div class="press-sort-menu" id="sortMenu">
 
-
             <button class="sort-option active" data-sort="newest" type="button">
-
               Newest
-
             </button>
-
 
             <button class="sort-option" data-sort="oldest" type="button">
-
               Oldest
-
             </button>
-
 
           </div>
 
-
         </div>
 
-
       </div>
-
 
       <!-- =====================================================
            LIST
       ====================================================== -->
-
       <div class="press-list" id="pressContainer">
 
         <!-- Loading state -->
-
         <div class="press-loading" id="pressLoading">
-
           Loading Press Releases...
-
         </div>
 
-
       </div>
-
 
       <!-- =====================================================
            LOAD MORE
       ====================================================== -->
-
       <div class="film-button-wrap" id="loadMoreWrapper">
-
         <button class="film-button" id="loadMoreBtn" type="button">
-
           Load More Updates
-
         </button>
-
       </div>
 
-
     </div>
-
   </section>
-
 
   <!-- =========================================================
        FOOTER
   ========================================================== -->
-
   <div id="footer"></div>
 
 
   <!-- =========================================================
        JAVASCRIPT
   ========================================================== -->
-
   <script src="assets/js/components.js"></script>
-
   <script src="assets/js/custom.js"></script>
-
   <script src="assets/js/press-release.js"></script>
-
-
-  <!-- =========================================================
-       PAGE SCRIPT
-  ========================================================== -->
-
   <script>
-
 
     /* ========================================================
        CONFIGURATION
     ========================================================= */
-
     const ITEMS_PER_PAGE = 5;
 
-    /*
-    | Batas maksimal karakter judul di card list. CSS
-    | line-clamp (lihat catatan CSS yang saya kirim terpisah)
-    | jadi lapisan kedua - dua-duanya sama-sama menjaga supaya
-    | "Read Full Announcement" tidak pernah tertutup judul
-    | yang kepanjangan, baik dari sisi data maupun tampilan.
-    */
     const TITLE_MAX_LENGTH = 35;
 
 
@@ -354,21 +234,7 @@
 
       try {
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | SHOW LOADING
-        |--------------------------------------------------------------------------
-        */
-
         showLoading();
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | FETCH
-        |--------------------------------------------------------------------------
-        */
 
         const data =
           await fetchPressReleases(
@@ -377,40 +243,17 @@
             }
           );
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | SAVE DATA
-        |--------------------------------------------------------------------------
-        */
-
         allPressReleases =
           Array.isArray(data)
             ? data
             : [];
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | RESET
-        |--------------------------------------------------------------------------
-        */
-
         visibleCount =
           ITEMS_PER_PAGE;
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | RENDER
-        |--------------------------------------------------------------------------
-        */
-
         renderPress();
 
-
       } catch (error) {
-
 
         console.error(
           "Press Release:",
@@ -425,29 +268,10 @@
 
     }
 
-
-    /* ========================================================
-       RENDER
-    ======================================================== */
-
     function renderPress() {
-
-
-      /*
-      |--------------------------------------------------------------------------
-      | CLEAR
-      |--------------------------------------------------------------------------
-      */
 
       pressContainer.innerHTML =
         "";
-
-
-      /*
-      |--------------------------------------------------------------------------
-      | FILTER
-      |--------------------------------------------------------------------------
-      */
 
       let filtered =
         [...allPressReleases];
@@ -485,13 +309,6 @@
 
       }
 
-
-      /*
-      |--------------------------------------------------------------------------
-      | SORT
-      |--------------------------------------------------------------------------
-      */
-
       filtered.sort(
         (a, b) => {
 
@@ -523,13 +340,6 @@
         }
       );
 
-
-      /*
-      |--------------------------------------------------------------------------
-      | EMPTY
-      |--------------------------------------------------------------------------
-      */
-
       if (
         filtered.length === 0
       ) {
@@ -539,13 +349,6 @@
         return;
 
       }
-
-
-      /*
-      |--------------------------------------------------------------------------
-      | RENDER ITEMS
-      |--------------------------------------------------------------------------
-      */
 
       const visibleItems =
         filtered.slice(
@@ -559,13 +362,6 @@
           .map(createPressCard)
           .join("");
 
-
-      /*
-      |--------------------------------------------------------------------------
-      | LOAD MORE BUTTON
-      |--------------------------------------------------------------------------
-      */
-
       loadMoreWrapper.style.display =
         filtered.length > visibleCount
           ? "flex"
@@ -573,63 +369,24 @@
 
     }
 
-
-    /* ========================================================
-       CREATE CARD
-    ======================================================== */
-
     function createPressCard(
       item
     ) {
-
-
-      /*
-      |--------------------------------------------------------------------------
-      | CATEGORY
-      |--------------------------------------------------------------------------
-      */
 
       const category =
         item.category_display ||
         item.category ||
         "Others";
 
-
-      /*
-      |--------------------------------------------------------------------------
-      | CATEGORY CLASS
-      |--------------------------------------------------------------------------
-      */
-
       const categoryClass =
         getCategoryClass(
           item.category
         );
 
-
-      /*
-      |--------------------------------------------------------------------------
-      | IMAGE
-      |--------------------------------------------------------------------------
-      */
-
       const image =
         normalizeImagePath(
           item.cover_image
         );
-
-
-      /*
-      |--------------------------------------------------------------------------
-      | TITLE
-      |--------------------------------------------------------------------------
-      |
-      | Dibatasi TITLE_MAX_LENGTH karakter supaya panjang card
-      | tetap konsisten dan "Read Full Announcement" tidak
-      | pernah kekubur. CSS line-clamp jadi lapisan kedua.
-      |
-      |--------------------------------------------------------------------------
-      */
 
       const title =
         escapeHtml(
@@ -640,13 +397,6 @@
           )
         );
 
-
-      /*
-      |--------------------------------------------------------------------------
-      | DESCRIPTION
-      |--------------------------------------------------------------------------
-      */
-
       const description =
         escapeHtml(
           limitText(
@@ -656,34 +406,12 @@
           )
         );
 
-
-      /*
-      |--------------------------------------------------------------------------
-      | DATE
-      |--------------------------------------------------------------------------
-      |
-      | FIX: sebelumnya pakai item.date yang TIDAK PERNAH ADA
-      | di response API (yang benar published_date) - jadi
-      | tanggal di card kemungkinan besar selalu kosong.
-      | Sekarang pakai urutan fallback yang sama seperti
-      | getPressTimestamp() supaya konsisten.
-      |
-      |--------------------------------------------------------------------------
-      */
-
       const date =
         formatDate(
           item.published_date ||
           item.date ||
           item.created_at
         );
-
-
-      /*
-      |--------------------------------------------------------------------------
-      | SLUG
-      |--------------------------------------------------------------------------
-      */
 
       const slug =
         item.slug ||
@@ -692,25 +420,11 @@
           ""
         );
 
-
-      /*
-      |--------------------------------------------------------------------------
-      | DETAIL URL
-      |--------------------------------------------------------------------------
-      */
-
       const detailUrl =
         "press-release.html?slug=" +
         encodeURIComponent(
           slug
         );
-
-
-      /*
-      |--------------------------------------------------------------------------
-      | RETURN CARD
-      |--------------------------------------------------------------------------
-      */
 
       return `
 
