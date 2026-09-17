@@ -68,13 +68,6 @@ if($result && mysqli_num_rows($result) > 0){
 | Jika tidak ada featured,
 | cari event terdekat
 |--------------------------------------------------------------------------
-|
-| end_date boleh NULL.
-|
-| Jika end_date NULL,
-| maka start_date dianggap sebagai tanggal selesai.
-|
-|--------------------------------------------------------------------------
 */
 
 $sql = "

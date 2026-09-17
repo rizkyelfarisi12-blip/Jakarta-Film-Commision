@@ -3,25 +3,15 @@ let allEvents = [];
 let currentStatusFilter = "";
 let currentCategoryFilter = "";
 
-/* =========================================================
-   INIT
-========================================================= */
-
 document.addEventListener("DOMContentLoaded", () => {
   loadEvents();
 });
-
-/* =========================================================
-   DEBUG
-========================================================= */
 
 console.log("API_URL =", API_URL);
 
 console.log("UPLOAD_URL =", UPLOAD_URL);
 
-/* =========================================================
-   LOAD EVENTS
-========================================================= */
+// LOAD EVENTS
 async function loadEvents() {
   try {
     const url = API_URL + "/events/get-admin-events.php";
@@ -58,33 +48,25 @@ async function loadEvents() {
 
     tbody.innerHTML = `
 
-            <tr>
+      <tr>
 
-                <td
-                    colspan="7"
-                    style="text-align:center;padding:30px;"
-                >
+        <td
+        colspan="7"
+        style="text-align:center;padding:30px;">
 
-                    Failed to load events.
+            Failed to load events.
 
-                </td>
+        </td>
 
-            </tr>
+      </tr>
 
-        `;
+    `;
 
     renderStats([]);
   }
 }
 
-/* =========================================================
-   RENDER STATS
-
-   Statistik selalu dihitung dari SELURUH data (allEvents),
-   bukan dari hasil filter/search, sama seperti halaman
-   Press Release.
-========================================================= */
-
+// RENDER STATS
 function renderStats(data) {
   const list = Array.isArray(data) ? data : [];
 
@@ -117,14 +99,7 @@ function renderStats(data) {
   if (draftEl) draftEl.textContent = draft;
 }
 
-/* =========================================================
-   SORT EVENTS
-
-   "updated" memakai updated_at kalau API menyediakannya,
-   dengan fallback ke created_at lalu id (perkiraan urutan
-   dibuat) kalau updated_at tidak ada di response API.
-========================================================= */
-
+// SORT EVENTS
 function getEventSortTime(event) {
   const value = event.updated_at || event.created_at || event.start_date || "";
 
@@ -164,10 +139,7 @@ function sortEvents(list, sortValue) {
   return list;
 }
 
-/* =========================================================
-   FILTER EVENTS
-========================================================= */
-
+// FILTER EVENTS
 function filterEvents() {
   const keyword = document
     .getElementById("searchEvent")
@@ -216,13 +188,10 @@ function filterEvents() {
       String(event.category || "").toLowerCase() === category.toLowerCase();
 
     /*
-            |--------------------------------------------------------------
-            | DATE RANGE
-            |--------------------------------------------------------------
-            |
-            | Berdasarkan start_date event (kolom "Date" di tabel).
-            |
-            */
+    |--------------------------------------------------------------
+    | DATE RANGE
+    |--------------------------------------------------------------
+    */
 
     const eventDate = String(event.start_date || "").slice(0, 10);
 
@@ -240,65 +209,51 @@ function filterEvents() {
   });
 
   /*
-    |--------------------------------------------------------------------------
-    | SORT
-    |--------------------------------------------------------------------------
-    */
-
+  |--------------------------------------------------------------------------
+  | SORT
+  |--------------------------------------------------------------------------
+  */
   sortEvents(filtered, sortValue);
 
   renderTable(filtered);
 }
 
-/* =========================================================
-   SEARCH
-========================================================= */
-
+// SEARCH
 function searchEvent() {
   filterEvents();
 }
 
-/* =========================================================
-   STATUS BADGE
-========================================================= */
-
+// STATUS BADGE
 function getStatusBadge(status) {
   const normalized = String(status || "draft").toLowerCase();
 
   switch (normalized) {
     case "published":
       return `
-                <span class="event-status-badge published">
-                    Published
-                </span>
-            `;
+        <span class="event-status-badge published">
+          Published
+        </span>
+      `;
 
     case "archived":
       return `
-                <span class="event-status-badge archived">
-                    Archived
-                </span>
-            `;
+        <span class="event-status-badge archived">
+          Archived
+        </span>
+      `;
 
     case "draft":
 
     default:
       return `
-                <span class="event-status-badge draft">
-                    Draft
-                </span>
-            `;
+        <span class="event-status-badge draft">
+          Draft
+        </span>
+      `;
   }
 }
 
-/* =========================================================
-   CATEGORY DISPLAY
-
-   Untuk category "Others", tampilkan category_name
-   (custom category) alih-alih tulisan "Others", sama
-   seperti di halaman Press Release.
-========================================================= */
-
+// CATEGORY DISPLAY
 function getCategoryDisplay(event) {
   const category = String(event.category || "").trim();
 
@@ -311,10 +266,7 @@ function getCategoryDisplay(event) {
   return category || "Others";
 }
 
-/* =========================================================
-   CATEGORY
-========================================================= */
-
+// CATEGORY
 function getCategoryClass(category) {
   const normalized = String(category || "Others")
     .toLowerCase()
@@ -337,9 +289,7 @@ function getCategoryClass(category) {
   }
 }
 
-/* =========================================================
-   RENDER TABLE
-========================================================= */
+// RENDER TABLE
 function renderTable(data) {
   const tbody = document.getElementById("eventTable");
 
@@ -348,33 +298,32 @@ function renderTable(data) {
   if (!Array.isArray(data) || data.length === 0) {
     tbody.innerHTML = `
 
-            <tr>
+      <tr>
 
-                <td
-                    colspan="7"
-                    style="
-                        text-align:center;
-                        padding:40px;
-                    "
-                >
+        <td
+          colspan="7"
+          style="
+              text-align:center;
+              padding:40px;
+          ">
 
-                    No events found.
+            No events found.
 
-                </td>
+        </td>
 
-            </tr>
+      </tr>
 
-        `;
+    `;
 
     return;
   }
 
   data.forEach((event) => {
     /*
-        |--------------------------------------------------------------------------
-        | IMAGE
-        |--------------------------------------------------------------------------
-        */
+    |--------------------------------------------------------------------------
+    | IMAGE
+    |--------------------------------------------------------------------------
+    */
 
     let image = "";
 
@@ -383,26 +332,24 @@ function renderTable(data) {
     }
 
     const imageHTML = image
-      ? `
-                <img
-                    src="${UPLOAD_URL}/${image}"
-                    class="table-thumb"
-                    alt="${event.title || "Event"}"
-                >
-            `
-      : `
-                <div
-                    class="table-thumb"
-                    style="
-                        display:flex;
-                        align-items:center;
-                        justify-content:center;
-                        background:#eee;
-                    "
-                >
-                    —
-                </div>
-            `;
+    ? `
+      <img
+        src="${UPLOAD_URL}/${image}"
+        class="table-thumb"
+        alt="${event.title || "Event"}"
+      >
+    `:`
+      <div
+        class="table-thumb"
+        style="
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          background:#eee;
+        ">
+        —
+      </div>
+    `;
 
     /* =========================================================
         STATUS
@@ -446,105 +393,67 @@ function renderTable(data) {
         break;
     }
 
-    /*
-        |--------------------------------------------------------------------------
-        | ROW
-        |--------------------------------------------------------------------------
-        */
-
     tbody.innerHTML += `
 
-            <tr>
+      <tr>
 
-                <td>
+        <td>
+            ${imageHTML}
+        </td>
 
-                    ${imageHTML}
+        <td>
+            <strong>
+                ${event.title || "Untitled Event"}
+            </strong>
+        </td>
 
-                </td>
+        <td>
+            <span class="event-category-badge ${getCategoryClass(event.category)}">
+                ${getCategoryDisplay(event)}
+            </span>
+        </td>
 
+        <td>
+            ${event.start_date || "TBA"}
+        </td>
 
-                <td>
+        <td>
+            ${event.location || "TBA"}
+        </td>
 
-                    <strong>
-                        ${event.title || "Untitled Event"}
-                    </strong>
+        <td>
+            <span class="status-badge ${statusClass}">
+                ${statusLabel}
+            </span>
+        </td>
 
-                </td>
+        <td>
+          <div class="table-action">
 
+            <a
+            href="form.php?id=${event.id}"
+            class="table-btn edit">
+              Edit
+            </a>
 
-                <td>
+            <button
+            class="table-btn delete"
+            onclick="deleteEvent(${event.id})">
+              Delete
+            </button>
 
-                    <span class="event-category-badge ${getCategoryClass(event.category)}">
+          </div>
+        </td>
 
-                        ${getCategoryDisplay(event)}
+      </tr>
 
-                    </span>
-
-                </td>
-
-
-                <td>
-
-                    ${event.start_date || "TBA"}
-
-                </td>
-
-
-                <td>
-
-                    ${event.location || "TBA"}
-
-                </td>
-
-
-                <td>
-
-                    <span class="status-badge ${statusClass}">
-
-                        ${statusLabel}
-
-                    </span>
-
-                </td>
-
-
-                <td>
-
-                    <div class="table-action">
-
-                        <a
-                            href="form.php?id=${event.id}"
-                            class="table-btn edit"
-                        >
-
-                            Edit
-
-                        </a>
-
-
-                        <button
-                            class="table-btn delete"
-                            onclick="deleteEvent(${event.id})"
-                        >
-
-                            Delete
-
-                        </button>
-
-                    </div>
-
-                </td>
-
-            </tr>
-
-        `;
+    `;
   });
 }
 
 /* =========================================================
    DELETE EVENT
 ========================================================= */
-
 async function deleteEvent(id) {
   if (!confirm("Delete Event?")) {
     return;
