@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daftar Member Individual | Jakarta Film Commission</title>
+
+    <meta name="description"
+        content="Daftarkan dirimu sebagai Individual Member Jakarta Film Commission dan dapatkan akses ke koneksi industri, promosi, serta peluang terkurasi di ekosistem perfilman Jakarta.">
+
+    <link rel="icon" type="image/png" href="assets/icon/JakartaFilmCommissionLogo-9.ico">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- internal resources -->
+    <link rel="stylesheet" href="assets/css/custom.css">
+
+    <style>
+        /* =========================================================
+           MEMBER INDIVIDUAL FORM
+           Page-specific styles (namespaced with "mif-" so nothing
+           here collides with the shared stylesheet).
+        ========================================================= */
+
+        .mif-hero {
+            position: relative;
+            min-height: 62vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            padding-top: 170px;
+            padding-bottom: 90px;
+        }
+
+        .mif-hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+        }
+
+        .mif-hero-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .mif-hero-overlay {
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(to right, rgba(10, 8, 5, .86), rgba(10, 8, 5, .45)),
+                linear-gradient(to top, #F8F0DF 0%, transparent 38%);
+        }
+
+        .mif-hero .container {
+            position: relative;
+            z-index: 5;
+        }
+
+        .mif-hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: #FFC72C;
+            font-size: 12px;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            margin-bottom: 22px;
+        }
+
+        .mif-hero-eyebrow::before {
+            content: "";
+            width: 26px;
+            height: 2px;
+            background: #FF6A14;
+        }
+
+        .mif-hero-content h1 {
+            max-width: 760px;
+            color: #fff;
+            font-size: clamp(40px, 5.5vw, 72px);
+            line-height: .98;
+            letter-spacing: -.04em;
+            font-weight: 800;
+            margin-bottom: 22px;
+        }
+
+        .mif-hero-content p {
+            max-width: 560px;
+            color: #d9d5c8;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        /* =========================================================
+           FORM SECTION
+        ========================================================= */
+
+        .mif-section {
+            position: relative;
+            z-index: 5;
+            background: #F8F0DF;
+            padding: 90px 0 130px;
+        }
+
+        .mif-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+            gap: 40px;
+            align-items: start;
+        }
+
+        /* ---------- INFO PANEL ---------- */
+
+        .mif-info {
+            position: sticky;
+            top: 110px;
+            background: #171817;
+            color: #fff;
+            padding: 44px 36px;
+            border-radius: 20px;
+        }
+
+        .mif-info-label {
+            display: inline-block;
+            color: #FF6A14;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .mif-info h2 {
+            font-size: 30px;
+            line-height: 1.1;
+            letter-spacing: -.03em;
+            margin-bottom: 18px;
+        }
+
+        .mif-info p {
+            color: rgba(255, 255, 255, .68);
+            font-size: 14px;
+            line-height: 1.8;
+            margin-bottom: 28px;
+        }
+
+        .mif-info-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 32px;
+        }
+
+        .mif-info-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, .85);
+            line-height: 1.6;
+        }
+
+        .mif-info-list li::before {
+            content: "✓";
+            flex-shrink: 0;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #97B300;
+            color: #111;
+            font-size: 12px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 2px;
+        }
+
+        .mif-info-note {
+            border-top: 1px solid rgba(255, 255, 255, .12);
+            padding-top: 22px;
+            font-size: 12px;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, .55);
+        }
+
+        /* ---------- FORM CARD ---------- */
+
+        .mif-form-card {
+            background: #fff;
+            border-radius: 22px;
+            padding: 48px;
+            box-shadow: 0 20px 55px rgba(0, 0, 0, .08);
+        }
+
+        .mif-form-heading {
+            margin-bottom: 34px;
+        }
+
+        .mif-form-heading h3 {
+            font-size: 26px;
+            color: #171817;
+            margin-bottom: 8px;
+        }
+
+        .mif-form-heading p {
+            color: #7a7f7a;
+            font-size: 14px;
+        }
+
+        .mif-required-note {
+            color: #DA291C;
+        }
+
+        .mif-fieldset {
+            display: flex;
+            flex-direction: column;
+            gap: 26px;
+        }
+
+        .mif-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+        }
+
+        .mif-field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .mif-field label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #262a26;
+        }
+
+        .mif-field label .req {
+            color: #DA291C;
+        }
+
+        .mif-field small {
+            color: #939893;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .mif-field input[type="text"],
+        .mif-field input[type="tel"],
+        .mif-field input[type="email"],
+        .mif-field input[type="url"],
+        .mif-field select,
+        .mif-field textarea {
+            width: 100%;
+            height: 52px;
+            padding: 0 18px;
+            border: 1.5px solid #e4e1d5;
+            border-radius: 12px;
+            background: #fcfbf7;
+            color: #171817;
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+            transition: border-color .2s ease, background .2s ease, box-shadow .2s ease;
+        }
+
+        .mif-field textarea {
+            height: auto;
+            min-height: 110px;
+            padding: 14px 18px;
+            resize: vertical;
+        }
+
+        .mif-field input:focus,
+        .mif-field select:focus,
+        .mif-field textarea:focus {
+            border-color: #FF6A14;
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(255, 106, 20, .12);
+        }
+
+        .mif-field input::placeholder,
+        .mif-field textarea::placeholder {
+            color: #b3b0a2;
+        }
+
+        .mif-hidden-field {
+            display: none;
+        }
+
+        .mif-hidden-field.show {
+            display: flex;
+        }
+
+        /* CHECKBOX GROUP (interests) */
+
+        .mif-checkbox-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .mif-checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px 16px;
+            border: 1.5px solid #e4e1d5;
+            border-radius: 12px;
+            background: #fcfbf7;
+            cursor: pointer;
+            transition: border-color .2s ease, background .2s ease;
+        }
+
+        .mif-checkbox:hover {
+            border-color: #FF6A14;
+        }
+
+        .mif-checkbox input {
+            margin-top: 3px;
+            accent-color: #FF6A14;
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+
+        .mif-checkbox span {
+            font-size: 13px;
+            color: #33362f;
+            line-height: 1.5;
+        }
+
+        .mif-checkbox:has(input:checked) {
+            border-color: #FF6A14;
+            background: #fff3ec;
+        }
+
+        /* PHOTO UPLOAD */
+
+        .mif-photo-upload {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+        }
+
+        .mif-photo-preview {
+            width: 96px;
+            height: 96px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #f1ede0;
+            border: 2px dashed #d8d3c1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #a7a394;
+            font-size: 11px;
+            text-align: center;
+        }
+
+        .mif-photo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .mif-photo-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .mif-upload-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 44px;
+            padding: 0 22px;
+            border-radius: 10px;
+            border: none;
+            background: #171817;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background .2s ease;
+            width: max-content;
+        }
+
+        .mif-upload-btn:hover {
+            background: #FF6A14;
+        }
+
+        /* SUBMIT */
+
+        .mif-submit-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+            padding-top: 26px;
+            border-top: 1px solid #eee7d6;
+        }
+
+        .mif-consent {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 12px;
+            color: #7a7f7a;
+            line-height: 1.6;
+            max-width: 420px;
+        }
+
+        .mif-consent input {
+            margin-top: 3px;
+            accent-color: #FF6A14;
+        }
+
+        .mif-submit-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            min-width: 220px;
+            height: 54px;
+            padding: 0 30px;
+            border: none;
+            border-radius: 12px;
+            background: #FF6A14;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background .2s ease, transform .2s ease;
+        }
+
+        .mif-submit-btn:hover {
+            background: #e0590d;
+            transform: translateY(-2px);
+        }
+
+        .mif-submit-btn:disabled {
+            background: #d8d3c1;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .mif-error-banner {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            background: #fdeceb;
+            color: #b8281c;
+            font-size: 13px;
+            margin-bottom: 24px;
+        }
+
+        .mif-error-banner.show {
+            display: flex;
+        }
+
+        .mif-field-error {
+            border-color: #DA291C !important;
+        }
+
+        /* SUCCESS STATE */
+
+        .mif-success {
+            display: none;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 18px;
+            padding: 20px 0 6px;
+        }
+
+        .mif-success.show {
+            display: flex;
+        }
+
+        .mif-success-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #eaf2d9;
+            color: #526E3E;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            font-weight: 800;
+        }
+
+        .mif-success h3 {
+            font-size: 26px;
+            color: #171817;
+        }
+
+        .mif-success p {
+            color: #7a7f7a;
+            font-size: 14px;
+            line-height: 1.8;
+            max-width: 460px;
+        }
+
+        .mif-success a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 48px;
+            padding: 0 26px;
+            border-radius: 10px;
+            background: #171817;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+            margin-top: 8px;
+        }
+
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
+
+        @media (max-width: 992px) {
+            .mif-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .mif-info {
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mif-hero {
+                padding-top: 130px;
+                min-height: 50vh;
+            }
+
+            .mif-form-card {
+                padding: 30px;
+                border-radius: 18px;
+            }
+
+            .mif-row,
+            .mif-checkbox-group {
+                grid-template-columns: 1fr;
+            }
+
+            .mif-submit-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .mif-submit-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- LOADER -->
+    <div id="loader-container"></div>
+
+    <!-- Hamburger Menu -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <!-- NAVBAR -->
+    <div id="navbar"></div>
+
+    <!-- =========================
+    HERO
+    ========================= -->
+    <section class="mif-hero">
+
+        <div class="mif-hero-bg">
+            <img src="gallery/cover/rendy-novantino-VKmJAnzyB6c-unsplash.jpg.jpeg" alt="Individual Membership">
+        </div>
+
+        <div class="mif-hero-overlay"></div>
+
+        <div class="container">
+            <div class="mif-hero-content">
+
+                <span class="mif-hero-eyebrow">Individual Membership</span>
+
+                <h1>Daftar Sebagai Individual Member</h1>
+
+                <p>
+                    Untuk sutradara, produser, kru produksi, talent, mahasiswa film, hingga penikmat film
+                    yang ingin terhubung lebih dekat dengan ekosistem perfilman Jakarta. Isi formulir di
+                    bawah ini untuk memulai pendaftaran.
+                </p>
+
+            </div>
+        </div>
+
+    </section>
+
+    <!-- =========================
+    FORM SECTION
+    ========================= -->
+    <section class="mif-section">
+        <div class="container">
+
+            <div class="mif-layout">
+
+                <!-- INFO PANEL -->
+                <aside class="mif-info">
+
+                    <span class="mif-info-label">Individual Member</span>
+
+                    <h2>Kenapa bergabung?</h2>
+
+                    <p>
+                        Membership individual terbuka untuk siapa pun yang aktif atau ingin aktif dalam
+                        ekosistem perfilman Jakarta.
+                    </p>
+
+                    <ul class="mif-info-list">
+                        <li>Akses ke jaringan pelaku industri dan komunitas film Jakarta</li>
+                        <li>Informasi lebih awal untuk program, pelatihan, dan pemutaran film</li>
+                        <li>Kesempatan promosi karya melalui kanal Jakarta Film Commission</li>
+                        <li>Terhubung dengan One-Stop Film Service untuk kebutuhan produksi</li>
+                    </ul>
+
+                    <div class="mif-info-note">
+                        Cocok untuk: praktisi industri, sutradara independen, mahasiswa/pelajar film,
+                        komunitas, hingga penikmat film. Untuk perusahaan atau badan usaha, silakan
+                        gunakan formulir Entities Member.
+                    </div>
+
+                </aside>
+
+                <!-- FORM CARD -->
+                <div class="mif-form-card">
+
+                    <div class="mif-form-heading">
+                        <h3>Formulir Pendaftaran</h3>
+                        <p>Kolom bertanda <span class="mif-required-note">*</span> wajib diisi.</p>
+                    </div>
+
+                    <div class="mif-error-banner" id="formErrorBanner"></div>
+
+                    <!-- FORM -->
+                    <form id="memberIndividualForm" novalidate>
+
+                        <div class="mif-fieldset">
+
+                            <!-- NAME -->
+                            <div class="mif-field">
+                                <label for="fullName">Nama Lengkap <span class="req">*</span></label>
+                                <input type="text" id="fullName" name="full_name" placeholder="Nama sesuai KTP / identitas"
+                                    autocomplete="name" required>
+                            </div>
+
+                            <!-- WHATSAPP + EMAIL -->
+                            <div class="mif-row">
+
+                                <div class="mif-field">
+                                    <label for="whatsapp">No. HP (WhatsApp) <span class="req">*</span></label>
+                                    <input type="tel" id="whatsapp" name="whatsapp" placeholder="08xx xxxx xxxx"
+                                        autocomplete="tel" required>
+                                </div>
+
+                                <div class="mif-field">
+                                    <label for="email">Email <span class="req">*</span></label>
+                                    <input type="email" id="email" name="email" placeholder="nama@email.com"
+                                        autocomplete="email" required>
+                                </div>
+
+                            </div>
+
+                            <!-- ROLE -->
+                            <div class="mif-field">
+                                <label for="role">Peran dalam Ekosistem Perfilman <span class="req">*</span></label>
+                                <select id="role" name="role" required>
+                                    <option value="" disabled selected>Pilih peran kamu</option>
+                                    <option value="Sutradara">Sutradara</option>
+                                    <option value="Produser">Produser</option>
+                                    <option value="Penulis Skenario">Penulis Skenario</option>
+                                    <option value="Aktor / Aktris">Aktor / Aktris</option>
+                                    <option value="Sinematografer / DOP">Sinematografer / DOP</option>
+                                    <option value="Editor">Editor</option>
+                                    <option value="Kru Produksi">Kru Produksi</option>
+                                    <option value="Talent / Model">Talent / Model</option>
+                                    <option value="Mahasiswa / Pelajar Film">Mahasiswa / Pelajar Film</option>
+                                    <option value="Komunitas Film">Komunitas Film</option>
+                                    <option value="Penikmat Film">Penikmat Film</option>
+                                    <option value="Others">Lainnya</option>
+                                </select>
+                            </div>
+
+                            <!-- ROLE OTHER (conditional) -->
+                            <div class="mif-field mif-hidden-field" id="roleOtherGroup">
+                                <label for="roleOther">Sebutkan peran kamu <span class="req">*</span></label>
+                                <input type="text" id="roleOther" name="role_other" placeholder="Tulis peranmu">
+                            </div>
+
+                            <!-- PORTFOLIO -->
+                            <div class="mif-field">
+                                <label for="portfolioLink">Link Portfolio <span class="req">*</span></label>
+                                <input type="url" id="portfolioLink" name="portfolio_link"
+                                    placeholder="https://" required>
+                                <small>IMDb, Vimeo, YouTube, Instagram, atau website pribadi.</small>
+                            </div>
+
+                            <!-- INTERESTS -->
+                            <div class="mif-field">
+                                <label>Minat dalam Ekosistem Jakarta Film Commission <span class="req">*</span></label>
+                                <small>Pilih satu atau lebih program yang paling menarik untukmu.</small>
+
+                                <div class="mif-checkbox-group" id="interestGroup">
+
+                                    <label class="mif-checkbox">
+                                        <input type="checkbox" name="interests[]" value="One-Stop Film Service">
+                                        <span>One-Stop Film Service<br>(perizinan &amp; lokasi syuting)</span>
+                                    </label>
+
+                                    <label class="mif-checkbox">
+                                        <input type="checkbox" name="interests[]" value="Pengembangan Talenta & Ekosistem Industri">
+                                        <span>Pengembangan Talenta<br>(pelatihan &amp; sertifikasi)</span>
+                                    </label>
+
+                                    <label class="mif-checkbox">
+                                        <input type="checkbox" name="interests[]" value="Dukungan Produksi & Insentif">
+                                        <span>Dukungan Produksi<br>&amp; Insentif</span>
+                                    </label>
+
+                                    <label class="mif-checkbox">
+                                        <input type="checkbox" name="interests[]" value="Akses Publik & Literasi Film">
+                                        <span>Akses Publik<br>&amp; Literasi Film</span>
+                                    </label>
+
+                                    <label class="mif-checkbox">
+                                        <input type="checkbox" name="interests[]" value="Promosi & Diplomasi Budaya">
+                                        <span>Promosi<br>&amp; Diplomasi Budaya</span>
+                                    </label>
+
+                                    <label class="mif-checkbox">
+                                        <input type="checkbox" name="interests[]" value="Nonton Di / Nonton Bareng">
+                                        <span>Nonton Di<br>&amp; Nonton Bareng</span>
+                                    </label>
+
+                                </div>
+                            </div>
+
+                            <!-- PHOTO -->
+                            <div class="mif-field">
+                                <label for="profilePhoto">Foto Profil <span class="req">*</span></label>
+
+                                <div class="mif-photo-upload">
+
+                                    <div class="mif-photo-preview" id="photoPreviewWrap">
+                                        <img id="photoPreview" alt="Preview foto profil">
+                                        <span id="photoPlaceholder">Belum ada foto</span>
+                                    </div>
+
+                                    <div class="mif-photo-actions">
+                                        <button type="button" class="mif-upload-btn" id="photoUploadBtn">
+                                            Pilih Foto
+                                        </button>
+                                        <small>JPG, PNG, atau WEBP. Maksimal 5 MB.</small>
+                                    </div>
+
+                                    <input type="file" id="profilePhoto" name="photo"
+                                        accept="image/jpeg,image/png,image/webp" hidden required>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- SUBMIT -->
+                        <div class="mif-submit-row">
+
+                            <label class="mif-consent">
+                                <input type="checkbox" id="consentCheck" required>
+                                <span>
+                                    Saya menyetujui data ini digunakan oleh Jakarta Film Commission untuk
+                                    keperluan verifikasi dan komunikasi membership.
+                                </span>
+                            </label>
+
+                            <button type="submit" class="mif-submit-btn" id="submitBtn">
+                                Kirim Pendaftaran
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                    <!-- SUCCESS STATE -->
+                    <div class="mif-success" id="formSuccess">
+
+                        <div class="mif-success-icon">✓</div>
+
+                        <h3>Pendaftaran berhasil dikirim</h3>
+
+                        <p>
+                            Terima kasih sudah mendaftar sebagai Individual Member Jakarta Film Commission.
+                            Tim kami akan meninjau data kamu dan menghubungi melalui email atau WhatsApp
+                            yang telah didaftarkan.
+                        </p>
+
+                        <a href="index.html">Kembali ke Beranda</a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <div id="footer"></div>
+
+</body>
+
+<!-- JAVASCRIPT -->
+<script src="assets/js/components.js"></script>
+<script src="assets/js/custom.js"></script>
+<script src="assets/js/member-individual-form.js"></script>
+
+</html>

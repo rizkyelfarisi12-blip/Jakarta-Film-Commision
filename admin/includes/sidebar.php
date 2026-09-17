@@ -69,7 +69,7 @@ $current = basename($_SERVER['PHP_SELF']);
         </span>
 
         <a class="<?= strpos($_SERVER['PHP_SELF'], '/individual/') !== false ? 'active' : '' ?>"
-            href="<?= $assetPath ?>placeholder/individual-index.php">
+            href="<?= $assetPath ?>individual/index.php">
 
             <i class="ri-user-line"></i>
             <span>Individual</span>
