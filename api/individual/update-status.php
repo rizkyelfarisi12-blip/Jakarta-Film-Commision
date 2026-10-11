@@ -1,16 +1,5 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| UPDATE INDIVIDUAL MEMBERSHIP STATUS
-|--------------------------------------------------------------------------
-|
-| Dipakai admin untuk approve / reject / kembalikan ke pending
-| pendaftar Individual Membership.
-|
-|--------------------------------------------------------------------------
-*/
-
 header("Content-Type: application/json");
 
 require_once __DIR__ . "/../db.php";
@@ -39,7 +28,7 @@ if ($id <= 0 || !in_array($status, $allowedStatus, true)) {
 try {
 
     $stmt = $conn->prepare(
-        "UPDATE membership_individual SET status = ? WHERE id = ? LIMIT 1"
+        "UPDATE members_individual SET status = ? WHERE id = ? LIMIT 1"
     );
 
     if (!$stmt) {

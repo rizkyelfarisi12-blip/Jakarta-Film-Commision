@@ -1,11 +1,5 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| DELETE INDIVIDUAL MEMBERSHIP RECORD
-|--------------------------------------------------------------------------
-*/
-
 header("Content-Type: application/json");
 
 require_once __DIR__ . "/../db.php";
@@ -30,7 +24,7 @@ if ($id <= 0) {
 try {
 
     $stmt = $conn->prepare(
-        "DELETE FROM membership_individual WHERE id = ? LIMIT 1"
+        "DELETE FROM members_individual WHERE id = ? LIMIT 1"
     );
 
     if (!$stmt) {

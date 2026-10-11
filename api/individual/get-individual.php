@@ -25,18 +25,18 @@ try {
         "
         SELECT
             id,
-            submitted_at,
             full_name,
-            phone,
+            whatsapp,
             email,
-            role_in_industry,
+            role,
+            role_other,
             portfolio_link,
-            interest,
+            interests,
             photo,
             status,
             created_at,
             updated_at
-        FROM membership_individual
+        FROM members_individual
         WHERE id = ?
         LIMIT 1
         "

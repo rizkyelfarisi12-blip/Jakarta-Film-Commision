@@ -5,10 +5,8 @@
 | UPLOAD PROFILE PHOTO - INDIVIDUAL MEMBERSHIP
 |--------------------------------------------------------------------------
 |
-| Pola sama seperti events/upload-image.php atau
-| press-release/upload-press-image.php - sesuaikan folder
-| tujuan upload ($uploadDir) kalau struktur uploads di project
-| kamu beda.
+| Path disesuaikan dengan komentar di SQL members_individual:
+| "uploads/members/individual/xxxx.jpg"
 |
 |--------------------------------------------------------------------------
 */
@@ -74,12 +72,12 @@ if ($file["size"] > 5 * 1024 * 1024) {
 | DESTINATION FOLDER
 |--------------------------------------------------------------------------
 |
-| Asumsi struktur:  project-root/uploads/membership/individual/
+| Asumsi struktur:  project-root/uploads/members/individual/
 |                    project-root/api/individual/upload-photo.php
 |--------------------------------------------------------------------------
 */
 
-$uploadDir = __DIR__ . "/../../uploads/membership/individual/";
+$uploadDir = __DIR__ . "/../../uploads/members/individual/";
 
 if (!is_dir($uploadDir)) {
     mkdir($uploadDir, 0755, true);
@@ -102,7 +100,7 @@ if (!move_uploaded_file($file["tmp_name"], $destination)) {
 
 }
 
-$relativePath = "uploads/membership/individual/" . $filename;
+$relativePath = "uploads/members/individual/" . $filename;
 
 echo json_encode([
     "success" => true,

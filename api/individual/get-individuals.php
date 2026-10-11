@@ -5,11 +5,12 @@
 | GET INDIVIDUAL MEMBERSHIP DATA
 |--------------------------------------------------------------------------
 |
-| Mengembalikan seluruh data pendaftar Individual Membership,
-| sudah termasuk statistik total/pending/approved/rejected,
-| supaya query cukup 1x saja dari sisi admin panel (filter,
-| search, sort dilakukan di JS - sama seperti pola
-| get-admin-events.php / get-admin-users.php).
+| Disesuaikan dengan skema tabel members_individual:
+| full_name, whatsapp, email, role, role_other, portfolio_link,
+| interests (JSON array), photo, status, created_at, updated_at.
+|
+| Catatan: tabel ini TIDAK punya kolom submitted_at terpisah,
+| jadi tanggal registrasi memakai created_at.
 |
 |--------------------------------------------------------------------------
 */
@@ -24,19 +25,19 @@ try {
         "
         SELECT
             id,
-            submitted_at,
             full_name,
-            phone,
+            whatsapp,
             email,
-            role_in_industry,
+            role,
+            role_other,
             portfolio_link,
-            interest,
+            interests,
             photo,
             status,
             created_at,
             updated_at
-        FROM membership_individual
-        ORDER BY submitted_at DESC, created_at DESC
+        FROM members_individual
+        ORDER BY created_at DESC
         "
     );
 

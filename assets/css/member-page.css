@@ -1,0 +1,890 @@
+/* =========================================================
+   JAKARTA FILM COMMISSION
+   HALAMAN MEMBER (member.php)
+   Letakkan di: assets/css/member-page.css
+   Dimuat SETELAH assets/css/custom.css. Prefix "mp-".
+========================================================= */
+
+:root {
+  --mp-orange: #ff6a14;
+  --mp-red: #da291c;
+  --mp-yellow: #ffc72c;
+  --mp-lime: #97b300;
+  --mp-green: #526e3e;
+  --mp-ink: #171817;
+  --mp-cream: #f8f0df;
+}
+
+.mp-page {
+  font-family: "text-normal", "Inter", sans-serif;
+  color: var(--mp-ink);
+  background: var(--mp-cream);
+  overflow-x: clip;
+}
+
+.mp-page span {
+  font-family: inherit;
+}
+
+.mp-section {
+  position: relative;
+  z-index: 5;
+  padding: 110px 0;
+  background: var(--mp-cream);
+}
+
+.mp-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: "heading-normal", sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--mp-green);
+  margin-bottom: 18px;
+}
+
+.mp-kicker::before {
+  content: "";
+  width: 28px;
+  height: 2px;
+  background: var(--mp-orange);
+}
+
+.mp-title {
+  font-size: clamp(36px, 4.6vw, 64px);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  font-weight: 800;
+  color: var(--mp-orange);
+  margin-bottom: 18px;
+}
+
+.mp-lead {
+  max-width: 600px;
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--mp-green);
+}
+
+.mp-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 56px;
+}
+
+.mp-head.is-center {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.mp-head.is-center .mp-lead {
+  margin: 0 auto;
+}
+
+/* tombol */
+.mp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 56px;
+  padding: 0 32px;
+  border: 2px solid transparent;
+  font-family: "heading-normal", sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.mp-btn:hover {
+  transform: translateY(-3px);
+}
+
+.mp-btn-yellow {
+  background: var(--mp-yellow);
+  color: #111;
+}
+
+.mp-btn-yellow:hover {
+  background: #fff;
+}
+
+.mp-btn-orange {
+  background: var(--mp-orange);
+  color: #111;
+}
+
+.mp-btn-orange:hover {
+  background: var(--mp-yellow);
+}
+
+.mp-btn-green {
+  background: var(--mp-green);
+  color: #fff;
+}
+
+.mp-btn-green:hover {
+  background: var(--mp-lime);
+  color: #111;
+}
+
+.mp-btn-line {
+  border-color: rgba(255, 255, 255, 0.55);
+  color: #fff;
+}
+
+.mp-btn-line:hover {
+  background: #fff;
+  color: #111;
+}
+
+.mp-btn:focus-visible {
+  outline: 3px solid var(--mp-yellow);
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+.mp-hero {
+  position: relative;
+  min-height: 92vh;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  padding: 190px 0 120px;
+}
+
+.mp-hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.mp-hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mp-hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background:
+    linear-gradient(to right, rgba(10, 8, 5, 0.9), rgba(10, 8, 5, 0.35)),
+    linear-gradient(to top, var(--mp-cream) 0%, transparent 28%);
+}
+
+.mp-hero .container {
+  position: relative;
+  z-index: 5;
+}
+
+.mp-hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+  font-family: "heading-normal", sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mp-yellow);
+}
+
+.mp-hero-eyebrow::before {
+  content: "";
+  width: 28px;
+  height: 2px;
+  background: var(--mp-orange);
+}
+
+.mp-hero h1 {
+  max-width: 900px;
+  color: #fff;
+  font-size: clamp(50px, 7.6vw, 118px);
+  line-height: 0.9;
+  letter-spacing: -0.06em;
+  font-weight: 800;
+  margin-bottom: 28px;
+}
+
+.mp-hero h1 em {
+  font-style: normal;
+  color: var(--mp-yellow);
+}
+
+.mp-hero p {
+  max-width: 600px;
+  color: #ddd8ca;
+  font-size: 17px;
+  line-height: 1.85;
+  margin-bottom: 38px;
+}
+
+.mp-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+/* =========================================================
+   STRIP (pita pilar)
+========================================================= */
+.mp-strip {
+  position: relative;
+  z-index: 6;
+  background: var(--mp-ink);
+  color: #fff;
+  padding: 26px 0;
+  overflow: hidden;
+}
+
+.mp-strip-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 14px 38px;
+}
+
+.mp-strip-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: "heading-normal", sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.mp-strip-item::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  background: var(--mp-orange);
+  border-radius: 50%;
+}
+
+.mp-strip-item:nth-child(2)::before {
+  background: var(--mp-yellow);
+}
+
+.mp-strip-item:nth-child(3)::before {
+  background: var(--mp-lime);
+}
+
+.mp-strip-item:nth-child(4)::before {
+  background: var(--mp-red);
+}
+
+/* =========================================================
+   BENEFIT: PROMOTION (kartu besar)
+========================================================= */
+.mp-promo {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  min-height: 560px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+}
+
+.mp-promo-main {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 64px;
+  color: #fff;
+  background:
+    linear-gradient(rgba(255, 106, 20, 0.9), rgba(23, 24, 23, 0.94)),
+    url("../../gallery/cover/promotion.webp") center / cover;
+}
+
+.mp-tag {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 9px 16px;
+  margin-bottom: 22px;
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  font-family: "heading-normal", sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.mp-promo-main h3 {
+  font-size: clamp(34px, 4.2vw, 62px);
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.mp-promo-main p {
+  max-width: 480px;
+  font-size: 17px;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.mp-tnc {
+  margin-top: auto;
+  padding-top: 30px;
+  align-self: flex-end;
+  font-size: 12px;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.mp-promo-list {
+  display: flex;
+  flex-direction: column;
+  background: var(--mp-ink);
+}
+
+.mp-promo-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 18px 22px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  transition: background 0.3s ease;
+}
+
+.mp-promo-item:last-child {
+  border-bottom: none;
+}
+
+.mp-promo-item:hover {
+  background: var(--mp-red);
+}
+
+.mp-promo-item img {
+  width: 128px;
+  height: 100px;
+  flex-shrink: 0;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.mp-promo-item span {
+  font-family: "heading-normal", sans-serif;
+  font-size: 22px;
+  line-height: 1.15;
+  color: #fff;
+  transition: color 0.3s ease;
+}
+
+.mp-promo-item:hover span {
+  color: var(--mp-yellow);
+}
+
+/* =========================================================
+   BENEFIT: kartu foto (screening, scouting, production)
+========================================================= */
+.mp-photo {
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.14);
+}
+
+.mp-photo-bg,
+.mp-photo-bg img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mp-photo-bg img {
+  transition: transform 1.2s ease;
+}
+
+.mp-photo:hover .mp-photo-bg img {
+  transform: scale(1.05);
+}
+
+.mp-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(rgba(255, 90, 31, 0.78), rgba(20, 20, 20, 0.88));
+}
+
+.mp-photo.is-green::after {
+  background: linear-gradient(rgba(82, 110, 62, 0.82), rgba(20, 20, 20, 0.9));
+}
+
+.mp-photo.is-red::after {
+  background: linear-gradient(rgba(218, 41, 28, 0.8), rgba(20, 20, 20, 0.9));
+}
+
+.mp-photo-body {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 52px;
+}
+
+.mp-photo h3 {
+  font-size: clamp(30px, 3.4vw, 50px);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 24px;
+}
+
+.mp-photo p {
+  max-width: 520px;
+  font-size: 16px;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.mp-banner {
+  margin-top: 28px;
+  min-height: 380px;
+}
+
+.mp-duo {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+  margin-top: 28px;
+}
+
+.mp-duo .mp-photo {
+  min-height: 520px;
+}
+
+.mp-tier {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.mp-tier > li {
+  font-family: "heading-normal", sans-serif;
+  font-size: 19px;
+  line-height: 1.3;
+  color: #fff;
+  padding-left: 18px;
+  border-left: 3px solid var(--mp-yellow);
+}
+
+.mp-tier ul {
+  list-style: none;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.mp-tier ul li {
+  font-family: "text-normal", sans-serif;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.mp-tier ul li::before {
+  content: "✓  ";
+  color: var(--mp-yellow);
+}
+
+/* =========================================================
+   PILIH JENIS MEMBER
+========================================================= */
+.mp-choose {
+  background: var(--mp-ink);
+  padding: 120px 0;
+}
+
+.mp-choose .mp-title {
+  color: var(--mp-yellow);
+}
+
+.mp-choose .mp-lead {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.mp-choose .mp-kicker {
+  color: var(--mp-lime);
+}
+
+.mp-choose-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+}
+
+.mp-type {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 600px;
+  color: #fff;
+  border-radius: 28px;
+  transition: transform 0.4s ease;
+}
+
+.mp-type:hover {
+  transform: translateY(-8px);
+}
+
+.mp-type-bg,
+.mp-type-bg img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mp-type::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10, 8, 5, 0.96) 38%, rgba(10, 8, 5, 0.45));
+}
+
+.mp-type::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  z-index: 4;
+  background: var(--mp-orange);
+}
+
+.mp-type.is-entity::before {
+  background: var(--mp-lime);
+}
+
+.mp-type-body {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin-top: auto;
+  padding: 44px;
+}
+
+.mp-type-label {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 8px 14px;
+  margin-bottom: 18px;
+  background: var(--mp-orange);
+  color: #111;
+  font-family: "heading-normal", sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.mp-type.is-entity .mp-type-label {
+  background: var(--mp-lime);
+}
+
+.mp-type h3 {
+  font-size: clamp(34px, 3.6vw, 52px);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 14px;
+}
+
+.mp-type p {
+  font-size: 15px;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 22px;
+}
+
+.mp-chips {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+
+.mp-chips li {
+  padding: 7px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+  font-size: 12px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.mp-type .mp-btn {
+  align-self: stretch;
+}
+
+/* langkah */
+.mp-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+  margin-top: 70px;
+}
+
+.mp-step {
+  padding-top: 22px;
+  border-top: 2px solid rgba(255, 255, 255, 0.14);
+}
+
+.mp-step b {
+  display: block;
+  font-family: "title-normal", sans-serif;
+  font-size: 46px;
+  line-height: 1;
+  color: var(--mp-orange);
+  margin-bottom: 12px;
+}
+
+.mp-step:nth-child(2) b {
+  color: var(--mp-yellow);
+}
+
+.mp-step:nth-child(3) b {
+  color: var(--mp-lime);
+}
+
+.mp-step h4 {
+  font-size: 18px;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.mp-step p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+/* =========================================================
+   TABEL BENEFIT
+========================================================= */
+.mp-table-wrap {
+  overflow-x: auto;
+  background: #fff;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+}
+
+.mp-table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+}
+
+.mp-table th {
+  padding: 22px 28px;
+  text-align: center;
+  background: var(--mp-orange);
+  color: #111;
+  font-family: "heading-normal", sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.mp-table th:first-child {
+  text-align: left;
+}
+
+.mp-table th.is-entity {
+  background: var(--mp-green);
+  color: #fff;
+}
+
+.mp-table td {
+  padding: 22px 28px;
+  border-top: 1px solid #eee7d6;
+  font-size: 16px;
+  color: var(--mp-ink);
+  text-align: center;
+}
+
+.mp-table td:first-child {
+  text-align: left;
+  font-family: "heading-normal", sans-serif;
+}
+
+.mp-table tbody tr:nth-child(even) {
+  background: #fcf8ee;
+}
+
+.mp-table tbody tr:hover {
+  background: #fff3ec;
+}
+
+.mp-yes {
+  color: var(--mp-green);
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.mp-no {
+  color: #c9c3b0;
+  font-size: 20px;
+}
+
+/* =========================================================
+   CTA
+========================================================= */
+.mp-cta {
+  position: relative;
+  z-index: 5;
+  background: var(--mp-red);
+  padding: 90px 0;
+  color: #fff;
+}
+
+.mp-cta-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 36px;
+  flex-wrap: wrap;
+}
+
+.mp-cta h2 {
+  font-size: clamp(34px, 4.4vw, 62px);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 12px;
+}
+
+.mp-cta p {
+  max-width: 520px;
+  font-size: 16px;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.mp-cta-actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.mp-cta .mp-btn-yellow:hover {
+  background: #111;
+  color: #fff;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+@media (max-width: 992px) {
+  .mp-promo,
+  .mp-duo,
+  .mp-choose-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mp-promo-main {
+    padding: 44px 32px;
+    min-height: 420px;
+  }
+
+  .mp-steps {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  .mp-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 768px) {
+  .mp-hero {
+    min-height: 78vh;
+    padding: 140px 0 90px;
+  }
+
+  .mp-hero h1 {
+    font-size: 46px !important;
+    line-height: 0.96 !important;
+  }
+
+  .mp-section,
+  .mp-choose {
+    padding: 70px 0;
+  }
+
+  .mp-photo-body {
+    padding: 34px 26px;
+  }
+
+  .mp-duo .mp-photo {
+    min-height: 440px;
+  }
+
+  .mp-type {
+    min-height: 560px;
+  }
+
+  .mp-type-body {
+    padding: 30px 24px;
+  }
+
+  .mp-promo-item img {
+    width: 92px;
+    height: 76px;
+  }
+
+  .mp-promo-item span {
+    font-size: 18px;
+  }
+
+  .mp-cta-actions .mp-btn,
+  .mp-hero-actions .mp-btn {
+    width: 100%;
+  }
+
+  .mp-table th,
+  .mp-table td {
+    padding: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mp-btn,
+  .mp-type,
+  .mp-photo-bg img {
+    transition: none !important;
+  }
+}

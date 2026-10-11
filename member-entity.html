@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daftar Member Entitas | Jakarta Film Commission</title>
+
+    <meta name="description"
+        content="Daftarkan perusahaan atau organisasi Anda sebagai Member Entitas Jakarta Film Commission. Perluas jaringan dan bangun kolaborasi strategis di ekosistem perfilman Jakarta.">
+
+    <link rel="icon" type="image/png" href="assets/icon/JakartaFilmCommissionLogo-9.ico">
+
+    <!-- internal resources -->
+    <link rel="stylesheet" href="assets/css/custom.css">
+    <link rel="stylesheet" href="assets/css/member-register.css">
+</head>
+
+<body>
+    <!-- LOADER -->
+    <div id="loader-container"></div>
+
+    <!-- Hamburger Menu -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <!-- NAVBAR -->
+    <div id="navbar"></div>
+
+    <main class="mr-page mr-theme-entity">
+
+        <!-- =========================
+        HERO
+        ========================= -->
+        <section class="mr-hero">
+            <div class="mr-hero-bg">
+                <img src="gallery/cover/person-mistery-warm.webp" alt="">
+            </div>
+            <div class="mr-hero-overlay"></div>
+
+            <div class="container">
+                <span class="mr-eyebrow">Member Entitas</span>
+
+                <h1>Bergabung sebagai<br>Member Entitas JFC</h1>
+
+                <p>
+                    Perluas jaringan, bangun kolaborasi strategis, dan jadilah bagian dari ekosistem perfilman Jakarta
+                    yang terus berkembang. Keanggotaan entitas terbuka bagi berbagai organisasi dan badan usaha yang
+                    ingin berkontribusi serta terhubung dengan industri film dan audiovisual.
+                </p>
+
+                <div class="mr-hero-chips">
+                    <span class="mr-hero-chip">Rumah Produksi</span>
+                    <span class="mr-hero-chip">Institusi Pendidikan</span>
+                    <span class="mr-hero-chip">Venture Capital</span>
+                    <span class="mr-hero-chip">UMKM &amp; Lainnya</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========================
+        FORM SECTION
+        ========================= -->
+        <section class="mr-section">
+            <div class="container">
+                <div class="mr-layout">
+
+                    <!-- ASIDE -->
+                    <aside class="mr-aside">
+                        <span class="mr-aside-label">Member Entitas</span>
+
+                        <h2>Siapa yang dapat bergabung?</h2>
+
+                        <p>
+                            Organisasi dan badan usaha yang memiliki keterkaitan dengan ekosistem perfilman dan
+                            memiliki NIB (Nomor Induk Berusaha).
+                        </p>
+
+                        <ul class="mr-benefits">
+                            <li>Rumah produksi dan institusi pendidikan</li>
+                            <li>Venture capital dan perusahaan pendukung industri</li>
+                            <li>Pengelola properti dan UMKM</li>
+                            <li>Entitas lain yang terkait ekosistem perfilman</li>
+                        </ul>
+
+                        <div class="mr-aside-block">
+                            <h3>Kelengkapan formulir</h3>
+                            <div class="mr-progress" role="progressbar" aria-label="Kelengkapan formulir">
+                                <div class="mr-progress-bar" data-progress-bar></div>
+                            </div>
+                            <span class="mr-progress-text" data-progress-text></span>
+                            <ul class="mr-checklist" data-checklist></ul>
+                        </div>
+
+                        <div class="mr-aside-block">
+                            <p class="mr-aside-note">
+                                Mendaftar atas nama pribadi? Gunakan
+                                <a href="member-individual.html" style="color:#ffc72c;text-decoration:underline">formulir Member Individu</a>.
+                            </p>
+                        </div>
+                    </aside>
+
+                    <!-- FORM CARD -->
+                    <div class="mr-card">
+
+                        <div id="formWrap">
+                            <div class="mr-card-head">
+                                <h3>Formulir Pendaftaran</h3>
+                                <p>Kolom bertanda <span class="mr-req">*</span> wajib diisi. Isian tersimpan otomatis di
+                                    browser Anda selama Anda belum mengirim.</p>
+                            </div>
+
+                            <form id="memberForm" novalidate autocomplete="on">
+
+                                <!-- ===== 01 PROFIL ENTITAS ===== -->
+                                <section class="mr-step">
+                                    <div class="mr-step-head">
+                                        <div class="mr-step-num">01</div>
+                                        <div>
+                                            <h4>Profil Entitas</h4>
+                                            <p>Informasi dasar perusahaan atau organisasi.</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="mr-fields">
+                                        <div class="mr-field" data-field="companyName">
+                                            <label class="mr-label" for="companyName">Nama Perusahaan <span class="mr-req">*</span></label>
+                                            <input class="mr-input" type="text" id="companyName" name="company_name"
+                                                placeholder="Nama perusahaan / organisasi" autocomplete="organization">
+                                            <p class="mr-error" role="alert"></p>
+                                        </div>
+
+                                        <div class="mr-field" data-field="description">
+                                            <label class="mr-label" for="description">Deskripsi Singkat Perusahaan <span class="mr-req">*</span></label>
+                                            <textarea class="mr-textarea" id="description" name="description" maxlength="500"
+                                                placeholder="Ceritakan secara singkat bidang usaha dan kegiatan utama perusahaan Anda"></textarea>
+                                            <span class="mr-counter" data-counter-for="description">0 / 500</span>
+                                            <p class="mr-error" role="alert"></p>
+                                        </div>
+
+                                        <div class="mr-field" data-field="entityType">
+                                            <span class="mr-label" id="entityTypeLabel">Jenis Entitas <span class="mr-req">*</span></span>
+                                            <div class="mr-options is-radio" role="radiogroup" aria-labelledby="entityTypeLabel">
+                                                <label class="mr-option">
+                                                    <input type="radio" name="entity_type" value="Rumah Produksi">
+                                                    <span class="mr-option-box"></span>
+                                                    <span class="mr-option-text">Rumah Produksi</span>
+                                                </label>
+                                                <label class="mr-option">
+                                                    <input type="radio" name="entity_type" value="Institusi Pendidikan">
+                                                    <span class="mr-option-box"></span>
+                                                    <span class="mr-option-text">Institusi Pendidikan</span>
+                                                </label>
+                                                <label class="mr-option">
+                                                    <input type="radio" name="entity_type" value="Venture Capital">
+                                                    <span class="mr-option-box"></span>
+                                                    <span class="mr-option-text">Venture Capital</span>
+                                                </label>
+                                                <label class="mr-option">
+                                                    <input type="radio" name="entity_type" value="Perusahaan Pendukung Industri">
+                                                    <span class="mr-option-box"></span>
+                                                    <span class="mr-option-text">Perusahaan Pendukung Industri</span>
+                                                </label>
+                                                <label class="mr-option">
+                                                    <input type="radio" name="entity_type" value="Pengelola Properti">
+                                                    <span class="mr-option-box"></span>
+                                                    <span class="mr-option-text">Pengelola Properti</span>
+                                                </label>
+                                                <label class="mr-option">
+                                                    <input type="radio" name="entity_type" value="UMKM">
+                                                    <span class="mr-option-box"></span>
+                                                    <span class="mr-option-text">UMKM</span>
+                                                </label>
+                                                <label class="mr-option">
+                                                    <input type="radio" name="entity_type" value="__other">
+                                                    <span class="mr-option-box"></span>
+                                                    <span class="mr-option-text">Yang lain</span>
+                                                </label>
+                                                <input class="mr-input mr-other-input" type="text" name="entity_type_other"
+                                                    placeholder="Sebutkan jenis entitas" aria-label="Sebutkan jenis entitas">
+                                            </div>
+                                            <p class="mr-error" role="alert"></p>
+                                        </div>
+
+                                        <div class="mr-field" data-field="productionType">
+                                            <span class="mr-label" id="productionLabel">Jenis Produksi yang Dikerjakan <span class="mr-req">*</span></span>
+                                            <span class="mr-hint">Pilih satu atau lebih.</span>
+                                            <div class="mr-options" role="group" aria-labelledby="productionLabel">
+                                                <label class="mr-option">
+                                                    <input type="checkbox" name="production_type" value="Film Panjang">
+                                                    <span class="mr-option-box"></span>
+                                                    <span class="mr-option-text">Film Panjang</span>
+                                                </label>
+                                                <label class="mr-option">
+                                                    <input type="checkbox" name="production_type" value="Film Pendek">
+                                                    <span class="mr-option-box"></span>
+                                                    <span class="mr-option-text">Film Pendek</span>
+                                                </label>
+                                                <label class="mr-option">
+                                                    <input type="checkbox" name="production_type" value="Series">
+                                                    <span class="mr-option-box"></span>
+                                                    <span class="mr-option-text">Series</span>
+                                                </label>
+                                                <label class="mr-option">
+                                                    <input type="checkbox" name="production_type" value="Iklan">
+                                                    <span class="mr-option-box"></span>
+                                                    <span class="mr-option-text">Iklan</span>
+                                                </label>
+                                                <label class="mr-option">
+                                                    <input type="checkbox" name="production_type" value="Music Video">
+                                                    <span class="mr-option-box"></span>
+                                                    <span class="mr-option-text">Music Video</span>
+                                                </label>
+                                                <label class="mr-option">
+                                                    <input type="checkbox" name="production_type" value="Dokumenter">
+                                                    <span class="mr-option-box"></span>
+                                                    <span class="mr-option-text">Dokumenter</span>
+                                                </label>
+                                                <label class="mr-option">
+                                                    <input type="checkbox" name="production_type" value="Digital Content">
+                                                    <span class="mr-option-box"></span>
+                                                    <span class="mr-option-text">Digital Content</span>
+                                                </label>
+                                                <label class="mr-option">
+                                                    <input type="checkbox" name="production_type" value="__other">
+                                                    <span class="mr-option-box"></span>
+                                                    <span class="mr-option-text">Yang lain</span>
+                                                </label>
+                                                <input class="mr-input mr-other-input" type="text" name="production_type_other"
+                                                    placeholder="Sebutkan jenis produksi lainnya" aria-label="Sebutkan jenis produksi lainnya">
+                                            </div>
+                                            <p class="mr-error" role="alert"></p>
+                                        </div>
+
+                                        <div class="mr-field" data-field="nib">
+                                            <label class="mr-label" for="nib">NIB Perusahaan</label>
+                                            <input class="mr-input" type="text" id="nib" name="nib" inputmode="numeric"
+                                                placeholder="Nomor Induk Berusaha" autocomplete="off">
+                                            <span class="mr-hint">Nomor Induk Berusaha dari OSS. Hanya angka.</span>
+                                            <p class="mr-error" role="alert"></p>
+                                        </div>
+                                    </div>
+                                </section>
+
+                                <!-- ===== 02 DOKUMEN ===== -->
+                                <section class="mr-step">
+                                    <div class="mr-step-head">
+                                        <div class="mr-step-num">02</div>
+                                        <div>
+                                            <h4>Dokumen &amp; Media Sosial</h4>
+                                            <p>Company profile, logo, dan kanal resmi perusahaan.</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="mr-fields">
+                                        <div class="mr-field" data-field="profileFile">
+                                            <span class="mr-label">Company Profile <span class="mr-req">*</span></span>
+
+                                            <div class="mr-drop is-doc" id="profileDrop" tabindex="0" role="button"
+                                                aria-label="Unggah company profile">
+                                                <input type="file" id="profileFile"
+                                                    accept=".pdf,.doc,.docx,.ppt,.pptx,application/pdf">
+
+                                                <div class="mr-drop-thumb">
+                                                    <img alt="">
+                                                    <svg width="34" height="34" viewBox="0 0 24 24" fill="none"
+                                                        stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+                                                        stroke-linejoin="round" aria-hidden="true">
+                                                        <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path>
+                                                        <path d="M14 3v5h5"></path>
+                                                        <path d="M9 13h6M9 17h6"></path>
+                                                    </svg>
+                                                    <span class="mr-doc-ext"></span>
+                                                </div>
+
+                                                <div class="mr-drop-body">
+                                                    <span class="mr-drop-title">Unggah company profile</span>
+                                                    <span class="mr-drop-sub">Seret &amp; lepas, atau klik untuk memilih. PDF, DOC, DOCX,
+                                                        PPT, atau PPTX, maks. 10 MB.</span>
+                                                    <div class="mr-drop-actions">
+                                                        <button type="button" class="mr-link-btn is-danger" data-drop-remove>Hapus</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <p class="mr-error" role="alert"></p>
+                                        </div>
+
+                                        <div class="mr-field" data-field="logoFile">
+                                            <span class="mr-label">Logo Perusahaan</span>
+
+                                            <div class="mr-drop is-square" id="logoDrop" tabindex="0" role="button"
+                                                aria-label="Unggah logo perusahaan">
+                                                <input type="file" id="logoFile"
+                                                    accept="image/png,image/jpeg,image/webp,image/svg+xml">
+
+                                                <div class="mr-drop-thumb">
+                                                    <img alt="Pratinjau logo">
+                                                    <svg width="34" height="34" viewBox="0 0 24 24" fill="none"
+                                                        stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+                                                        stroke-linejoin="round" aria-hidden="true">
+                                                        <rect x="3" y="3" width="18" height="18" rx="3"></rect>
+                                                        <circle cx="9" cy="9" r="1.6"></circle>
+                                                        <path d="M21 16l-5-5-8 8"></path>
+                                                    </svg>
+                                                </div>
+
+                                                <div class="mr-drop-body">
+                                                    <span class="mr-drop-title">Unggah logo perusahaan</span>
+                                                    <span class="mr-drop-sub">Seret &amp; lepas, atau klik untuk memilih. PNG, JPG, WEBP, atau
+                                                        SVG, maks. 1 MB.</span>
+                                                    <div class="mr-drop-actions">
+                                                        <button type="button" class="mr-link-btn is-danger" data-drop-remove>Hapus</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <p class="mr-error" role="alert"></p>
+                                        </div>
+
+                                        <div class="mr-field" data-field="social">
+                                            <label class="mr-label" for="social">Instagram / Media Sosial Perusahaan</label>
+                                            <input class="mr-input" type="text" id="social" name="social_media"
+                                                placeholder="@namaperusahaan atau https://instagram.com/namaperusahaan">
+                                            <p class="mr-error" role="alert"></p>
+                                        </div>
+                                    </div>
+                                </section>
+
+                                <!-- ===== 03 MINAT ===== -->
+                                <section class="mr-step">
+                                    <div class="mr-step-head">
+                                        <div class="mr-step-num">03</div>
+                                        <div>
+                                            <h4>Minat Kolaborasi</h4>
+                                            <p>Area yang ingin Anda eksplorasi bersama JFC.</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="mr-fields">
+                                        <div class="mr-field" data-field="interest">
+                                            <span class="mr-label" id="interestLabel">Minat dalam Ekosistem Jakarta Film Commission <span class="mr-req">*</span></span>
+                                            <span class="mr-hint">Pilih satu atau lebih.</span>
+                                            <div class="mr-options" role="group" aria-labelledby="interestLabel">
+                                                <label class="mr-option">
+                                                    <input type="checkbox" name="interest" value="Informasi Produksi dan Perizinan Lokasi">
+                                                    <span class="mr-option-box"></span>
+                                                    <span class="mr-option-text">Informasi Produksi dan Perizinan Lokasi</span>
+                                                </label>
+                                                <label class="mr-option">
+                                                    <input type="checkbox" name="interest" value="Pengembangan Kompetensi">
+                                                    <span class="mr-option-box"></span>
+                                                    <span class="mr-option-text">Pengembangan Kompetensi</span>
+                                                </label>
+                                                <label class="mr-option">
+                                                    <input type="checkbox" name="interest" value="Promosi Karya dan Pemutaran Film">
+                                                    <span class="mr-option-box"></span>
+                                                    <span class="mr-option-text">Promosi Karya dan Pemutaran Film</span>
+                                                </label>
+                                                <label class="mr-option">
+                                                    <input type="checkbox" name="interest" value="Jejaring dan Forum Industri">
+                                                    <span class="mr-option-box"></span>
+                                                    <span class="mr-option-text">Jejaring dan Forum Industri</span>
+                                                </label>
+                                                <label class="mr-option">
+                                                    <input type="checkbox" name="interest" value="Kemitraan Bisnis">
+                                                    <span class="mr-option-box"></span>
+                                                    <span class="mr-option-text">Kemitraan Bisnis</span>
+                                                </label>
+                                                <label class="mr-option">
+                                                    <input type="checkbox" name="interest" value="Kolaborasi Proyek">
+                                                    <span class="mr-option-box"></span>
+                                                    <span class="mr-option-text">Kolaborasi Proyek</span>
+                                                </label>
+                                                <label class="mr-option">
+                                                    <input type="checkbox" name="interest" value="Program Literasi Film">
+                                                    <span class="mr-option-box"></span>
+                                                    <span class="mr-option-text">Program Literasi Film</span>
+                                                </label>
+                                                <label class="mr-option">
+                                                    <input type="checkbox" name="interest" value="__other">
+                                                    <span class="mr-option-box"></span>
+                                                    <span class="mr-option-text">Yang lain</span>
+                                                </label>
+                                                <input class="mr-input mr-other-input" type="text" name="interest_other"
+                                                    placeholder="Sebutkan minat lainnya" aria-label="Sebutkan minat lainnya">
+                                            </div>
+                                            <p class="mr-error" role="alert"></p>
+                                        </div>
+                                    </div>
+                                </section>
+
+                                <!-- ===== 04 PIC ===== -->
+                                <section class="mr-step">
+                                    <div class="mr-step-head">
+                                        <div class="mr-step-num">04</div>
+                                        <div>
+                                            <h4>Kontak Penanggung Jawab (PIC)</h4>
+                                            <p>Orang yang akan kami hubungi terkait keanggotaan.</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="mr-fields">
+                                        <div class="mr-row">
+                                            <div class="mr-field" data-field="picName">
+                                                <label class="mr-label" for="picName">Nama PIC <span class="mr-req">*</span></label>
+                                                <input class="mr-input" type="text" id="picName" name="pic_name"
+                                                    placeholder="Nama lengkap" autocomplete="name">
+                                                <p class="mr-error" role="alert"></p>
+                                            </div>
+
+                                            <div class="mr-field" data-field="picPosition">
+                                                <label class="mr-label" for="picPosition">Jabatan <span class="mr-req">*</span></label>
+                                                <input class="mr-input" type="text" id="picPosition" name="pic_position"
+                                                    placeholder="Contoh: Producer, Direktur" autocomplete="organization-title">
+                                                <p class="mr-error" role="alert"></p>
+                                            </div>
+                                        </div>
+
+                                        <div class="mr-row">
+                                            <div class="mr-field" data-field="picEmail">
+                                                <label class="mr-label" for="picEmail">Email PIC <span class="mr-req">*</span></label>
+                                                <input class="mr-input" type="email" id="picEmail" name="pic_email"
+                                                    placeholder="nama@perusahaan.com" autocomplete="email">
+                                                <p class="mr-error" role="alert"></p>
+                                            </div>
+
+                                            <div class="mr-field" data-field="picPhone">
+                                                <label class="mr-label" for="picPhone">No. HP (WhatsApp) <span class="mr-req">*</span></label>
+                                                <input class="mr-input" type="tel" id="picPhone" name="pic_phone"
+                                                    placeholder="08xx xxxx xxxx" autocomplete="tel" inputmode="tel">
+                                                <p class="mr-error" role="alert"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+
+                                <div class="mr-banner" id="formBanner" role="alert"></div>
+
+                                <div class="mr-actions">
+                                    <p>Anda dapat meninjau seluruh data sebelum benar-benar dikirim.</p>
+                                    <button type="button" class="mr-btn mr-btn-primary" id="reviewBtn">Tinjau Pendaftaran</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- SUCCESS -->
+                        <div class="mr-success" id="formSuccess" tabindex="-1">
+                            <div class="mr-success-icon">✓</div>
+                            <h3>Pendaftaran berhasil dikirim</h3>
+                            <p>
+                                Terima kasih telah mendaftarkan entitas Anda sebagai Member Jakarta Film Commission.
+                                Tim kami akan meninjau data dan dokumen Anda, lalu menghubungi PIC melalui email atau
+                                WhatsApp yang didaftarkan.
+                            </p>
+                            <div class="mr-success-actions">
+                                <a class="mr-btn mr-btn-primary" href="index.html">Kembali ke Beranda</a>
+                                <a class="mr-btn mr-btn-ghost" href="member.php">Lihat Info Membership</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- =========================
+    REVIEW MODAL
+    ========================= -->
+    <div class="mr-modal mr-theme-entity" id="reviewModal" role="dialog" aria-modal="true" aria-labelledby="reviewTitle">
+        <div class="mr-modal-card">
+            <div class="mr-modal-head">
+                <div>
+                    <h3 id="reviewTitle">Tinjau Pendaftaran</h3>
+                    <p>Pastikan seluruh data sudah benar sebelum dikirim.</p>
+                </div>
+                <button type="button" class="mr-modal-close" data-modal-close aria-label="Tutup">✕</button>
+            </div>
+
+            <div id="reviewContent"></div>
+
+            <div class="mr-modal-foot">
+                <label class="mr-consent">
+                    <input type="checkbox" id="consent">
+                    <span>
+                        Saya menyatakan seluruh data dan dokumen yang diisi adalah benar, serta menyetujui data ini
+                        digunakan oleh Jakarta Film Commission untuk keperluan verifikasi dan komunikasi keanggotaan.
+                    </span>
+                </label>
+
+                <div class="mr-modal-buttons">
+                    <button type="button" class="mr-btn mr-btn-ghost" data-modal-close>Kembali Ubah</button>
+                    <button type="button" class="mr-btn mr-btn-primary" id="submitBtn" disabled>Kirim Pendaftaran</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div id="footer"></div>
+</body>
+
+<!-- JAVASCRIPT -->
+<script src="assets/js/components.js"></script>
+<script src="assets/js/custom.js"></script>
+<script src="assets/js/member-register.js"></script>
+<script src="assets/js/member-entity-form.js"></script>
+
+</html>

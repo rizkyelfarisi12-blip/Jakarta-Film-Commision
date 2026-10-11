@@ -90,7 +90,7 @@ include "../includes/header.php";
                     <input
                         type="text"
                         id="searchIndividual"
-                        placeholder="Search name, email, or phone..."
+                        placeholder="Search name, email, or WhatsApp..."
                         class="table-search"
                         autocomplete="off">
 
@@ -99,6 +99,10 @@ include "../includes/header.php";
                         <option value="pending">Pending</option>
                         <option value="approved">Approved</option>
                         <option value="rejected">Rejected</option>
+                    </select>
+
+                    <select id="roleFilter" class="table-filter">
+                        <option value="">All Role</option>
                     </select>
 
                     <select id="interestFilter" class="table-filter">
@@ -130,7 +134,7 @@ include "../includes/header.php";
                             <th>Contact</th>
                             <th>Role</th>
                             <th>Interest</th>
-                            <th>Date</th>
+                            <th>Registered</th>
                             <th>Status</th>
                             <th width="220">Action</th>
                         </tr>
@@ -156,6 +160,13 @@ include "../includes/header.php";
 
 <!-- =========================================================
      DETAIL MODAL
+
+     PENTING: overlay ini HARUS default display:none. Class
+     .richtext-link-modal-overlay di admin.css defaultnya
+     display:flex + opacity:0 (dibuat untuk dipasang lewat JS
+     lalu dihapus lagi). Karena elemen ini statis di DOM, kalau
+     tidak di-override jadi display:none, div full-screen ini
+     akan nge-block seluruh klik di halaman walau transparan.
 ========================================================= -->
 <div id="individualModalOverlay" class="richtext-link-modal-overlay" style="display:none;">
 
@@ -195,7 +206,6 @@ include "../includes/header.php";
 ========================================================= -->
 <style>
 
-    /* Modal visibility toggle (see note above) */
     #individualModalOverlay { display: none; }
     #individualModalOverlay.show { display: flex; }
 

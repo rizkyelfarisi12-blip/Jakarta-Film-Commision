@@ -1,5 +1,20 @@
 <?php
 
+/*
+|--------------------------------------------------------------------------
+| CREATE INDIVIDUAL MEMBERSHIP RECORD
+|--------------------------------------------------------------------------
+|
+| Sesuai skema members_individual, kolom-kolom berikut NOT NULL
+| di database: full_name, whatsapp, email, role, portfolio_link,
+| photo. Jadi divalidasi wajib diisi di sini juga.
+|
+| "interests" disimpan sebagai JSON array text, contoh:
+| ["One-Stop Film Service","Promosi & Diplomasi Budaya"]
+|
+|--------------------------------------------------------------------------
+*/
+
 header("Content-Type: application/json");
 
 require_once __DIR__ . "/../db.php";
@@ -7,24 +22,42 @@ require_once __DIR__ . "/../db.php";
 $input = json_decode(file_get_contents("php://input"), true);
 
 $fullName = trim($input["full_name"] ?? "");
-$phone = trim($input["phone"] ?? "");
+$whatsapp = trim($input["whatsapp"] ?? "");
 $email = trim($input["email"] ?? "");
-$roleInIndustry = trim($input["role_in_industry"] ?? "");
+$role = trim($input["role"] ?? "");
+$roleOther = trim($input["role_other"] ?? "");
 $portfolioLink = trim($input["portfolio_link"] ?? "");
-$interest = trim($input["interest"] ?? "");
 $photo = trim($input["photo"] ?? "");
 $status = $input["status"] ?? "pending";
-$submittedAt = trim($input["submitted_at"] ?? "");
+
+$interestsInput = $input["interests"] ?? [];
+$interests = is_array($interestsInput) ? array_values(array_filter($interestsInput, "strlen")) : [];
 
 $allowedStatus = ["pending", "approved", "rejected"];
 
-if ($fullName === "") {
+/*
+|--------------------------------------------------------------------------
+| VALIDATION (mengikuti NOT NULL di tabel members_individual)
+|--------------------------------------------------------------------------
+*/
+
+$errors = [];
+
+if ($fullName === "") $errors[] = "Full name is required.";
+if ($whatsapp === "") $errors[] = "WhatsApp number is required.";
+if ($email === "") $errors[] = "Email is required.";
+if ($role === "") $errors[] = "Role is required.";
+if ($role === "Others" && $roleOther === "") $errors[] = "Please specify the custom role.";
+if ($portfolioLink === "") $errors[] = "Portfolio link is required.";
+if ($photo === "") $errors[] = "Profile photo is required.";
+
+if ($errors) {
 
     http_response_code(400);
 
     echo json_encode([
         "success" => false,
-        "message" => "Full name is required.",
+        "message" => implode(" ", $errors),
     ]);
 
     exit;
@@ -35,15 +68,19 @@ if (!in_array($status, $allowedStatus, true)) {
     $status = "pending";
 }
 
-$submittedAt = $submittedAt !== "" ? $submittedAt . " 00:00:00" : date("Y-m-d H:i:s");
+if ($role !== "Others") {
+    $roleOther = "";
+}
+
+$interestsJson = json_encode($interests, JSON_UNESCAPED_UNICODE);
 
 try {
 
     $stmt = $conn->prepare(
         "
-        INSERT INTO membership_individual
-            (submitted_at, full_name, phone, email, role_in_industry,
-             portfolio_link, interest, photo, status)
+        INSERT INTO members_individual
+            (full_name, whatsapp, email, role, role_other,
+             portfolio_link, interests, photo, status)
         VALUES
             (?, ?, ?, ?, ?, ?, ?, ?, ?)
         "
@@ -55,13 +92,13 @@ try {
 
     $stmt->bind_param(
         "sssssssss",
-        $submittedAt,
         $fullName,
-        $phone,
+        $whatsapp,
         $email,
-        $roleInIndustry,
+        $role,
+        $roleOther,
         $portfolioLink,
-        $interest,
+        $interestsJson,
         $photo,
         $status
     );

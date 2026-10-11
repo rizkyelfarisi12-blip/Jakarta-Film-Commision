@@ -9,37 +9,37 @@ $input = json_decode(file_get_contents("php://input"), true);
 $id = isset($input["id"]) ? (int) $input["id"] : 0;
 
 $fullName = trim($input["full_name"] ?? "");
-$phone = trim($input["phone"] ?? "");
+$whatsapp = trim($input["whatsapp"] ?? "");
 $email = trim($input["email"] ?? "");
-$roleInIndustry = trim($input["role_in_industry"] ?? "");
+$role = trim($input["role"] ?? "");
+$roleOther = trim($input["role_other"] ?? "");
 $portfolioLink = trim($input["portfolio_link"] ?? "");
-$interest = trim($input["interest"] ?? "");
 $photo = trim($input["photo"] ?? "");
 $status = $input["status"] ?? "pending";
-$submittedAt = trim($input["submitted_at"] ?? "");
+
+$interestsInput = $input["interests"] ?? [];
+$interests = is_array($interestsInput) ? array_values(array_filter($interestsInput, "strlen")) : [];
 
 $allowedStatus = ["pending", "approved", "rejected"];
 
-if ($id <= 0) {
+$errors = [];
+
+if ($id <= 0) $errors[] = "Invalid ID.";
+if ($fullName === "") $errors[] = "Full name is required.";
+if ($whatsapp === "") $errors[] = "WhatsApp number is required.";
+if ($email === "") $errors[] = "Email is required.";
+if ($role === "") $errors[] = "Role is required.";
+if ($role === "Others" && $roleOther === "") $errors[] = "Please specify the custom role.";
+if ($portfolioLink === "") $errors[] = "Portfolio link is required.";
+if ($photo === "") $errors[] = "Profile photo is required.";
+
+if ($errors) {
 
     http_response_code(400);
 
     echo json_encode([
         "success" => false,
-        "message" => "Invalid ID.",
-    ]);
-
-    exit;
-
-}
-
-if ($fullName === "") {
-
-    http_response_code(400);
-
-    echo json_encode([
-        "success" => false,
-        "message" => "Full name is required.",
+        "message" => implode(" ", $errors),
     ]);
 
     exit;
@@ -50,21 +50,25 @@ if (!in_array($status, $allowedStatus, true)) {
     $status = "pending";
 }
 
-$submittedAt = $submittedAt !== "" ? $submittedAt . " 00:00:00" : null;
+if ($role !== "Others") {
+    $roleOther = "";
+}
+
+$interestsJson = json_encode($interests, JSON_UNESCAPED_UNICODE);
 
 try {
 
     $stmt = $conn->prepare(
         "
-        UPDATE membership_individual
+        UPDATE members_individual
         SET
-            submitted_at = COALESCE(?, submitted_at),
             full_name = ?,
-            phone = ?,
+            whatsapp = ?,
             email = ?,
-            role_in_industry = ?,
+            role = ?,
+            role_other = ?,
             portfolio_link = ?,
-            interest = ?,
+            interests = ?,
             photo = ?,
             status = ?
         WHERE id = ?
@@ -78,13 +82,13 @@ try {
 
     $stmt->bind_param(
         "sssssssssi",
-        $submittedAt,
         $fullName,
-        $phone,
+        $whatsapp,
         $email,
-        $roleInIndustry,
+        $role,
+        $roleOther,
         $portfolioLink,
-        $interest,
+        $interestsJson,
         $photo,
         $status,
         $id

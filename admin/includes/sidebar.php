@@ -77,7 +77,7 @@ $current = basename($_SERVER['PHP_SELF']);
         </a>
 
         <a class="<?= strpos($_SERVER['PHP_SELF'], '/company/') !== false ? 'active' : '' ?>"
-            href="<?= $assetPath ?>placeholder/company-index.php">
+            href="<?= $assetPath ?>entities/index.php">
 
             <i class="ri-building-line"></i>
             <span>Company</span>

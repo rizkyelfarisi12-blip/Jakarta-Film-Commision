@@ -90,45 +90,86 @@ include "../includes/header.php";
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="phone">No. HP (WhatsApp)</label>
-                                    <input type="text" id="phone" placeholder="e.g. 081234567890" autocomplete="off">
+                                    <label for="whatsapp">No. HP (WhatsApp) *</label>
+                                    <input type="text" id="whatsapp" placeholder="e.g. 081234567890" autocomplete="off">
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="email">Email</label>
+                                    <label for="email">Email *</label>
                                     <input type="email" id="email" placeholder="name@example.com" autocomplete="off">
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="submitted_at">Submission Date</label>
-                                    <input type="date" id="submitted_at">
-                                    <small>
-                                        The original registration date. Defaults to today for a new registrant.
-                                    </small>
+                                    <label for="role">Role in Film Ecosystem *</label>
+                                    <select id="role">
+                                        <option value="">Select Role</option>
+                                        <option value="Sutradara">Sutradara</option>
+                                        <option value="Produser">Produser</option>
+                                        <option value="Penulis Skenario">Penulis Skenario</option>
+                                        <option value="Sinematografer / DOP">Sinematografer / DOP</option>
+                                        <option value="Editor">Editor</option>
+                                        <option value="Production Designer">Production Designer</option>
+                                        <option value="Sound Designer">Sound Designer</option>
+                                        <option value="Composer">Composer</option>
+                                        <option value="Aktor / Aktris">Aktor / Aktris</option>
+                                        <option value="Crew Produksi">Crew Produksi</option>
+                                        <option value="Others">Others</option>
+                                    </select>
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="role_in_industry">Role in Film Ecosystem</label>
-                                    <input type="text" id="role_in_industry"
-                                        placeholder="e.g. Director, Producer, Editor">
-                                    <small>
-                                        Separate multiple roles with a comma ( , ).
-                                    </small>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="interest">Interest in Jakarta Film Commission</label>
-                                    <input type="text" id="interest"
-                                        placeholder="e.g. Workshop, Networking, Funding Access">
-                                    <small>
-                                        Separate multiple interests with a comma ( , ).
-                                    </small>
+                                <div class="form-group" id="customRoleGroup" style="display:none;">
+                                    <label for="role_other">Custom Role</label>
+                                    <input type="text" id="role_other" placeholder="Enter your role">
                                 </div>
 
                                 <div class="form-group" style="grid-column:1 / -1;">
-                                    <label for="portfolio_link">Portfolio Link</label>
+                                    <label for="portfolio_link">Portfolio Link *</label>
                                     <input type="text" id="portfolio_link"
                                         placeholder="IMDb / Vimeo / YouTube / Instagram / Website link">
+                                </div>
+
+                                <div class="form-group" style="grid-column:1 / -1;">
+
+                                    <label>Interest in Jakarta Film Commission</label>
+
+                                    <div class="checkbox-grid" id="interestCheckboxGroup">
+
+                                        <label class="checkbox-item">
+                                            <input type="checkbox" value="One-Stop Film Service">
+                                            <span>One-Stop Film Service</span>
+                                        </label>
+
+                                        <label class="checkbox-item">
+                                            <input type="checkbox" value="Promosi & Diplomasi Budaya">
+                                            <span>Promosi &amp; Diplomasi Budaya</span>
+                                        </label>
+
+                                        <label class="checkbox-item">
+                                            <input type="checkbox" value="Pelatihan & Pengembangan SDM Film">
+                                            <span>Pelatihan &amp; Pengembangan SDM Film</span>
+                                        </label>
+
+                                        <label class="checkbox-item">
+                                            <input type="checkbox" value="Akses Pendanaan / Investasi">
+                                            <span>Akses Pendanaan / Investasi</span>
+                                        </label>
+
+                                        <label class="checkbox-item">
+                                            <input type="checkbox" value="Jaringan / Networking Industri">
+                                            <span>Jaringan / Networking Industri</span>
+                                        </label>
+
+                                        <label class="checkbox-item">
+                                            <input type="checkbox" value="Lokasi Syuting & Perizinan">
+                                            <span>Lokasi Syuting &amp; Perizinan</span>
+                                        </label>
+
+                                    </div>
+
+                                    <small>
+                                        Sesuaikan daftar pilihan ini dengan opsi asli di form pendaftaran kamu kalau berbeda.
+                                    </small>
+
                                 </div>
 
                             </div>
@@ -155,11 +196,16 @@ include "../includes/header.php";
                                 </select>
                             </div>
 
+                            <div class="form-group" id="registeredAtGroup" style="display:none;margin-top:16px;">
+                                <label>Registered</label>
+                                <div id="registeredAtValue" style="font-size:13px;color:#4e534e;font-weight:650;"></div>
+                            </div>
+
                         </section>
 
                         <section class="admin-card">
 
-                            <h3>Profile Photo</h3>
+                            <h3>Profile Photo *</h3>
 
                             <div class="upload-box">
 
@@ -193,6 +239,96 @@ include "../includes/header.php";
     </main>
 
 </div>
+
+<!-- =========================================================
+     PAGE-SPECIFIC STYLE
+========================================================= -->
+<style>
+
+    /*
+    |----------------------------------------------------------
+    | INTEREST CHECKBOX GRID
+    |----------------------------------------------------------
+    |
+    | PENTING: checkbox ini ada di dalam .form-group, dan
+    | admin.css punya aturan global:
+    |
+    |   .form-group input:not([type="file"]) { width:100%;
+    |     height:52px; padding:0 16px; border-radius:14px; ... }
+    |
+    | Aturan itu dibuat untuk text input/select, tapi ikut kena
+    | ke <input type="checkbox"> juga (karena checkbox bukan
+    | type="file"), dan specificity-nya lebih tinggi dari class
+    | biasa - makanya checkbox-nya jadi kotak raksasa kalau
+    | cuma di-style pakai ".checkbox-item input" biasa.
+    |
+    | Fix-nya: scope ke #interestCheckboxGroup (ID menaikkan
+    | specificity) + reset eksplisit dengan !important untuk
+    | properti yang "dibajak" admin.css.
+    |----------------------------------------------------------
+    */
+
+    #interestCheckboxGroup {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 4px;
+    }
+
+    #interestCheckboxGroup .checkbox-item {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 10px 12px;
+        border: 1px solid var(--border-dark);
+        border-radius: 10px;
+        font-size: 13px;
+        color: #3d423d;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    #interestCheckboxGroup .checkbox-item:hover {
+        border-color: #c9cdc9;
+        background: #fafbfa;
+    }
+
+    #interestCheckboxGroup .checkbox-item input[type="checkbox"] {
+        -webkit-appearance: checkbox !important;
+        appearance: checkbox !important;
+        width: 16px !important;
+        height: 16px !important;
+        min-width: 16px !important;
+        min-height: 16px !important;
+        max-width: 16px !important;
+        flex: 0 0 16px !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: 1px solid #b9bdb9 !important;
+        border-radius: 4px !important;
+        background: #fff !important;
+        box-shadow: none !important;
+        outline: none !important;
+        accent-color: var(--primary);
+        cursor: pointer;
+    }
+
+    #interestCheckboxGroup .checkbox-item input[type="checkbox"]:focus {
+        box-shadow: 0 0 0 3px rgba(255, 90, 31, 0.15) !important;
+    }
+
+    #interestCheckboxGroup .checkbox-item span {
+        flex: 1;
+        line-height: 1.4;
+    }
+
+    @media (max-width: 768px) {
+        #interestCheckboxGroup {
+            grid-template-columns: 1fr;
+        }
+    }
+
+</style>
 
 <script src="../assets/js/individual-form.js"></script>
 

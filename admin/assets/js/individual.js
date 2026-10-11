@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("searchIndividual").addEventListener("input", filterIndividuals);
   document.getElementById("statusFilter").addEventListener("change", filterIndividuals);
+  document.getElementById("roleFilter").addEventListener("change", filterIndividuals);
   document.getElementById("interestFilter").addEventListener("change", filterIndividuals);
   document.getElementById("dateFromFilter").addEventListener("change", filterIndividuals);
   document.getElementById("dateToFilter").addEventListener("change", filterIndividuals);
@@ -51,6 +52,7 @@ async function loadIndividuals() {
     allIndividuals = Array.isArray(result.data?.items) ? result.data.items : [];
 
     renderStats(result.data || {});
+    populateRoleFilter(allIndividuals);
     populateInterestFilter(allIndividuals);
     filterIndividuals();
   } catch (error) {
@@ -85,8 +87,56 @@ function renderStats(data) {
 }
 
 /* =========================================================
-   INTEREST FILTER (DYNAMIC)
+   HELPERS - ROLE
 ========================================================= */
+
+function getRoleDisplay(item) {
+  if (item.role === "Others" && item.role_other) return item.role_other;
+  return item.role || "-";
+}
+
+function populateRoleFilter(data) {
+  const select = document.getElementById("roleFilter");
+
+  if (!select) return;
+
+  const current = select.value;
+
+  const roles = new Set();
+
+  data.forEach((item) => {
+    const display = getRoleDisplay(item);
+    if (display && display !== "-") roles.add(display);
+  });
+
+  const sorted = Array.from(roles).sort((a, b) =>
+    a.localeCompare(b, undefined, { sensitivity: "base" }),
+  );
+
+  select.innerHTML = `<option value="">All Role</option>`;
+
+  sorted.forEach((value) => {
+    const option = document.createElement("option");
+    option.value = value;
+    option.textContent = value;
+    select.appendChild(option);
+  });
+
+  select.value = current;
+}
+
+/* =========================================================
+   HELPERS - INTERESTS (JSON array column)
+========================================================= */
+
+function getInterests(item) {
+  try {
+    const parsed = JSON.parse(item.interests || "[]");
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (e) {
+    return [];
+  }
+}
 
 function populateInterestFilter(data) {
   const select = document.getElementById("interestFilter");
@@ -98,7 +148,7 @@ function populateInterestFilter(data) {
   const interests = new Set();
 
   data.forEach((item) => {
-    splitList(item.interest).forEach((value) => interests.add(value));
+    getInterests(item).forEach((value) => interests.add(value));
   });
 
   const sorted = Array.from(interests).sort((a, b) =>
@@ -118,15 +168,8 @@ function populateInterestFilter(data) {
 }
 
 /* =========================================================
-   HELPERS
+   HELPERS - GENERAL
 ========================================================= */
-
-function splitList(value) {
-  return String(value || "")
-    .split(",")
-    .map((v) => v.trim())
-    .filter(Boolean);
-}
 
 function toTime(value) {
   const time = new Date(value).getTime();
@@ -134,7 +177,7 @@ function toTime(value) {
 }
 
 function getRegistrantDate(item) {
-  return item.submitted_at || item.created_at || "";
+  return item.created_at || "";
 }
 
 function formatMemberDate(value) {
@@ -203,6 +246,7 @@ function getStatusClass(status) {
 function filterIndividuals() {
   const keyword = document.getElementById("searchIndividual").value.toLowerCase().trim();
   const status = document.getElementById("statusFilter").value;
+  const role = document.getElementById("roleFilter").value;
   const interest = document.getElementById("interestFilter").value;
   const dateFrom = document.getElementById("dateFromFilter").value;
   const dateTo = document.getElementById("dateToFilter").value;
@@ -211,24 +255,33 @@ function filterIndividuals() {
   const filtered = allIndividuals.filter((item) => {
     const name = String(item.full_name || "").toLowerCase();
     const email = String(item.email || "").toLowerCase();
-    const phone = String(item.phone || "").toLowerCase();
+    const whatsapp = String(item.whatsapp || "").toLowerCase();
 
     const matchesKeyword =
       !keyword ||
       name.includes(keyword) ||
       email.includes(keyword) ||
-      phone.includes(keyword);
+      whatsapp.includes(keyword);
 
     const matchesStatus = !status || String(item.status || "pending") === status;
 
-    const matchesInterest = !interest || splitList(item.interest).includes(interest);
+    const matchesRole = !role || getRoleDisplay(item) === role;
+
+    const matchesInterest = !interest || getInterests(item).includes(interest);
 
     const itemDate = String(getRegistrantDate(item)).slice(0, 10);
 
     const matchesDateFrom = !dateFrom || (itemDate && itemDate >= dateFrom);
     const matchesDateTo = !dateTo || (itemDate && itemDate <= dateTo);
 
-    return matchesKeyword && matchesStatus && matchesInterest && matchesDateFrom && matchesDateTo;
+    return (
+      matchesKeyword &&
+      matchesStatus &&
+      matchesRole &&
+      matchesInterest &&
+      matchesDateFrom &&
+      matchesDateTo
+    );
   });
 
   sortIndividuals(filtered, sortValue);
@@ -285,11 +338,7 @@ function renderTable(data) {
       ? `<img src="${resolvePhotoPath(item.photo)}" class="member-photo" alt="${escapeHtml(item.full_name || "Photo")}">`
       : `<div class="member-photo-placeholder">${escapeHtml(getInitials(item.full_name))}</div>`;
 
-    const roleChips = splitList(item.role_in_industry)
-      .map((r) => `<span class="chip">${escapeHtml(r)}</span>`)
-      .join("") || "-";
-
-    const interestChips = splitList(item.interest)
+    const interestChips = getInterests(item)
       .map((r) => `<span class="chip">${escapeHtml(r)}</span>`)
       .join("") || "-";
 
@@ -306,11 +355,11 @@ function renderTable(data) {
         </td>
 
         <td class="contact-cell">
-          <strong>${escapeHtml(item.phone || "-")}</strong>
+          <strong>${escapeHtml(item.whatsapp || "-")}</strong>
           <span>${escapeHtml(item.email || "-")}</span>
         </td>
 
-        <td><div class="chip-group">${roleChips}</div></td>
+        <td>${escapeHtml(getRoleDisplay(item))}</td>
 
         <td><div class="chip-group">${interestChips}</div></td>
 
@@ -373,8 +422,8 @@ function viewIndividual(id) {
     </div>
 
     <div class="detail-row">
-      <span>Phone (WhatsApp)</span>
-      <span>${escapeHtml(item.phone || "-")}</span>
+      <span>WhatsApp</span>
+      <span>${escapeHtml(item.whatsapp || "-")}</span>
     </div>
 
     <div class="detail-row">
@@ -383,8 +432,8 @@ function viewIndividual(id) {
     </div>
 
     <div class="detail-row">
-      <span>Role in Film Industry</span>
-      <span>${escapeHtml(splitList(item.role_in_industry).join(", ") || "-")}</span>
+      <span>Role</span>
+      <span>${escapeHtml(getRoleDisplay(item))}</span>
     </div>
 
     <div class="detail-row">
@@ -394,11 +443,11 @@ function viewIndividual(id) {
 
     <div class="detail-row">
       <span>Interest in JFC</span>
-      <span>${escapeHtml(splitList(item.interest).join(", ") || "-")}</span>
+      <span>${escapeHtml(getInterests(item).join(", ") || "-")}</span>
     </div>
 
     <div class="detail-row">
-      <span>Submitted</span>
+      <span>Registered</span>
       <span>${formatMemberDate(getRegistrantDate(item))}</span>
     </div>
 
@@ -504,6 +553,7 @@ async function deleteIndividual(id) {
 function getFilteredRowsForExport() {
   const keyword = document.getElementById("searchIndividual").value.toLowerCase().trim();
   const status = document.getElementById("statusFilter").value;
+  const role = document.getElementById("roleFilter").value;
   const interest = document.getElementById("interestFilter").value;
   const dateFrom = document.getElementById("dateFromFilter").value;
   const dateTo = document.getElementById("dateToFilter").value;
@@ -512,19 +562,27 @@ function getFilteredRowsForExport() {
   const filtered = allIndividuals.filter((item) => {
     const name = String(item.full_name || "").toLowerCase();
     const email = String(item.email || "").toLowerCase();
-    const phone = String(item.phone || "").toLowerCase();
+    const whatsapp = String(item.whatsapp || "").toLowerCase();
 
     const matchesKeyword =
-      !keyword || name.includes(keyword) || email.includes(keyword) || phone.includes(keyword);
+      !keyword || name.includes(keyword) || email.includes(keyword) || whatsapp.includes(keyword);
 
     const matchesStatus = !status || String(item.status || "pending") === status;
-    const matchesInterest = !interest || splitList(item.interest).includes(interest);
+    const matchesRole = !role || getRoleDisplay(item) === role;
+    const matchesInterest = !interest || getInterests(item).includes(interest);
 
     const itemDate = String(getRegistrantDate(item)).slice(0, 10);
     const matchesDateFrom = !dateFrom || (itemDate && itemDate >= dateFrom);
     const matchesDateTo = !dateTo || (itemDate && itemDate <= dateTo);
 
-    return matchesKeyword && matchesStatus && matchesInterest && matchesDateFrom && matchesDateTo;
+    return (
+      matchesKeyword &&
+      matchesStatus &&
+      matchesRole &&
+      matchesInterest &&
+      matchesDateFrom &&
+      matchesDateTo
+    );
   });
 
   sortIndividuals(filtered, sortValue);
@@ -541,13 +599,13 @@ function exportToExcel() {
   }
 
   const data = rows.map((item) => ({
-    "Timestamp": getRegistrantDate(item),
+    "Registered": getRegistrantDate(item),
     "Nama Lengkap": item.full_name || "",
-    "No. HP (Whatsapp)": item.phone || "",
+    "No. HP (Whatsapp)": item.whatsapp || "",
     "Email": item.email || "",
-    "Peran dalam Ekosistem Perfilman": splitList(item.role_in_industry).join(", "),
+    "Peran dalam Ekosistem Perfilman": getRoleDisplay(item),
     "Link Portfolio": item.portfolio_link || "",
-    "Minat dalam Ekosistem JFC": splitList(item.interest).join(", "),
+    "Minat dalam Ekosistem JFC": getInterests(item).join(", "),
     "Status": item.status || "pending",
   }));
 
@@ -583,16 +641,16 @@ function exportToPdf() {
   const tableData = rows.map((item) => [
     formatMemberDate(getRegistrantDate(item)),
     item.full_name || "-",
-    item.phone || "-",
+    item.whatsapp || "-",
     item.email || "-",
-    splitList(item.role_in_industry).join(", ") || "-",
-    splitList(item.interest).join(", ") || "-",
-    (item.status || "pending"),
+    getRoleDisplay(item),
+    getInterests(item).join(", ") || "-",
+    item.status || "pending",
   ]);
 
   doc.autoTable({
     startY: 22,
-    head: [["Date", "Name", "Phone", "Email", "Role", "Interest", "Status"]],
+    head: [["Date", "Name", "WhatsApp", "Email", "Role", "Interest", "Status"]],
     body: tableData,
     styles: { fontSize: 8, cellPadding: 3 },
     headStyles: { fillColor: [255, 90, 31] },
