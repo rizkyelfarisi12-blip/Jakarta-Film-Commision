@@ -246,10 +246,12 @@
 .mp-strip {
   position: relative;
   z-index: 6;
-  background: var(--mp-ink);
-  color: #fff;
+  background: var(--mp-cream);
+  color: var(--mp-ink);
   padding: 26px 0;
   overflow: hidden;
+  border-top: 1px solid rgba(23, 24, 23, 0.12);
+  border-bottom: 1px solid rgba(23, 24, 23, 0.12);
 }
 
 .mp-strip-inner {
@@ -353,7 +355,7 @@
 .mp-promo-list {
   display: flex;
   flex-direction: column;
-  background: var(--mp-ink);
+  background: #fff;
 }
 
 .mp-promo-item {
@@ -362,7 +364,7 @@
   align-items: center;
   gap: 20px;
   padding: 18px 22px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid #eee7d6;
   transition: background 0.3s ease;
 }
 
@@ -386,12 +388,12 @@
   font-family: "heading-normal", sans-serif;
   font-size: 22px;
   line-height: 1.15;
-  color: #fff;
+  color: var(--mp-ink);
   transition: color 0.3s ease;
 }
 
 .mp-promo-item:hover span {
-  color: var(--mp-yellow);
+  color: #fff;
 }
 
 /* =========================================================
@@ -516,20 +518,14 @@
    PILIH JENIS MEMBER
 ========================================================= */
 .mp-choose {
-  background: var(--mp-ink);
-  padding: 120px 0;
+  position: relative;
+  z-index: 5;
+  background: var(--mp-cream);
+  padding: 110px 0;
 }
 
 .mp-choose .mp-title {
-  color: var(--mp-yellow);
-}
-
-.mp-choose .mp-lead {
-  color: rgba(255, 255, 255, 0.72);
-}
-
-.mp-choose .mp-kicker {
-  color: var(--mp-lime);
+  color: var(--mp-orange);
 }
 
 .mp-choose-grid {
@@ -658,7 +654,7 @@
 
 .mp-step {
   padding-top: 22px;
-  border-top: 2px solid rgba(255, 255, 255, 0.14);
+  border-top: 2px solid rgba(23, 24, 23, 0.14);
 }
 
 .mp-step b {
@@ -671,23 +667,23 @@
 }
 
 .mp-step:nth-child(2) b {
-  color: var(--mp-yellow);
+  color: var(--mp-red);
 }
 
 .mp-step:nth-child(3) b {
-  color: var(--mp-lime);
+  color: var(--mp-green);
 }
 
 .mp-step h4 {
   font-size: 18px;
-  color: #fff;
+  color: var(--mp-ink);
   margin-bottom: 6px;
 }
 
 .mp-step p {
   font-size: 14px;
   line-height: 1.7;
-  color: rgba(255, 255, 255, 0.62);
+  color: var(--mp-green);
 }
 
 /* =========================================================
@@ -763,9 +759,9 @@
 .mp-cta {
   position: relative;
   z-index: 5;
-  background: var(--mp-red);
-  padding: 90px 0;
-  color: #fff;
+  background: var(--mp-cream);
+  padding: 20px 0 120px;
+  color: var(--mp-ink);
 }
 
 .mp-cta-inner {
@@ -774,6 +770,8 @@
   justify-content: space-between;
   gap: 36px;
   flex-wrap: wrap;
+  padding: 56px 0 0;
+  border-top: 1px solid rgba(23, 24, 23, 0.14);
 }
 
 .mp-cta h2 {
@@ -781,7 +779,7 @@
   line-height: 0.98;
   letter-spacing: -0.045em;
   font-weight: 800;
-  color: #fff;
+  color: var(--mp-orange);
   margin-bottom: 12px;
 }
 
@@ -789,7 +787,7 @@
   max-width: 520px;
   font-size: 16px;
   line-height: 1.75;
-  color: rgba(255, 255, 255, 0.88);
+  color: var(--mp-green);
 }
 
 .mp-cta-actions {
@@ -798,8 +796,13 @@
   flex-wrap: wrap;
 }
 
-.mp-cta .mp-btn-yellow:hover {
-  background: #111;
+.mp-btn-outline-dark {
+  border-color: var(--mp-green);
+  color: var(--mp-green);
+}
+
+.mp-btn-outline-dark:hover {
+  background: var(--mp-green);
   color: #fff;
 }
 

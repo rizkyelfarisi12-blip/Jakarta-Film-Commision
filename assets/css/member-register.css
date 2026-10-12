@@ -77,9 +77,18 @@ body.mr-lock {
 .mr-hero-overlay {
   position: absolute;
   inset: 0;
+  z-index: 2;
+  /* vignette: tepi gelap, tengah sedikit lebih terang, + dasar gelap agar teks terbaca di foto apa pun */
   background:
-    linear-gradient(to right, rgba(10, 8, 5, 0.88), rgba(10, 8, 5, 0.42)),
-    linear-gradient(to top, var(--mr-cream) 0%, transparent 34%);
+    linear-gradient(to top, var(--mr-cream) 0%, transparent 20%),
+    radial-gradient(
+      ellipse 115% 110% at 62% 45%,
+      rgba(10, 8, 5, 0.45) 0%,
+      rgba(10, 8, 5, 0.78) 55%,
+      rgba(10, 8, 5, 0.95) 100%
+    ),
+    linear-gradient(to right, rgba(10, 8, 5, 0.75), rgba(10, 8, 5, 0.2) 75%),
+    rgba(10, 8, 5, 0.38);
 }
 
 .mr-hero .container {
@@ -116,9 +125,15 @@ body.mr-lock {
   margin-bottom: 22px;
 }
 
+.mr-hero h1,
+.mr-hero p,
+.mr-eyebrow {
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55);
+}
+
 .mr-hero p {
   max-width: 600px;
-  color: #ddd8ca;
+  color: #ece7da;
   font-size: 16px;
   line-height: 1.85;
 }

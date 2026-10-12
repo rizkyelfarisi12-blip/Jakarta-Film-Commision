@@ -346,8 +346,8 @@
                         <p>Daftar hari ini dan jadilah bagian dari ekosistem resmi Filming in Jakarta.</p>
                     </div>
                     <div class="mp-cta-actions">
-                        <a href="member-individual.html" class="mp-btn mp-btn-yellow">Individual</a>
-                        <a href="member-entity.html" class="mp-btn mp-btn-line">Entities</a>
+                        <a href="member-individual.html" class="mp-btn mp-btn-orange">Individual</a>
+                        <a href="member-entity.html" class="mp-btn mp-btn-outline-dark">Entities</a>
                     </div>
                 </div>
             </div>
