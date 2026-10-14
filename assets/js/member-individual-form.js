@@ -1,8 +1,6 @@
 /* =============================================================
    JAKARTA FILM COMMISSION
    MEMBER INDIVIDU - FORM LOGIC
-   Letakkan di: assets/js/member-individual-form.js
-   Membutuhkan: member-register.js dan Cropper.js
 ============================================================= */
 (function () {
   "use strict";
@@ -12,8 +10,8 @@
      DEMO_MODE = true  -> belum mengirim ke server (tampilan saja)
      Setelah backend publik siap, ubah ke false dan sesuaikan API_URL.
   ----------------------------------------------------------- */
-  const DEMO_MODE = true;
-  const API_URL = "api/members/create-member-individual.php";
+  const DEMO_MODE = false;
+  const API_URL = "api/individual/create-member-individual.php";
   const DRAFT_KEY = "jfc-member-individual-draft";
 
   const MAX_ORIGINAL = 5 * 1024 * 1024; // foto asli sebelum dipotong

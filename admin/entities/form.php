@@ -112,12 +112,12 @@ include "../includes/header.php";
                                         <label for="entity_type">Entity Type</label>
                                         <select id="entity_type">
                                             <option value="">Select Entity Type</option>
-                                            <option value="PT">PT (Perseroan Terbatas)</option>
-                                            <option value="CV">CV</option>
-                                            <option value="Yayasan">Yayasan</option>
-                                            <option value="Koperasi">Koperasi</option>
-                                            <option value="Komunitas">Komunitas</option>
-                                            <option value="Studio Independen">Studio Independen</option>
+                                            <option value="Rumah Produksi">Rumah Produksi</option>
+                                            <option value="Institusi Pendidikan">Institusi Pendidikan</option>
+                                            <option value="Venture Capital">Venture Capital</option>
+                                            <option value="Perusahaan Pendukung Industri">Perusahaan Pendukung Industri</option>
+                                            <option value="Pengelola Properti">Pengelola Properti</option>
+                                            <option value="UMKM">UMKM</option>
                                             <option value="Others">Others</option>
                                         </select>
                                     </div>

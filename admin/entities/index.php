@@ -142,13 +142,7 @@ include "../includes/header.php";
                     </thead>
 
                     <tbody id="entityTable">
-                        <tr>
-                            <td colspan="9" style="text-align:center;padding:40px;">
-                                No data yet. Once this page is connected to the
-                                database (see <code>entities.js</code>), registered
-                                entities will show up here.
-                            </td>
-                        </tr>
+                        <tr><td colspan="9" style="text-align:center;">Loading Entities Membership...</td></tr>
                     </tbody>
 
                 </table>
@@ -221,6 +215,9 @@ include "../includes/header.php";
 <!-- =========================================================
      JAVASCRIPT (to be wired to the API next)
 ========================================================= -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <script src="../assets/js/entities.js"></script>
 
 <?php include "../includes/footer.php"; ?>

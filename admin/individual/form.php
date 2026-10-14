@@ -103,16 +103,12 @@ include "../includes/header.php";
                                     <label for="role">Role in Film Ecosystem *</label>
                                     <select id="role">
                                         <option value="">Select Role</option>
-                                        <option value="Sutradara">Sutradara</option>
-                                        <option value="Produser">Produser</option>
-                                        <option value="Penulis Skenario">Penulis Skenario</option>
-                                        <option value="Sinematografer / DOP">Sinematografer / DOP</option>
-                                        <option value="Editor">Editor</option>
-                                        <option value="Production Designer">Production Designer</option>
-                                        <option value="Sound Designer">Sound Designer</option>
-                                        <option value="Composer">Composer</option>
-                                        <option value="Aktor / Aktris">Aktor / Aktris</option>
-                                        <option value="Crew Produksi">Crew Produksi</option>
+                                        <option value="Praktisi Industri Aktif">Praktisi Industri Aktif</option>
+                                        <option value="Filmmaker Independen">Filmmaker Independen</option>
+                                        <option value="Pelajar">Pelajar</option>
+                                        <option value="Penggiat Film">Penggiat Film</option>
+                                        <option value="Komunitas">Komunitas</option>
+                                        <option value="Pelaku Usaha">Pelaku Usaha</option>
                                         <option value="Others">Others</option>
                                     </select>
                                 </div>
@@ -167,7 +163,8 @@ include "../includes/header.php";
                                     </div>
 
                                     <small>
-                                        Sesuaikan daftar pilihan ini dengan opsi asli di form pendaftaran kamu kalau berbeda.
+                                        Sesuaikan daftar pilihan ini dengan opsi asli di form pendaftaran kamu kalau
+                                        berbeda.
                                     </small>
 
                                 </div>
@@ -240,33 +237,7 @@ include "../includes/header.php";
 
 </div>
 
-<!-- =========================================================
-     PAGE-SPECIFIC STYLE
-========================================================= -->
 <style>
-
-    /*
-    |----------------------------------------------------------
-    | INTEREST CHECKBOX GRID
-    |----------------------------------------------------------
-    |
-    | PENTING: checkbox ini ada di dalam .form-group, dan
-    | admin.css punya aturan global:
-    |
-    |   .form-group input:not([type="file"]) { width:100%;
-    |     height:52px; padding:0 16px; border-radius:14px; ... }
-    |
-    | Aturan itu dibuat untuk text input/select, tapi ikut kena
-    | ke <input type="checkbox"> juga (karena checkbox bukan
-    | type="file"), dan specificity-nya lebih tinggi dari class
-    | biasa - makanya checkbox-nya jadi kotak raksasa kalau
-    | cuma di-style pakai ".checkbox-item input" biasa.
-    |
-    | Fix-nya: scope ke #interestCheckboxGroup (ID menaikkan
-    | specificity) + reset eksplisit dengan !important untuk
-    | properti yang "dibajak" admin.css.
-    |----------------------------------------------------------
-    */
 
     #interestCheckboxGroup {
         display: grid;
@@ -327,7 +298,6 @@ include "../includes/header.php";
             grid-template-columns: 1fr;
         }
     }
-
 </style>
 
 <script src="../assets/js/individual-form.js"></script>

@@ -1,8 +1,6 @@
 /* =============================================================
    JAKARTA FILM COMMISSION
    MEMBER REGISTRATION - SHARED HELPERS
-   Letakkan di: assets/js/member-register.js
-   Dimuat sebelum member-individual-form.js / member-entity-form.js
 ============================================================= */
 (function (global) {
   "use strict";

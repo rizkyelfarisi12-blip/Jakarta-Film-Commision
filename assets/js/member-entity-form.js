@@ -1,8 +1,6 @@
 /* =============================================================
    JAKARTA FILM COMMISSION
    MEMBER ENTITAS - FORM LOGIC
-   Letakkan di: assets/js/member-entity-form.js
-   Membutuhkan: member-register.js
 ============================================================= */
 (function () {
   "use strict";
@@ -12,8 +10,8 @@
      DEMO_MODE = true  -> belum mengirim ke server (tampilan saja)
      Setelah backend publik siap, ubah ke false dan sesuaikan API_URL.
   ----------------------------------------------------------- */
-  const DEMO_MODE = true;
-  const API_URL = "api/members/create-member-entity.php";
+  const DEMO_MODE = false;
+  const API_URL = "api/entities/create-member-entity.php";
   const DRAFT_KEY = "jfc-member-entity-draft";
 
   const MAX_PROFILE = 10 * 1024 * 1024; // company profile: 10 MB
@@ -60,10 +58,10 @@
 
     const logoDrop = MR.initDrop({
       root: $("logoDrop"),
-      mimes: ["image/png", "image/jpeg", "image/webp", "image/svg+xml"],
-      exts: ["png", "jpg", "jpeg", "webp", "svg"],
+      mimes: ["image/png", "image/jpeg", "image/webp"],
+      exts: ["png", "jpg", "jpeg", "webp"],
       maxBytes: MAX_LOGO,
-      typeMessage: "Logo harus berformat PNG, JPG, WEBP, atau SVG.",
+      typeMessage: "Logo harus berformat PNG, JPG, atau WEBP.",
       onFile: (file) => {
         state.logo = file;
         logoDrop.setFile(file);
